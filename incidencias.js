@@ -1,6 +1,8 @@
 // FUNCIONES DE INCIDENCIAS
 let rolUsuarioInc = '';
 let tecnicosDisponibles = [];
+let incidenciaPrioridadActiva = null;
+let incidenciaBorrarActiva = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const usuario = await verificarSesion();
@@ -38,14 +40,16 @@ async function cargarIncidencias() {
                     <td>${escapeHtml(inc.nombre_tecnico) || 'Sin asignar'}</td>
                     <td>${new Date(inc.fecha_creacion).toLocaleDateString()}</td>
                     ${['admin', 'tecnico'].includes(rolUsuarioInc) ? `<td>
+                        <div class="incidence-action-stack">
                         ${rolUsuarioInc === 'admin' ? `<label class="visually-hidden" for="tecnico-inc-${inc.id}">Asignar técnico</label><select id="tecnico-inc-${inc.id}" onchange="asignarTecnicoIncidencia(${inc.id}, this.value)"><option value="">Sin asignar</option>${tecnicosDisponibles.map(t => `<option value="${t.id}" ${String(t.id) === String(inc.asignado_a) ? 'selected' : ''}>${escapeHtml(t.nombre)}</option>`).join('')}</select>` : ''}
-                        <select onchange="actualizarIncidencia(${inc.id}, this.value)" style="width:auto;padding:5px;font-size:12px;">
+                        <div class="incidence-action-controls"><select aria-label="Cambiar estado de ${escapeHtml(inc.titulo)}" onchange="actualizarIncidencia(${Number(inc.id)}, this.value)" style="width:auto;padding:5px;font-size:12px;">
                             <option value="" disabled selected>Cambiar estado</option>
                             <option value="abierta">Abierta</option>
                             <option value="en_proceso">En proceso</option>
                             <option value="resuelta">Resuelta</option>
                             <option value="cerrada">Cerrada</option>
-                        </select>
+                        </select><button type="button" class="btn-priority-inc" data-incidencia-id="${Number(inc.id)}" data-prioridad="${escapeHtml(inc.prioridad)}" onclick="abrirDialogoPrioridadDesdeBoton(this)">Cambiar prioridad</button><button type="button" class="btn-delete-inc" data-incidencia-id="${Number(inc.id)}" data-incidencia-titulo="${escapeHtml(inc.titulo)}" aria-label="Borrar incidencia: ${escapeHtml(inc.titulo)}" title="Borrar incidencia" onclick="abrirDialogoBorrarDesdeBoton(this)"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+                        </div>
                     </td>` : ''}
                 </tr>
             `).join('');
@@ -135,4 +139,60 @@ async function asignarTecnicoIncidencia(id, tecnicoId) {
     const f = new FormData(); f.append('id', id); f.append('tecnico_id', tecnicoId);
     try { const r=await fetch('api/incidencias.php?accion=asignar',{method:'POST',body:f}); const d=await r.json(); if(d.status!=='exito') throw new Error(d.message); cargarIncidencias(); }
     catch(e) { mostrarError('errorIncidencia', e.message || 'No se pudo asignar el técnico.'); }
+}
+
+function abrirDialogoPrioridadDesdeBoton(boton) {
+    incidenciaPrioridadActiva = Number(boton.dataset.incidenciaId);
+    document.getElementById('nuevaPrioridadIncidencia').value = boton.dataset.prioridad;
+    document.getElementById('errorPrioridadIncidencia').textContent = '';
+    document.getElementById('dialogoPrioridadIncidencia').showModal();
+}
+
+async function guardarPrioridadIncidencia() {
+    const prioridad = document.getElementById('nuevaPrioridadIncidencia').value;
+    const formData = new FormData();
+    formData.append('id', incidenciaPrioridadActiva);
+    formData.append('prioridad', prioridad);
+    const boton = document.getElementById('guardarPrioridadIncidencia');
+    boton.disabled = true;
+    try {
+        const resp = await fetch('api/incidencias.php?accion=cambiar_prioridad', { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (!resp.ok || data.status !== 'exito') throw new Error(data.message || 'No se pudo cambiar la prioridad.');
+        document.getElementById('dialogoPrioridadIncidencia').close();
+        document.getElementById('estadoIncidencia').textContent = data.message;
+        await cargarIncidencias();
+    } catch (error) {
+        document.getElementById('errorPrioridadIncidencia').textContent = error.message || 'No se pudo cambiar la prioridad.';
+    } finally {
+        boton.disabled = false;
+    }
+}
+
+function abrirDialogoBorrarDesdeBoton(boton) {
+    incidenciaBorrarActiva = Number(boton.dataset.incidenciaId);
+    const titulo = boton.dataset.incidenciaTitulo || 'esta incidencia';
+    document.getElementById('mensajeConfirmarBorradoIncidencia').textContent = `¿Seguro que querés borrar la incidencia «${titulo}»? Esta acción no se puede deshacer.`;
+    document.getElementById('errorBorrarIncidencia').textContent = '';
+    document.getElementById('dialogoBorrarIncidencia').showModal();
+    document.getElementById('cancelarBorradoIncidencia').focus();
+}
+
+async function confirmarBorradoIncidencia() {
+    const formData = new FormData();
+    formData.append('id', incidenciaBorrarActiva);
+    const boton = document.getElementById('confirmarBorradoIncidencia');
+    boton.disabled = true;
+    try {
+        const resp = await fetch('api/incidencias.php?accion=eliminar', { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (!resp.ok || data.status !== 'exito') throw new Error(data.message || 'No se pudo borrar la incidencia.');
+        document.getElementById('dialogoBorrarIncidencia').close();
+        document.getElementById('estadoIncidencia').textContent = data.message;
+        await cargarIncidencias();
+    } catch (error) {
+        document.getElementById('errorBorrarIncidencia').textContent = error.message || 'No se pudo borrar la incidencia.';
+    } finally {
+        boton.disabled = false;
+    }
 }

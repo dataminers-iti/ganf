@@ -1,6 +1,7 @@
 // FUNCIONES DE SERVICIO
 let rolUsuarioSol = '';
 let tecnicosServicio = [];
+let solicitudActiva = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const usuario = await verificarSesion();
@@ -43,13 +44,16 @@ async function cargarSolicitudes() {
                     <td>${new Date(sol.fecha_creacion).toLocaleDateString()}</td>
                     ${['admin', 'tecnico'].includes(rolUsuarioSol) ? `<td>
                         ${rolUsuarioSol === 'admin' ? `<label class="visually-hidden" for="tecnico-sol-${sol.id}">Asignar técnico</label><select id="tecnico-sol-${sol.id}" onchange="asignarTecnicoSolicitud(${sol.id}, this.value)"><option value="">Sin asignar</option>${tecnicosServicio.map(t => `<option value="${t.id}" ${String(t.id) === String(sol.tecnico_id) ? 'selected' : ''}>${escapeHtml(t.nombre)}</option>`).join('')}</select>` : ''}
-                        <select onchange="actualizarSolicitud(${sol.id}, this.value)" style="width:auto;padding:5px;font-size:12px;">
+                        <div class="incidence-action-controls"><select aria-label="Cambiar estado de solicitud ${sol.id}" onchange="actualizarSolicitud(${sol.id}, this.value)" style="width:auto;padding:5px;font-size:12px;">
                             <option value="" disabled selected>Cambiar estado</option>
                             <option value="pendiente">Pendiente</option>
                             <option value="en_proceso">En proceso</option>
                             <option value="completada">Completada</option>
                             <option value="rechazada">Rechazada</option>
                         </select>
+                            <button type="button" class="btn-priority-inc" data-solicitud-id="${sol.id}" data-prioridad="${sol.prioridad}" onclick="abrirPrioridadSolicitud(this)">Cambiar prioridad</button>
+                            <button type="button" class="btn-delete-inc" aria-label="Borrar solicitud: ${escapeHtml(sol.tipo_servicio)}" onclick="borrarSolicitud(${sol.id}, this)" data-titulo="${escapeHtml(sol.tipo_servicio)}"><span aria-hidden="true">⌫</span></button>
+                        </div>
                     </td>` : ''}
                 </tr>
             `).join('');
@@ -137,4 +141,21 @@ async function asignarTecnicoSolicitud(id, tecnicoId) {
     const f = new FormData(); f.append('id', id); f.append('tecnico_id', tecnicoId);
     try { const r=await fetch('api/solicitudes.php?accion=asignar',{method:'POST',body:f}); const d=await r.json(); if(d.status!=='exito') throw new Error(d.message); cargarSolicitudes(); }
     catch(e) { mostrarError('errorServicio', e.message || 'No se pudo asignar el técnico.'); }
+}
+
+async function abrirPrioridadSolicitud(boton) {
+    solicitudActiva = Number(boton.dataset.solicitudId);
+    const valor = await elegirPrioridadCentrada({titulo:'Cambiar prioridad', prioridad:boton.dataset.prioridad});
+    if (!valor) return;
+    const f = new FormData(); f.append('id', solicitudActiva); f.append('prioridad', valor);
+    try { const r=await fetch('api/solicitudes.php?accion=cambiar_prioridad',{method:'POST',body:f}); const d=await r.json(); if(!r.ok || d.status!=='exito') throw new Error(d.message); cargarSolicitudes(); }
+    catch(e) { mostrarError('errorServicio',e.message || 'No se pudo cambiar la prioridad.'); }
+}
+
+async function borrarSolicitud(id, boton) {
+    const ok = await confirmarAccionCentrada({titulo:'Borrar solicitud', mensaje:`¿Seguro que querés borrar la solicitud «${boton.dataset.titulo}»? Esta acción no se puede deshacer.`, confirmar:'Sí, borrar', peligro:true});
+    if (!ok) return;
+    const f=new FormData(); f.append('id',id);
+    try { const r=await fetch('api/solicitudes.php?accion=eliminar',{method:'POST',body:f}); const d=await r.json(); if(!r.ok || d.status!=='exito') throw new Error(d.message); document.getElementById('estadoServicio').textContent=d.message; cargarSolicitudes(); }
+    catch(e) { mostrarError('errorServicio',e.message || 'No se pudo borrar la solicitud.'); }
 }

@@ -8,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="base.css?v=3">
-    <link rel="stylesheet" href="tema.css?v=7">
+    <link rel="stylesheet" href="tema.css?v=9">
     <link rel="stylesheet" href="componentes.css?v=3">
-    <link rel="stylesheet" href="layout.css?v=8">
+    <link rel="stylesheet" href="layout.css?v=10">
     <script src="navegacion.js?v=3" defer></script>
     <script src="autenticacion.js?v=3" defer></script>
-    <script src="incidencias.js?v=3" defer></script>
+    <script src="incidencias.js?v=4" defer></script>
     <script src="tema.js?v=5" defer></script>
 </head>
 <body class="page-incidencias">
@@ -62,5 +62,38 @@
             </table>
         </div>
     </div>
+
+    <dialog id="dialogoPrioridadIncidencia" class="inc-dialog" aria-labelledby="tituloDialogoPrioridadIncidencia">
+        <div class="inc-dialog-card">
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoPrioridadIncidencia').close()">×</button>
+            <span class="incidence-kicker">Gestión de incidencia</span>
+            <h2 id="tituloDialogoPrioridadIncidencia">Cambiar prioridad</h2>
+            <label for="nuevaPrioridadIncidencia">Seleccioná la nueva prioridad</label>
+            <select id="nuevaPrioridadIncidencia">
+                <option value="alta">Alta</option>
+                <option value="media">Media</option>
+                <option value="baja">Baja</option>
+            </select>
+            <p id="errorPrioridadIncidencia" class="inc-dialog-error" role="status" aria-live="polite"></p>
+            <div class="inc-dialog-actions">
+                <button type="button" class="btn-secundario" onclick="document.getElementById('dialogoPrioridadIncidencia').close()">Cancelar</button>
+                <button type="button" id="guardarPrioridadIncidencia" onclick="guardarPrioridadIncidencia()">Guardar prioridad</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="dialogoBorrarIncidencia" class="inc-dialog" aria-labelledby="tituloDialogoBorrarIncidencia">
+        <div class="inc-dialog-card">
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoBorrarIncidencia').close()">×</button>
+            <span class="incidence-kicker">Confirmación</span>
+            <h2 id="tituloDialogoBorrarIncidencia">Borrar incidencia</h2>
+            <p id="mensajeConfirmarBorradoIncidencia" class="inc-dialog-message"></p>
+            <p id="errorBorrarIncidencia" class="inc-dialog-error" role="status" aria-live="polite"></p>
+            <div class="inc-dialog-actions">
+                <button type="button" id="cancelarBorradoIncidencia" class="btn-secundario" onclick="document.getElementById('dialogoBorrarIncidencia').close()">Cancelar</button>
+                <button type="button" id="confirmarBorradoIncidencia" class="btn-danger-inc" onclick="confirmarBorradoIncidencia()">Sí, borrar</button>
+            </div>
+        </div>
+    </dialog>
 </body>
 </html>

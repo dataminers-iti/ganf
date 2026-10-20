@@ -211,6 +211,50 @@ body:has(.app-shell) { max-width:none; min-height:100vh; padding:0; margin:0; te
 .incidence-fields textarea { min-height:92px; }
 .page-incidencias .incidence-form > button { margin:0; border-radius:8px; font-weight:700; }
 .page-incidencias .app-content .incidence-list { max-width:1200px; margin:0 auto 24px !important; }
+.incidence-action-stack { display:grid; gap:7px; min-width:230px; }
+.incidence-action-stack > select { width:100%; margin:0; padding:6px 8px; font-size:12px; }
+.incidence-action-controls { display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
+.incidence-action-controls > select { width:auto !important; max-width:150px; margin:0; padding:6px 8px !important; font-size:12px !important; }
+.incidence-action-controls button { width:auto; margin:0; border-radius:8px; font-size:12px; font-weight:700; }
+.btn-priority-inc { min-height:34px; padding:6px 10px; background:#e8f2fc; color:#225888; border:1px solid #cfe0f1; }
+.btn-priority-inc:hover { background:#d9eafa; }
+.btn-delete-inc { display:grid; place-items:center; width:36px !important; height:36px; padding:7px; color:#b33b45; background:#fff1f1; border:1px solid #f1d1d3; }
+.btn-delete-inc:hover { color:#8e2630; background:#ffe2e3; }
+.btn-delete-inc svg { display:block; width:19px; height:19px; }
+.inc-dialog { position:fixed; inset:0; margin:auto; width:min(92vw,460px); max-width:none; max-height:calc(100vh - 36px); padding:0; border:0; border-radius:16px; background:transparent; color:inherit; overflow:auto; }
+.inc-dialog::backdrop { background:rgba(11,28,46,.56); backdrop-filter:blur(3px); }
+.inc-dialog-card { position:relative; padding:28px; border:1px solid #d8e5f1; border-radius:16px; background:#fff; color:#203047; box-shadow:0 24px 70px rgba(8,31,55,.25); }
+.inc-dialog-card h2 { margin:4px 32px 14px 0; color:#173b63; font-size:22px; font-weight:800; }
+.inc-dialog-card label { display:block; margin:0 0 6px; font-size:13px; font-weight:700; }
+.inc-dialog-card select { margin:0; border:1px solid #cbd9e7; border-radius:8px; }
+.inc-dialog-message { margin:0; color:#52677d; line-height:1.55; }
+.inc-dialog-error { min-height:1.25em; margin:8px 0 0; color:#b42332; font-size:13px; }
+.inc-dialog-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:15px; }
+.inc-dialog-actions button { width:auto; min-width:112px; margin:0 !important; padding:9px 13px; border-radius:8px; font-size:13px; font-weight:700; }
+.inc-dialog-actions .btn-secundario { border:1px solid #d2dfeb; background:#f3f7fb; color:#315d83; }
+.btn-danger-inc { background:#b42332; color:#fff; }
+.btn-danger-inc:hover { background:#941c29; }
+.btn-primary-inc { background:#216eaa; color:#fff; }
+.btn-primary-inc:hover { background:#185b91; }
+.inc-dialog-close { position:absolute; top:13px; right:13px; width:32px !important; height:32px; margin:0 !important; padding:0; border:0; border-radius:8px; background:#f1f5f9; color:#536981; font-size:22px; line-height:1; }
+.inc-dialog-close:hover { background:#e3ebf3; }
+.page-incidencias .app-content .inc-dialog select { color:#203047; background:#fbfdff; border-color:#cbd9e7; }
+.page-incidencias .app-content .inc-dialog-actions .btn-secundario { background:#f3f7fb; color:#315d83; }
+.page-incidencias .app-content .inc-dialog-close { background:#f1f5f9; color:#536981; }
+html.dark body .incidence-action-stack > select,html.dark body .incidence-action-controls > select { background:#122033; color:#edf4fc; border-color:#354a61; }
+html.dark body .btn-priority-inc { color:#d9ebfb; background:#203d59; border-color:#355572; }
+html.dark body .btn-priority-inc:hover { background:#285477; }
+html.dark body .btn-delete-inc { color:#ffb5b9; background:#422b35; border-color:#68404a; }
+html.dark body .btn-delete-inc:hover { color:#fff; background:#66333d; }
+html.dark body .inc-dialog-card { border-color:#304760; background:#182638; color:#e3ebf4; }
+html.dark body .inc-dialog-card h2 { color:#e1efff; }
+html.dark body .inc-dialog-card label { color:#d8e4f0; }
+html.dark body .inc-dialog-card select,html.dark body .page-incidencias .app-content .inc-dialog select { color:#edf4fc; background:#122033; border-color:#3b5874; }
+html.dark body .inc-dialog-message { color:#c1cfdd; }
+html.dark body .inc-dialog-error { color:#ffb5b9; }
+html.dark body .inc-dialog-actions .btn-secundario,html.dark body .page-incidencias .app-content .inc-dialog-actions .btn-secundario { color:#dceeff; background:#203d59; border-color:#355572; }
+html.dark body .inc-dialog-close,html.dark body .page-incidencias .app-content .inc-dialog-close { color:#d3e2f2; background:#203247; }
+.inc-dialog button:focus-visible,.incidence-action-controls button:focus-visible { outline:3px solid #70b8ed; outline-offset:2px; }
 .incidence-list-heading { display:flex; align-items:end; justify-content:space-between; gap:14px; margin-bottom:12px; }
 .incidence-list-heading h2 { margin:4px 0 0; color:#173b63; font-size:23px; font-weight:800; text-transform:none; }
 .incidence-list-caption { color:#8294a7; font-size:12px; }

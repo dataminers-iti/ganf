@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('formInventario').style.display = 'flex';
         document.getElementById('colAcciones').style.display = '';
         document.getElementById('panelUbicaciones').style.display = 'flex';
+        document.getElementById('listaUbicaciones').style.display = 'block';
     }
 
     await cargarUbicaciones();
@@ -32,7 +33,17 @@ async function cargarUbicaciones() {
         select.innerHTML = '<option value="">Seleccione una ubicación</option>' + data.data.map(u =>
             `<option value="${u.id}">${escapeHtml([u.edificio,u.tipo,u.nombre,u.piso,u.referencia].filter(Boolean).join(' · '))}</option>`
         ).join('');
+        const tabla = document.getElementById('bodyUbicaciones');
+        if (tabla) tabla.innerHTML = data.data.length ? data.data.map(u => `<tr><td>${escapeHtml(u.edificio)}</td><td>${escapeHtml(u.tipo)}</td><td>${escapeHtml(u.nombre)}</td><td>${escapeHtml(u.piso || '—')}</td><td>${escapeHtml(u.referencia || '—')}</td><td><button type="button" class="btn-delete-inc" aria-label="Borrar ubicación ${escapeHtml(u.nombre)}" onclick="eliminarUbicacion(${Number(u.id)}, this)" data-nombre="${escapeHtml(u.nombre)}"><span aria-hidden="true">⌫</span></button></td></tr>`).join('') : '<tr><td colspan="6">No hay ubicaciones registradas.</td></tr>';
     } catch (_) { mostrarError('errorInventario', 'No se pudieron cargar las ubicaciones.'); }
+}
+
+async function eliminarUbicacion(id, boton) {
+    const ok=await confirmarAccionCentrada({titulo:'Borrar ubicación',mensaje:`¿Seguro que querés borrar «${boton.dataset.nombre}»? Solo se puede borrar si no tiene equipos asignados.`,confirmar:'Sí, borrar',peligro:true});
+    if(!ok)return;
+    const f=new FormData();f.append('id',id);
+    try{const r=await fetch('api/inventario.php?accion=eliminar_ubicacion',{method:'POST',body:f});const d=await r.json();if(!r.ok||d.status!=='exito')throw new Error(d.message);document.getElementById('estadoUbicacion').textContent=d.message;await cargarUbicaciones();}
+    catch(e){mostrarError('errorUbicacion',e.message||'No se pudo borrar la ubicación.');}
 }
 
 async function guardarUbicacion() {
@@ -75,9 +86,9 @@ async function cargarInventario() {
                     <td><span class="badge badge-${item.estado}">${formatEstado(item.estado)}</span></td>
                     <td>${escapeHtml(item.ubicacion_nombre) || 'Sin ubicación'}</td>
                     <td>${item.cantidad}</td>
-                    ${esAdmin ? `<td style="white-space:nowrap;">
-                        <button onclick="prepararEdicion(${item.id})" style="background:#0095f6;width:auto;padding:5px 10px;font-size:12px;margin-right:4px;">Editar</button>
-                        <button onclick="eliminarProducto(${item.id})" style="background:#e74c3c;width:auto;padding:5px 10px;font-size:12px;">Eliminar</button>
+                    ${esAdmin ? `<td><div class="incidence-action-controls">
+                        <button onclick="prepararEdicion(${item.id})" style="background:#0095f6;width:auto;padding:5px 10px;font-size:12px;">Editar</button>
+                        <button type="button" class="btn-delete-inc" aria-label="Eliminar equipo: ${escapeHtml(item.nombre)}" onclick="eliminarProducto(${item.id})"><span aria-hidden="true">⌫</span></button>
                     </td>` : ''}
                 </tr>
             `).join('');
@@ -182,13 +193,14 @@ async function guardarProducto() {
 }
 
 async function eliminarProducto(id) {
-    const boton = document.querySelector(`button[onclick="eliminarProducto(${id})"]`);
-    if (boton && boton.dataset.confirmar !== 'si') {
-        boton.dataset.confirmar = 'si';
-        boton.textContent = 'Confirmar eliminación';
-        setTimeout(() => { if (boton.isConnected) { boton.dataset.confirmar = ''; boton.textContent = 'Eliminar'; } }, 4000);
-        return;
-    }
+    const item = inventarioActual.find(equipo => Number(equipo.id) === Number(id));
+    const confirmar = await confirmarAccionCentrada({
+        titulo: 'Eliminar equipo',
+        mensaje: `¿Seguro que querés eliminar «${item?.nombre || 'este equipo'}»? Esta acción no se puede deshacer.`,
+        confirmar: 'Sí, eliminar',
+        peligro: true
+    });
+    if (!confirmar) return;
 
     try {
         const formData = new FormData();

@@ -75,4 +75,26 @@ class IncidenciaModel
         );
         return $stmt->execute(['estado' => $estado, 'fr' => $fechaResolucion, 'id' => $id]);
     }
+
+    public function cambiarPrioridad(int $id, string $prioridad): bool
+    {
+        if (!in_array($prioridad, ['alta', 'media', 'baja'], true)) {
+            return false;
+        }
+        $stmt = $this->db->prepare('UPDATE incidencias SET prioridad = :prioridad WHERE id = :id');
+        $stmt->execute(['prioridad' => $prioridad, 'id' => $id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+        $check = $this->db->prepare('SELECT 1 FROM incidencias WHERE id = :id');
+        $check->execute(['id' => $id]);
+        return (bool) $check->fetchColumn();
+    }
+
+    public function eliminar(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM incidencias WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->rowCount() > 0;
+    }
 }

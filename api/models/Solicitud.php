@@ -82,4 +82,22 @@ class SolicitudModel
         );
         return $stmt->execute(['estado' => $estado, 'fc' => $fechaCompletada, 'id' => $id]);
     }
+
+    public function cambiarPrioridad(int $id, string $prioridad): bool
+    {
+        if (!in_array($prioridad, ['alta', 'media', 'baja'], true)) return false;
+        $existe = $this->db->prepare('SELECT id FROM solicitudes WHERE id = :id');
+        $existe->execute(['id' => $id]);
+        if (!$existe->fetch()) return false;
+        $stmt = $this->db->prepare('UPDATE solicitudes SET prioridad = :prioridad WHERE id = :id');
+        $stmt->execute(['prioridad' => $prioridad, 'id' => $id]);
+        return true;
+    }
+
+    public function eliminar(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM solicitudes WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->rowCount() > 0;
+    }
 }

@@ -64,6 +64,16 @@ if ($accion === 'crear' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+if ($accion === 'eliminar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    requerirRol(['admin', 'tecnico']);
+    $id = (int) ($_POST['id'] ?? 0);
+    if ($id <= 0) responder('error', 'ID inválido.', null, 400);
+    $stmt = $db->prepare('DELETE FROM prestamos WHERE id = :id');
+    $stmt->execute(['id' => $id]);
+    if (!$stmt->rowCount()) responder('error', 'El préstamo no existe o ya fue eliminado.', null, 404);
+    responder('exito', 'Préstamo eliminado correctamente.');
+}
+
 if ($accion === 'actualizar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     requerirRol(['admin', 'tecnico']);
     $id = (int) ($_POST['id'] ?? 0);

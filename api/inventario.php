@@ -21,6 +21,19 @@ switch ($accion) {
         responder('exito', 'Ubicaciones obtenidas', $stmt->fetchAll());
         break;
 
+    case 'eliminar_ubicacion':
+        requerirRol(['admin']);
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) responder('error', 'ID inválido.', null, 400);
+        $uso = $db->prepare('SELECT COUNT(*) FROM inventario WHERE ubicacion_id = :id');
+        $uso->execute(['id' => $id]);
+        if ((int)$uso->fetchColumn() > 0) responder('error', 'No se puede borrar: hay equipos asignados a esta ubicación.', null, 409);
+        $stmt = $db->prepare('UPDATE ubicaciones SET activa = 0 WHERE id = :id AND activa = 1');
+        $stmt->execute(['id' => $id]);
+        if (!$stmt->rowCount()) responder('error', 'La ubicación no existe o ya fue eliminada.', null, 404);
+        responder('exito', 'Ubicación eliminada correctamente.');
+        break;
+
     case 'crear_ubicacion':
         requerirRol(['admin']);
         $nombre = trim((string) ($_POST['nombre'] ?? ''));
@@ -71,6 +84,9 @@ switch ($accion) {
         requerirRol(['admin']);
         $id = (int) ($_POST['id'] ?? 0);
         if ($id <= 0) responder('error', 'ID inválido', null, 400);
+        $referencias = $db->prepare('SELECT (SELECT COUNT(*) FROM prestamos WHERE equipo_id = :prestamo) + (SELECT COUNT(*) FROM incidencias WHERE equipo_id = :incidencia)');
+        $referencias->execute(['prestamo' => $id, 'incidencia' => $id]);
+        if ((int)$referencias->fetchColumn() > 0) responder('error', 'No se puede borrar: este equipo tiene préstamos o incidencias asociadas.', null, 409);
         $modelo->eliminar($id);
         responder('exito', 'Equipo eliminado correctamente', null);
         break;

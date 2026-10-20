@@ -33,7 +33,7 @@ async function cargarPrestamos() {
 
 function accionesPrestamo(p) {
     const opts = p.estado === 'solicitado' && rolPrestamo === 'admin' ? [['aprobado','Aprobar'],['rechazado','Rechazar']] : p.estado === 'aprobado' ? [['entregado','Marcar entregado']] : p.estado === 'entregado' ? [['devuelto','Marcar devuelto']] : [];
-    return opts.map(([estado,label]) => `<button type="button" class="btn-secundario" onclick="actualizarPrestamo(${p.id},'${estado}')">${label}</button>`).join('') || '—';
+    return opts.map(([estado,label]) => `<button type="button" class="btn-secundario" onclick="actualizarPrestamo(${p.id},'${estado}')">${label}</button>`).join('') + `<button type="button" class="btn-delete-inc" aria-label="Borrar préstamo" onclick="borrarPrestamo(${p.id}, this)" data-equipo="${escapeHtml(p.nombre_equipo)}"><span aria-hidden="true">⌫</span></button>`;
 }
 
 async function solicitarPrestamo() {
@@ -52,4 +52,13 @@ async function actualizarPrestamo(id, estado) {
     const f = new FormData(); f.append('id',id); f.append('estado',estado);
     try { const r=await fetch('api/prestamos.php?accion=actualizar',{method:'POST',body:f}); const d=await r.json(); if(!r.ok || d.status!=='exito') throw new Error(d.message); document.getElementById('estadoPrestamo').textContent=d.message; await cargarPrestamos(); await cargarEquiposPrestamo(); }
     catch(e) { mostrarError('errorPrestamo',e.message || 'No se pudo actualizar el préstamo.'); }
+}
+
+async function borrarPrestamo(id, boton) {
+    const equipo=boton.dataset.equipo;
+    const ok=await confirmarAccionCentrada({titulo:'Borrar préstamo',mensaje:`¿Seguro que querés borrar el préstamo de «${equipo}»? Esta acción no se puede deshacer.`,confirmar:'Sí, borrar',peligro:true});
+    if(!ok)return;
+    const f=new FormData();f.append('id',id);
+    try{const r=await fetch('api/prestamos.php?accion=eliminar',{method:'POST',body:f});const d=await r.json();if(!r.ok||d.status!=='exito')throw new Error(d.message);document.getElementById('estadoPrestamo').textContent=d.message;await cargarPrestamos();await cargarEquiposPrestamo();}
+    catch(e){mostrarError('errorPrestamo',e.message||'No se pudo borrar el préstamo.');}
 }

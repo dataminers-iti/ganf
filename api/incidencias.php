@@ -69,6 +69,30 @@ switch ($accion) {
         responder('exito', 'Asignación actualizada.');
         break;
 
+    case 'cambiar_prioridad':
+        requerirRol(['admin', 'tecnico']);
+        $id = (int) ($_POST['id'] ?? 0);
+        $prioridad = (string) ($_POST['prioridad'] ?? '');
+        if ($id <= 0) responder('error', 'ID inválido.', null, 400);
+        if (!in_array($prioridad, ['alta', 'media', 'baja'], true)) {
+            responder('error', 'La prioridad seleccionada no es válida.', null, 400);
+        }
+        if (!$modelo->cambiarPrioridad($id, $prioridad)) {
+            responder('error', 'La incidencia no existe o ya no está disponible.', null, 404);
+        }
+        responder('exito', 'Prioridad actualizada correctamente.');
+        break;
+
+    case 'eliminar':
+        requerirRol(['admin', 'tecnico']);
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) responder('error', 'ID inválido.', null, 400);
+        if (!$modelo->eliminar($id)) {
+            responder('error', 'La incidencia no existe o ya fue eliminada.', null, 404);
+        }
+        responder('exito', 'Incidencia eliminada correctamente.');
+        break;
+
     default:
         responder('error', 'Acción no reconocida', null, 400);
 }
