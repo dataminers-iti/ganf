@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const usuario = await verificarSesion();
     if (!usuario || usuario.rol !== 'admin') {
-        alert('Acceso denegado. Solo administradores.');
         window.location.href = 'principal.html';
         return;
     }
@@ -59,13 +58,13 @@ async function cambiarRol(id, nuevoRol) {
         });
         const data = await resp.json();
         if (data.status === 'exito') {
-            alert('Rol actualizado correctamente');
+            document.getElementById('estadoUsuarios').textContent = 'Rol actualizado correctamente.';
         } else {
-            alert(data.message || 'Error al cambiar rol');
+            document.getElementById('estadoUsuarios').textContent = data.message || 'Error al cambiar rol';
             cargarUsuarios(); // Reload to revert the select
         }
     } catch (err) {
-        alert('Error de conexión');
+        document.getElementById('estadoUsuarios').textContent = 'Error de conexión';
         cargarUsuarios();
     }
 }
@@ -84,9 +83,9 @@ async function toggleActivo(id, nuevoEstado) {
         if (data.status === 'exito') {
             cargarUsuarios();
         } else {
-            alert(data.message || 'Error al cambiar estado');
+            document.getElementById('estadoUsuarios').textContent = data.message || 'Error al cambiar estado';
         }
     } catch (err) {
-        alert('Error de conexión');
+        document.getElementById('estadoUsuarios').textContent = 'Error de conexión';
     }
 }

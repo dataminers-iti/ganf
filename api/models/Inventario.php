@@ -15,16 +15,16 @@ class InventarioModel
 
     public function listar(): array
     {
-        $stmt = $this->db->query('SELECT * FROM inventario ORDER BY id DESC');
+        $stmt = $this->db->query('SELECT i.*, CONCAT_WS(" · ", u.edificio, u.tipo, u.nombre, u.piso, u.referencia) AS ubicacion_nombre FROM inventario i LEFT JOIN ubicaciones u ON u.id = i.ubicacion_id ORDER BY i.id DESC');
         return $stmt->fetchAll();
     }
 
     public function agregar(array $d): int
     {
         $sql = 'INSERT INTO inventario
-                (nombre, tipo, marca, modelo, numero_serie, estado, ubicacion, descripcion, cantidad)
+                (nombre, tipo, marca, modelo, numero_serie, estado, ubicacion_id, descripcion, cantidad)
                 VALUES
-                (:nombre, :tipo, :marca, :modelo, :numero_serie, :estado, :ubicacion, :descripcion, :cantidad)';
+                (:nombre, :tipo, :marca, :modelo, :numero_serie, :estado, :ubicacion_id, :descripcion, :cantidad)';
         $stmt = $this->db->prepare($sql);
         $stmt->execute($this->normalizar($d));
         return (int) $this->db->lastInsertId();
@@ -34,7 +34,7 @@ class InventarioModel
     {
         $sql = 'UPDATE inventario SET
                 nombre = :nombre, tipo = :tipo, marca = :marca, modelo = :modelo,
-                numero_serie = :numero_serie, estado = :estado, ubicacion = :ubicacion,
+                numero_serie = :numero_serie, estado = :estado, ubicacion_id = :ubicacion_id,
                 descripcion = :descripcion, cantidad = :cantidad
                 WHERE id = :id';
         $stmt = $this->db->prepare($sql);
@@ -61,7 +61,7 @@ class InventarioModel
             'modelo'       => !empty($d['modelo']) ? trim((string) $d['modelo']) : null,
             'numero_serie' => !empty($d['numero_serie']) ? trim((string) $d['numero_serie']) : null,
             'estado'       => $estado,
-            'ubicacion'    => !empty($d['ubicacion']) ? trim((string) $d['ubicacion']) : null,
+            'ubicacion_id'=> !empty($d['ubicacion_id']) ? (int) $d['ubicacion_id'] : null,
             'descripcion'  => !empty($d['descripcion']) ? trim((string) $d['descripcion']) : null,
             'cantidad'     => max(1, (int) ($d['cantidad'] ?? 1)),
         ];

@@ -11,6 +11,17 @@ CREATE TABLE IF NOT EXISTS usuarios (
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS ubicaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    tipo ENUM('laboratorio','salon','administracion','otro') NOT NULL DEFAULT 'otro',
+    edificio VARCHAR(100) NOT NULL DEFAULT 'ITI',
+    piso VARCHAR(30) NULL,
+    referencia VARCHAR(100) NULL,
+    activa TINYINT(1) NOT NULL DEFAULT 1,
+    UNIQUE KEY uq_ubicacion (edificio, tipo, nombre, piso, referencia)
+);
+
 CREATE TABLE IF NOT EXISTS inventario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -19,10 +30,11 @@ CREATE TABLE IF NOT EXISTS inventario (
     modelo VARCHAR(50),
     numero_serie VARCHAR(100),
     estado ENUM('activo','en_reparacion','de_baja') DEFAULT 'activo',
-    ubicacion VARCHAR(100),
+    ubicacion_id INT NULL,
     descripcion TEXT,
     cantidad INT DEFAULT 1,
-    fecha_ingreso DATETIME DEFAULT CURRENT_TIMESTAMP
+    fecha_ingreso DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ubicacion_id) REFERENCES ubicaciones(id)
 );
 
 CREATE TABLE IF NOT EXISTS incidencias (
@@ -54,6 +66,23 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     fecha_completada DATETIME,
     FOREIGN KEY (solicitante_id) REFERENCES usuarios(id),
     FOREIGN KEY (tecnico_id) REFERENCES usuarios(id)
+);
+
+CREATE TABLE IF NOT EXISTS prestamos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    equipo_id INT NOT NULL,
+    cantidad INT NOT NULL DEFAULT 1,
+    motivo VARCHAR(200) NOT NULL,
+    fecha_solicitud DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_entrega DATETIME NULL,
+    fecha_devolucion_prevista DATE NULL,
+    fecha_devolucion DATETIME NULL,
+    estado ENUM('solicitado','aprobado','entregado','devuelto','rechazado') NOT NULL DEFAULT 'solicitado',
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (equipo_id) REFERENCES inventario(id),
+    INDEX idx_prestamos_equipo_estado (equipo_id, estado),
+    INDEX idx_prestamos_usuario (usuario_id)
 );
 
 -- ============================================================

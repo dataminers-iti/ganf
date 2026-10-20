@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SGRSI | ITI</title>
     <link rel="icon" type="image/png" href="ico logo.png">
-    <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="tema.css">
-    <link rel="stylesheet" href="componentes.css">
-    <link rel="stylesheet" href="layout.css">
-    <script src="navegacion.js" defer></script>
-    <script src="autenticacion.js" defer></script>
-    <script src="tema.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="base.css?v=3">
+    <link rel="stylesheet" href="tema.css?v=3">
+    <link rel="stylesheet" href="componentes.css?v=3">
+    <link rel="stylesheet" href="layout.css?v=3">
+    <script src="navegacion.js?v=3" defer></script>
+    <script src="autenticacion.js?v=3" defer></script>
+    <script src="tema.js?v=3" defer></script>
 </head>
 <body>
     <!-- PÁGINA DE LOGIN -->
@@ -20,8 +21,8 @@
     <div class="login-container">
         <div class="card">
             <h1>Iniciar Sesión</h1>
-            <input type="email" id="correo" placeholder="Correo" required>
-            <input type="password" id="clave" placeholder="Contraseña" required>
+            <label for="correo">Correo</label><input type="email" id="correo" required>
+            <label for="clave">Contraseña</label><input type="password" id="clave" required>
             <p id="errorLogin" style="color:red;"></p>
             <button onclick="login()">Ingresar</button>
             <p>¿No tienes cuenta? <a onclick="mostrarRegistro()">Regístrate</a></p>

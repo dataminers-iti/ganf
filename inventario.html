@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario | SGRSI</title>
     <link rel="icon" type="image/png" href="ico logo.png">
-    <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="tema.css">
-    <link rel="stylesheet" href="componentes.css">
-    <link rel="stylesheet" href="layout.css">
-    <script src="navegacion.js" defer></script>
-    <script src="autenticacion.js" defer></script>
-    <script src="inventario.js" defer></script>
-    <script src="tema.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="base.css?v=3">
+    <link rel="stylesheet" href="tema.css?v=3">
+    <link rel="stylesheet" href="componentes.css?v=3">
+    <link rel="stylesheet" href="layout.css?v=3">
+    <script src="navegacion.js?v=3" defer></script>
+    <script src="autenticacion.js?v=3" defer></script>
+    <script src="inventario.js?v=3" defer></script>
+    <script src="tema.js?v=3" defer></script>
 </head>
 <body>
     <button class="dark-btn" onclick="toggleDark()">◑</button>
@@ -21,8 +23,8 @@
     <div id="formInventario" class="card" style="display:none; max-width:500px;">
         <h1 id="tituloFormInventario">Agregar Equipo</h1>
         <input type="hidden" id="idEditando" value="">
-        <input type="text" id="nombre" placeholder="Nombre del equipo" required>
-        <select id="tipo">
+        <label for="nombre">Nombre del equipo</label><input type="text" id="nombre" required>
+        <label for="tipo">Tipo</label><select id="tipo">
             <option value="">Seleccione tipo</option>
             <option value="Computadora">Computadora</option>
             <option value="Monitor">Monitor</option>
@@ -31,21 +33,33 @@
             <option value="Impresora">Impresora</option>
             <option value="Otro">Otro</option>
         </select>
-        <input type="text" id="marca" placeholder="Marca">
-        <input type="text" id="modelo" placeholder="Modelo">
-        <input type="text" id="numero_serie" placeholder="Número de serie">
-        <select id="estado">
+        <label for="marca">Marca</label><input type="text" id="marca">
+        <label for="modelo">Modelo</label><input type="text" id="modelo">
+        <label for="numero_serie">Número de serie</label><input type="text" id="numero_serie">
+        <label for="estado">Estado</label><select id="estado">
             <option value="activo">Activo</option>
             <option value="en_reparacion">En reparación</option>
             <option value="de_baja">De baja</option>
         </select>
-        <input type="text" id="ubicacion" placeholder="Ubicación">
-        <input type="text" id="descripcion" placeholder="Descripción (opcional)">
-        <input type="number" id="cantidad" placeholder="Cantidad" min="1" value="1">
+        <label for="ubicacion_id">Ubicación exacta</label><select id="ubicacion_id" required><option value="">Seleccione una ubicación</option></select>
+        <label for="descripcion">Descripción (opcional)</label><input type="text" id="descripcion">
+        <label for="cantidad">Cantidad</label><input type="number" id="cantidad" min="1" value="1">
         <p id="errorInventario" style="color:red;"></p>
+        <p id="estadoInventario" class="feedback" role="status" aria-live="polite"></p>
         <button onclick="guardarProducto()" id="btnGuardarInventario">Agregar equipo</button>
         <button onclick="cancelarEdicion()" id="btnCancelarEdicion" style="display:none; background:#888;">Cancelar edición</button>
     </div>
+
+    <details id="panelUbicaciones" class="card" style="display:none; max-width:500px;">
+        <summary>Registrar una ubicación</summary>
+        <label for="edificioUbicacion">Edificio o centro</label><input id="edificioUbicacion" value="ITI" required>
+        <label for="tipoUbicacion">Tipo de espacio</label><select id="tipoUbicacion"><option value="laboratorio">Laboratorio</option><option value="salon">Salón</option><option value="administracion">Administración</option><option value="otro">Otro</option></select>
+        <label for="nombreUbicacion">Nombre o número de sala</label><input id="nombreUbicacion" required>
+        <label for="pisoUbicacion">Piso</label><input id="pisoUbicacion">
+        <label for="referenciaUbicacion">Referencia exacta (sector, ala, etc.)</label><input id="referenciaUbicacion">
+        <p id="errorUbicacion" class="feedback" role="alert"></p><p id="estadoUbicacion" class="feedback" role="status"></p>
+        <button onclick="guardarUbicacion()">Guardar ubicación</button>
+    </details>
 
     <!-- Tabla de inventario -->
     <div class="section-container" style="margin: 20px auto; max-width: 1200px;">

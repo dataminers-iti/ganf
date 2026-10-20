@@ -17,6 +17,8 @@ body.dark input {
     border: 1px solid #555;
 }
 
+body.dark textarea { background:#2b2b2b; color:white; border:1px solid #555; }
+
 body.dark button {
     background: #333;
     color: white;

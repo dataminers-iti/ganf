@@ -1,10 +1,15 @@
 // FUNCIONES DE INCIDENCIAS
 let rolUsuarioInc = '';
+let tecnicosDisponibles = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     const usuario = await verificarSesion();
     if (!usuario) return;
     rolUsuarioInc = usuario.rol;
+    if (rolUsuarioInc === 'admin') {
+        const r = await fetch('api/usuarios.php?accion=tecnicos'); const d = await r.json();
+        tecnicosDisponibles = d.data || [];
+    }
 
     // Admin and tecnico can manage incidents
     if (['admin', 'tecnico'].includes(rolUsuarioInc)) {
@@ -33,6 +38,7 @@ async function cargarIncidencias() {
                     <td>${escapeHtml(inc.nombre_tecnico) || 'Sin asignar'}</td>
                     <td>${new Date(inc.fecha_creacion).toLocaleDateString()}</td>
                     ${['admin', 'tecnico'].includes(rolUsuarioInc) ? `<td>
+                        ${rolUsuarioInc === 'admin' ? `<label class="visually-hidden" for="tecnico-inc-${inc.id}">Asignar técnico</label><select id="tecnico-inc-${inc.id}" onchange="asignarTecnicoIncidencia(${inc.id}, this.value)"><option value="">Sin asignar</option>${tecnicosDisponibles.map(t => `<option value="${t.id}" ${String(t.id) === String(inc.asignado_a) ? 'selected' : ''}>${escapeHtml(t.nombre)}</option>`).join('')}</select>` : ''}
                         <select onchange="actualizarIncidencia(${inc.id}, this.value)" style="width:auto;padding:5px;font-size:12px;">
                             <option value="" disabled selected>Cambiar estado</option>
                             <option value="abierta">Abierta</option>
@@ -91,7 +97,7 @@ async function guardarIncidencia() {
         const data = await resp.json();
 
         if (data.status === 'exito') {
-            alert('Incidencia guardada correctamente');
+            document.getElementById('estadoIncidencia').textContent = 'Incidencia guardada correctamente.';
             limpiarCampo('titulo');
             limpiarCampo('descripcionIncidencia');
             limpiarCampo('area');
@@ -118,9 +124,15 @@ async function actualizarIncidencia(id, nuevoEstado) {
         if (data.status === 'exito') {
             cargarIncidencias();
         } else {
-            alert(data.message || 'Error al actualizar');
+            mostrarError('errorIncidencia', data.message || 'Error al actualizar');
         }
     } catch (err) {
-        alert('Error de conexión');
+        mostrarError('errorIncidencia', 'Error de conexión');
     }
+}
+
+async function asignarTecnicoIncidencia(id, tecnicoId) {
+    const f = new FormData(); f.append('id', id); f.append('tecnico_id', tecnicoId);
+    try { const r=await fetch('api/incidencias.php?accion=asignar',{method:'POST',body:f}); const d=await r.json(); if(d.status!=='exito') throw new Error(d.message); cargarIncidencias(); }
+    catch(e) { mostrarError('errorIncidencia', e.message || 'No se pudo asignar el técnico.'); }
 }

@@ -11,6 +11,10 @@ $accion = $_GET['accion'] ?? '';
 requerirRol(['admin']); // todo este endpoint es exclusivo de admin
 
 switch ($accion) {
+    case 'tecnicos':
+        $stmt = $db->query("SELECT id, nombre FROM usuarios WHERE rol = 'tecnico' AND activo = 1 ORDER BY nombre");
+        responder('exito', 'Técnicos obtenidos', $stmt->fetchAll());
+        break;
     case 'listar':
         responder('exito', 'Usuarios obtenidos', $modelo->listarTodos());
         break;

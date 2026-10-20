@@ -1,10 +1,15 @@
 // FUNCIONES DE SERVICIO
 let rolUsuarioSol = '';
+let tecnicosServicio = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     const usuario = await verificarSesion();
     if (!usuario) return;
     rolUsuarioSol = usuario.rol;
+    if (rolUsuarioSol === 'admin') {
+        const r = await fetch('api/usuarios.php?accion=tecnicos'); const d = await r.json();
+        tecnicosServicio = d.data || [];
+    }
 
     // Show form for admin and solicitante
     if (['admin', 'solicitante'].includes(rolUsuarioSol)) {
@@ -37,6 +42,7 @@ async function cargarSolicitudes() {
                     <td>${escapeHtml(sol.nombre_tecnico) || 'Sin asignar'}</td>
                     <td>${new Date(sol.fecha_creacion).toLocaleDateString()}</td>
                     ${['admin', 'tecnico'].includes(rolUsuarioSol) ? `<td>
+                        ${rolUsuarioSol === 'admin' ? `<label class="visually-hidden" for="tecnico-sol-${sol.id}">Asignar técnico</label><select id="tecnico-sol-${sol.id}" onchange="asignarTecnicoSolicitud(${sol.id}, this.value)"><option value="">Sin asignar</option>${tecnicosServicio.map(t => `<option value="${t.id}" ${String(t.id) === String(sol.tecnico_id) ? 'selected' : ''}>${escapeHtml(t.nombre)}</option>`).join('')}</select>` : ''}
                         <select onchange="actualizarSolicitud(${sol.id}, this.value)" style="width:auto;padding:5px;font-size:12px;">
                             <option value="" disabled selected>Cambiar estado</option>
                             <option value="pendiente">Pendiente</option>
@@ -93,7 +99,7 @@ async function enviarSolicitud() {
         const data = await resp.json();
 
         if (data.status === 'exito') {
-            alert('Solicitud enviada correctamente');
+            document.getElementById('estadoServicio').textContent = 'Solicitud enviada correctamente.';
             limpiarCampo('tipoServicio');
             limpiarCampo('descripcionServicio');
             document.getElementById('prioridad').selectedIndex = 0;
@@ -120,9 +126,15 @@ async function actualizarSolicitud(id, nuevoEstado) {
         if (data.status === 'exito') {
             cargarSolicitudes();
         } else {
-            alert(data.message || 'Error al actualizar');
+            mostrarError('errorServicio', data.message || 'Error al actualizar');
         }
     } catch (err) {
-        alert('Error de conexión');
+        mostrarError('errorServicio', 'Error de conexión');
     }
+}
+
+async function asignarTecnicoSolicitud(id, tecnicoId) {
+    const f = new FormData(); f.append('id', id); f.append('tecnico_id', tecnicoId);
+    try { const r=await fetch('api/solicitudes.php?accion=asignar',{method:'POST',body:f}); const d=await r.json(); if(d.status!=='exito') throw new Error(d.message); cargarSolicitudes(); }
+    catch(e) { mostrarError('errorServicio', e.message || 'No se pudo asignar el técnico.'); }
 }

@@ -102,7 +102,8 @@ async function registro() {
         const data = await resp.json();
 
         if (data.status === 'exito') {
-            alert("Cuenta creada correctamente. Ahora podés iniciar sesión.");
+            mostrarError('estadoRegistro', 'Cuenta creada correctamente. Ahora podés iniciar sesión.');
+            document.querySelector('#errorRegistro')?.replaceChildren();
             window.location.href = 'pagina.html';
         } else {
             mostrarError("errorRegistro", data.message || "Error al crear cuenta");

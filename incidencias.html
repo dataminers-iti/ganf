@@ -5,36 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incidencias | SGRSI</title>
     <link rel="icon" type="image/png" href="ico logo.png">
-    <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="tema.css">
-    <link rel="stylesheet" href="componentes.css">
-    <link rel="stylesheet" href="layout.css">
-    <script src="navegacion.js" defer></script>
-    <script src="autenticacion.js" defer></script>
-    <script src="incidencias.js" defer></script>
-    <script src="tema.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="base.css?v=3">
+    <link rel="stylesheet" href="tema.css?v=3">
+    <link rel="stylesheet" href="componentes.css?v=3">
+    <link rel="stylesheet" href="layout.css?v=4">
+    <script src="navegacion.js?v=3" defer></script>
+    <script src="autenticacion.js?v=3" defer></script>
+    <script src="incidencias.js?v=3" defer></script>
+    <script src="tema.js?v=3" defer></script>
 </head>
-<body>
+<body class="page-incidencias">
     <button class="dark-btn" onclick="toggleDark()">◑</button>
 
     <!-- Formulario para crear incidencia -->
-    <div class="card" style="max-width:500px;">
-        <h1>Registrar Incidencia</h1>
-        <input type="text" id="titulo" placeholder="Título de la incidencia" required>
-        <input type="text" id="descripcionIncidencia" placeholder="Descripción del problema" required>
-        <input type="text" id="area" placeholder="Área o departamento" required>
-        <select id="prioridadIncidencia">
+    <div class="card incidence-form">
+        <div class="incidence-heading"><span class="incidence-kicker">Mesa de ayuda</span><h1>Registrar incidencia</h1><p>Contanos qué pasó y dónde ocurrió para que podamos ayudarte.</p></div>
+        <div class="incidence-fields">
+        <div class="incidence-field incidence-field-wide"><label for="titulo">Título de la incidencia</label><input type="text" id="titulo" required></div>
+        <div class="incidence-field incidence-field-wide"><label for="descripcionIncidencia">Descripción del problema</label><textarea id="descripcionIncidencia" required rows="3"></textarea></div>
+        <div class="incidence-field"><label for="area">Área o departamento</label><input type="text" id="area" required></div>
+        <div class="incidence-field"><label for="prioridadIncidencia">Prioridad</label><select id="prioridadIncidencia">
             <option value="media">Prioridad: Media</option>
             <option value="alta">Prioridad: Alta</option>
             <option value="baja">Prioridad: Baja</option>
-        </select>
+        </select></div>
+        </div>
         <p id="errorIncidencia" style="color:red;"></p>
+        <p id="estadoIncidencia" class="feedback" role="status" aria-live="polite"></p>
         <button onclick="guardarIncidencia()">Guardar incidencia</button>
     </div>
 
     <!-- Tabla de incidencias -->
-    <div class="section-container" style="margin: 20px auto; max-width: 1200px;">
-        <h1 style="margin-bottom: 15px;">Incidencias Registradas</h1>
+    <div class="section-container incidence-list">
+        <div class="incidence-list-heading"><div><span class="incidence-kicker">Seguimiento</span><h2>Incidencias registradas</h2></div><span class="incidence-list-caption">Consultá el estado de los reportes</span></div>
         <div style="overflow-x: auto;">
             <table class="tabla-datos" id="tablaIncidencias">
                 <thead>

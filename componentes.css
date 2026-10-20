@@ -6,17 +6,19 @@
     width: 320px;
     margin: 20px auto;
     padding: 25px;
-    border-radius: 10px;
+    border-radius: 14px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(25, 55, 90, 0.10);
 }
 
 .card h1 {
     margin-bottom: 15px;
     margin-top: 0;
 }
+
+h1,h2,h3,.section-heading,.dashboard-stat .stat-number { font-family:Manrope,"DM Sans","Segoe UI",sans-serif; letter-spacing:-.03em; }
 
 #errorLogin,
 #errorRegistro,
@@ -45,7 +47,7 @@
 }
 
 .tabla-datos th {
-    background: #333;
+    background: #17324d;
     color: white;
     padding: 12px 10px;
     text-align: left;
@@ -103,6 +105,10 @@ body.dark .tabla-datos tr:hover {
 .badge-en_reparacion, .badge-en_proceso { background: #fef3c7; color: #d97706; }
 .badge-de_baja, .badge-cerrada, .badge-rechazada { background: #fee2e2; color: #dc2626; }
 .badge-resuelta, .badge-completada { background: #d1fae5; color: #059669; }
+.badge-solicitado { background:#ede9fe; color:#6d28d9; }
+.badge-aprobado { background:#dbeafe; color:#1d4ed8; }
+.badge-entregado { background:#fef3c7; color:#b45309; }
+.badge-devuelto { background:#d1fae5; color:#047857; }
 
 /* =====================
    SELECT STYLES
@@ -116,6 +122,15 @@ select {
     font-family: Arial, sans-serif;
     background: white;
 }
+
+textarea {
+    width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px;
+    border: 1px solid #ccc; font: inherit; resize: vertical;
+}
+.card label { text-align: left; font-size: .92rem; font-weight: 600; margin: 3px 0 -5px; }
+.feedback { min-height: 1.2em; font-size: .92rem; margin: 2px 0; }
+.btn-secundario { width:auto; padding:6px 10px; margin:2px; }
+.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
 body.dark select {
     background: #2b2b2b;

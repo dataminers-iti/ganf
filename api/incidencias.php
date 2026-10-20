@@ -41,13 +41,32 @@ switch ($accion) {
         $estado = (string) ($_POST['estado'] ?? '');
         if ($id <= 0) responder('error', 'ID inválido', null, 400);
 
-        // El técnico que atiende la incidencia queda auto-asignado
-        $asignadoA = $usuario['rol'] === 'tecnico' ? (int) $usuario['id'] : null;
+        $asignadoA = $usuario['rol'] === 'tecnico' ? (int) $usuario['id'] : (isset($_POST['tecnico_id']) && $_POST['tecnico_id'] !== '' ? (int) $_POST['tecnico_id'] : null);
+        if ($usuario['rol'] === 'admin' && $asignadoA !== null) {
+            $check = $db->prepare("SELECT id FROM usuarios WHERE id = :id AND rol = 'tecnico' AND activo = 1");
+            $check->execute(['id' => $asignadoA]);
+            if (!$check->fetch()) responder('error', 'El usuario seleccionado no es un técnico activo.', null, 400);
+        }
 
         if (!$modelo->actualizar($id, $estado, $asignadoA)) {
             responder('error', 'Estado inválido', null, 400);
         }
         responder('exito', 'Incidencia actualizada correctamente', null);
+        break;
+
+    case 'asignar':
+        requerirRol(['admin']);
+        $id = (int) ($_POST['id'] ?? 0);
+        $tecnicoId = ($_POST['tecnico_id'] ?? '') === '' ? null : (int) $_POST['tecnico_id'];
+        if ($id <= 0) responder('error', 'ID inválido', null, 400);
+        if ($tecnicoId !== null) {
+            $check = $db->prepare("SELECT id FROM usuarios WHERE id = :id AND rol = 'tecnico' AND activo = 1");
+            $check->execute(['id' => $tecnicoId]);
+            if (!$check->fetch()) responder('error', 'El usuario seleccionado no es un técnico activo.', null, 400);
+        }
+        $stmt = $db->prepare('UPDATE incidencias SET asignado_a = :tecnico WHERE id = :id');
+        $stmt->execute(['tecnico' => $tecnicoId, 'id' => $id]);
+        responder('exito', 'Asignación actualizada.');
         break;
 
     default:
