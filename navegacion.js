@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     shell.append(sidebar, main);
     document.body.appendChild(shell);
     const darkButton = document.querySelector('.dark-btn');
-    if (darkButton) shell.appendChild(darkButton);
+    if (darkButton) topbar.querySelector('.topbar-user')?.insertBefore(darkButton, topbar.querySelector('.btn-logout'));
 });
 
 function toggleMobileNav() {

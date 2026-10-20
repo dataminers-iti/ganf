@@ -122,7 +122,7 @@ footer {
 .barra-navegacion .enlaces-nav a { color:#e6f1fa; text-decoration:none; font-size:.94rem; }
 .barra-navegacion .enlaces-nav a:hover { color:#fff; text-decoration:underline; }
 .barra-navegacion .salir-nav { width:auto; margin:0; padding:8px 14px; background:#285477; white-space:nowrap; }
-body.dark .barra-navegacion { background:#101f30; }
+html.dark body .barra-navegacion { background:#101f30; }
 
 /* Marco compartido inspirado en el prototipo, con paleta azul y blanca. */
 body:has(.app-shell) { max-width:none; min-height:100vh; padding:0; margin:0; text-align:left; background:#f3f7fc; color:#203047; }
@@ -214,17 +214,24 @@ body:has(.app-shell) { max-width:none; min-height:100vh; padding:0; margin:0; te
 .incidence-list-heading { display:flex; align-items:end; justify-content:space-between; gap:14px; margin-bottom:12px; }
 .incidence-list-heading h2 { margin:4px 0 0; color:#173b63; font-size:23px; font-weight:800; text-transform:none; }
 .incidence-list-caption { color:#8294a7; font-size:12px; }
-body.dark .incidence-heading p,body.dark .incidence-list-caption { color:#aab9c9; }
-body.dark .incidence-fields input,body.dark .incidence-fields select,body.dark .incidence-fields textarea { background:#122033; color:#e3ebf4; border-color:#354a61; }
-body.dark:has(.app-shell) { background:#101a27; color:#e3ebf4; }
-body.dark .app-sidebar { background:#102b47; }
-body.dark .app-topbar,body.dark .dashboard-panel,body.dark .dashboard-stat,body.dark .app-content > header:not(.app-topbar),body.dark .app-content .card { background:#182638; color:#e3ebf4; border-color:#293c52; }
-body.dark .app-content h1,body.dark .app-content h2,body.dark .app-content h3,body.dark .dashboard-stat .stat-number { color:#d6eaff; }
-body.dark .dashboard-table td,body.dark .app-content .tabla-datos td { color:#d7e2ef; }
-body.dark .app-content .tabla-datos th,body.dark .dashboard-table thead th { background:#203247; color:#c3d5e7; }
-body.dark .dashboard-note { background:#203247; color:#d6eaff; }
-body.dark .location-row { border-color:#293c52; }
-body.dark .location-row strong { color:#d6eaff; }
+html.dark body .incidence-heading p,html.dark body .incidence-list-caption { color:#aab9c9; }
+html.dark body .incidence-fields input,html.dark body .incidence-fields select,html.dark body .incidence-fields textarea { background:#122033; color:#e3ebf4; border-color:#354a61; }
+html.dark body:has(.app-shell) { background:#101a27; color:#e3ebf4; }
+html.dark body .app-sidebar { background:#10243a; border-right:1px solid #223b55; }
+html.dark body .app-sidebar nav { background:transparent; }
+html.dark body .app-sidebar .sidebar-link { color:#bfd0e1; }
+html.dark body .app-sidebar .sidebar-link:hover,html.dark body .app-sidebar .sidebar-link.active { color:#fff; background:#1c3c5a; }
+html.dark body .app-sidebar .sidebar-foot { border-color:#2b4560; background:#142c44; }
+html.dark body .app-topbar,html.dark body .dashboard-panel,html.dark body .dashboard-stat,html.dark body .app-content > header:not(.app-topbar),html.dark body .app-content .card { background:#182638; color:#e3ebf4; border-color:#293c52; }
+html.dark body .app-content h1,html.dark body .app-content h2,html.dark body .app-content h3,html.dark body .dashboard-stat .stat-number { color:#d6eaff; }
+html.dark body .dashboard-table td,html.dark body .app-content .tabla-datos td { color:#d7e2ef; }
+html.dark body .app-content .tabla-datos th,html.dark body .dashboard-table thead th { background:#203247; color:#c3d5e7; }
+html.dark body .dashboard-table { --bs-table-bg:#182638; --bs-table-color:#d7e2ef; --bs-table-border-color:#293c52; --bs-table-striped-bg:#203247; --bs-table-striped-color:#e3ebf4; --bs-table-hover-bg:#203247; --bs-table-hover-color:#fff; }
+html.dark body .dashboard-table > :not(caption) > * > * { background-color:#182638; color:#d7e2ef; border-bottom-color:#293c52; box-shadow:inset 0 0 0 9999px #182638; }
+html.dark body .dashboard-table thead > tr > th { background-color:#203247; color:#c3d5e7; box-shadow:inset 0 0 0 9999px #203247; }
+html.dark body .dashboard-note { background:#203247; color:#d6eaff; }
+html.dark body .location-row { border-color:#293c52; }
+html.dark body .location-row strong { color:#d6eaff; }
 
 /* =====================
    RESPONSIVE (mobile first fallback)

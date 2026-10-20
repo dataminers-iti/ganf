@@ -1,53 +1,60 @@
 /* =====================
    ESTILOS DEL MODO OSCURO Y BOTONES
    ===================== */
-body.dark {
+html.dark body {
     background: #121212;
     color: white;
 }
 
-body.dark .card {
+html.dark body .card {
     background: #1e1e1e;
     color: white;
 }
 
-body.dark input {
+html.dark body input {
+    background: #17283b;
+    color: #edf4fc;
+    border: 1px solid #3b5066;
+}
+
+html.dark body textarea,
+html.dark body select { background:#17283b; color:#edf4fc; border:1px solid #3b5066; }
+html.dark body select option { background:#17283b; color:#edf4fc; }
+html.dark body input::placeholder,html.dark body textarea::placeholder { color:#9cafc2; }
+html.dark body label { color:#d8e4f0; }
+html.dark body a { color:#75b9f0; }
+html.dark body a:hover { color:#a6d3fb; }
+
+html.dark body button:not(.dark-btn):not(.btn-logout):not(.btn-secundario) {
+    background: #1769aa;
+    color: #fff;
+}
+
+html.dark body button:not(.dark-btn):not(.btn-logout):not(.btn-secundario):hover {
+    background: #2382c8;
+}
+
+html.dark body .dark-btn {
+    background: #20354b;
+    color: #f4c95d;
+    border: 1px solid #3b5066;
+}
+
+html.dark body header {
+    background: #1e1e1e;
+}
+
+html.dark body nav {
     background: #2b2b2b;
-    color: white;
-    border: 1px solid #555;
 }
 
-body.dark textarea { background:#2b2b2b; color:white; border:1px solid #555; }
-
-body.dark button {
-    background: #333;
-    color: white;
-}
-
-body.dark button:hover {
-    background: #555;
-}
-
-body.dark .dark-btn {
-    background: #333;
-    color: white;
-}
-
-body.dark header {
+html.dark body footer {
     background: #1e1e1e;
 }
 
-body.dark nav {
-    background: #2b2b2b;
-}
-
-body.dark footer {
-    background: #1e1e1e;
-}
-
-body.dark main,
-body.dark section,
-body.dark article {
+html.dark body:not(:has(.app-shell)) main,
+html.dark body:not(:has(.app-shell)) section,
+html.dark body:not(:has(.app-shell)) article {
     background: #2b2b2b;
     color: white;
     border-color: #444;
@@ -60,7 +67,11 @@ body.dark article {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    font-size: 18px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    font-size: 23px;
+    line-height: 1;
     background: white;
     color: black;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -68,6 +79,29 @@ body.dark article {
     cursor: pointer;
     z-index: 1000;
 }
+
+.theme-icon-moon,.theme-icon-sun { display:block; }
+.theme-icon-moon[hidden],.theme-icon-sun[hidden] { display:none; }
+body:has(.app-shell) .dark-btn { position:static; flex:0 0 36px; width:36px; height:36px; margin:0; border:1px solid #e1eaf3; border-radius:9px; color:#315d83; box-shadow:none; background:#f4f8fc; font-size:21px; }
+html.dark body:has(.app-shell) .dark-btn { border-color:#3b5066; color:#f4c95d; background:#20354b; }
+html.dark body .feedback { color:#c6d6e7; }
+html.dark body .empty-note,html.dark body td,html.dark body th,html.dark body .form-text { color:#d4dfeb; }
+html.dark body .tabla-datos { border-color:#2c4055; background:#182638; }
+html.dark body .tabla-datos th { background:#20364d; color:#d9e8f6; }
+html.dark body .tabla-datos td { border-bottom-color:#2b3c50; }
+html.dark body .tabla-datos tr:hover { background:#203247; }
+html.dark body .app-content .card,html.dark body .login-container { background:#182638; color:#e3ebf4; border-color:#293c52; }
+html.dark body .app-content h1,html.dark body .app-content h2,html.dark body .app-content h3 { color:#d6eaff; }
+html.dark body .app-content .section-container { color:#e3ebf4; }
+html.dark body .app-content input,html.dark body .app-content select,html.dark body .app-content textarea { color:#edf4fc; background:#122033; border-color:#354a61; }
+html.dark body .app-content .btn-secundario { background:#203d59; color:#dceeff; }
+html.dark body .app-content .btn-logout { background:#20354b; color:#dceeff; }
+html.dark body .app-content .tabla-datos { background:#182638; }
+html.dark body .app-content .tabla-datos td { color:#d7e2ef; }
+html.dark body .app-content .tabla-datos th { background:#203247; color:#c3d5e7; }
+html.dark body .app-content .dashboard-table td { color:#d7e2ef; }
+html.dark body .app-content .dashboard-table thead th { background:#203247; color:#c3d5e7; }
+html.dark body .app-topbar { border-bottom-color:#293c52; }
 
 .home-btn,
 .back-btn {
@@ -95,13 +129,13 @@ body.dark article {
     background: #f0f0f0;
 }
 
-body.dark .home-btn,
-body.dark .back-btn {
+html.dark body .home-btn,
+html.dark body .back-btn {
     background: #333;
     color: white;
 }
 
-body.dark .home-btn:hover,
-body.dark .back-btn:hover {
+html.dark body .home-btn:hover,
+html.dark body .back-btn:hover {
     background: #555;
 }

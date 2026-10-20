@@ -2,22 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const modoOscuro=localStorage.getItem("modo")==="dark";document.documentElement.style.colorScheme=modoOscuro?"dark":"light";if(modoOscuro)document.documentElement.classList.add("dark")}catch(_){}</script>
     <title>Servicio | SGRSI</title>
     <link rel="icon" type="image/png" href="ico logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="base.css?v=3">
-    <link rel="stylesheet" href="tema.css?v=3">
+    <link rel="stylesheet" href="tema.css?v=5">
     <link rel="stylesheet" href="componentes.css?v=3">
-    <link rel="stylesheet" href="layout.css?v=3">
+    <link rel="stylesheet" href="layout.css?v=8">
     <script src="navegacion.js?v=3" defer></script>
     <script src="autenticacion.js?v=3" defer></script>
     <script src="servicio.js?v=3" defer></script>
-    <script src="tema.js?v=3" defer></script>
+    <script src="tema.js?v=5" defer></script>
 </head>
 <body>
-    <button class="dark-btn" onclick="toggleDark()">◑</button>
+    <button class="dark-btn" onclick="toggleDark()"><span class="theme-icon-moon" aria-hidden="true">☾</span><span class="theme-icon-sun" aria-hidden="true" hidden>☀</span></button>
 
     <!-- Formulario (only admin and solicitante) -->
     <div id="formSolicitud" class="card" style="display:none; max-width:500px;">
