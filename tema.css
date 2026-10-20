@@ -6,6 +6,30 @@ html.dark body {
     color: white;
 }
 
+html.dark body:has(.login-container) {
+    min-height:100vh;
+    background:radial-gradient(ellipse at 50% 0%,#1b3b5b 0%,#12263b 42%,#101a27 78%);
+    color:#e3ebf4;
+}
+html.dark body:has(.login-container) .login-container { min-height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; }
+html.dark body:has(.login-container) .login-container .card { width:min(100%,400px); margin:0 auto; background:#182638; color:#e3ebf4; border:1px solid #304760; box-shadow:0 18px 48px #07111f80; }
+html.dark body:has(.login-container) .login-container h1 { color:#e1efff; }
+html.dark body:has(.login-container) .login-container p { color:#b8c9dc; }
+html.dark body:has(.login-container) .login-container a { color:#80c2f5; }
+html.dark body:has(.login-container) .login-container input { background:#122033; color:#edf4fc; border-color:#3b5874; }
+
+html:not(.dark) body:has(.login-container) {
+    min-height:100vh;
+    background:radial-gradient(ellipse at 50% 0%,#e3f0fc 0%,#f1f6fc 46%,#eaf2fa 100%);
+    color:#203047;
+}
+html:not(.dark) body:has(.login-container) .login-container { min-height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; }
+html:not(.dark) body:has(.login-container) .login-container .card { width:min(100%,400px); margin:0 auto; background:#fff; color:#203047; border:1px solid #d8e5f1; box-shadow:0 18px 48px #173b631a; }
+html:not(.dark) body:has(.login-container) .login-container h1 { color:#173b63; }
+html:not(.dark) body:has(.login-container) .login-container p { color:#5e7288; }
+html:not(.dark) body:has(.login-container) .login-container a { color:#1769aa; }
+html:not(.dark) body:has(.login-container) .login-container input { background:#fbfdff; color:#203047; border-color:#cbd9e7; }
+
 html.dark body .card {
     background: #1e1e1e;
     color: white;
