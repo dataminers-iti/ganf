@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const modoOscuro=localStorage.getItem("modo")==="dark";document.documentElement.style.colorScheme=modoOscuro?"dark":"light";if(modoOscuro)document.documentElement.classList.add("dark")}catch(_){}</script>
+    <title>Servicio | SGRSI</title>
+    <link rel="icon" type="image/png" href="../src/shared/assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../src/shared/styles/base.css?v=3">
+    <link rel="stylesheet" href="../src/shared/styles/tema.css?v=9">
+    <link rel="stylesheet" href="../src/shared/styles/componentes.css?v=3">
+    <link rel="stylesheet" href="../src/shared/styles/layout.css?v=14">
+    <script type="module" src="../src/app/entries/service-requests.page.js"></script>
+</head>
+<body>
+    <button class="dark-btn" onclick="toggleDark()"><i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i><i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true" hidden></i></button>
+
+    <!-- Formulario (only admin and solicitante) -->
+    <div id="formSolicitud" class="card" style="display:none; max-width:500px;">
+        <h1>Solicitud de Servicio</h1>
+        <label for="tipoServicio">Tipo de servicio</label><input type="text" id="tipoServicio" required>
+        <label for="descripcionServicio">Descripción del servicio</label><textarea id="descripcionServicio" required rows="3"></textarea>
+        <label for="prioridad">Prioridad</label><select id="prioridad" required>
+            <option value="">Seleccione prioridad</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+        </select>
+        <p id="errorServicio" style="color:red;"></p>
+        <p id="estadoServicio" class="feedback" role="status" aria-live="polite"></p>
+        <button onclick="enviarSolicitud()">Enviar solicitud</button>
+    </div>
+
+    <!-- Tabla de solicitudes -->
+    <div class="section-container" style="margin: 20px auto; max-width: 1200px;">
+        <h1 style="margin-bottom: 15px;">Solicitudes de Servicio</h1>
+        <div style="overflow-x: auto;">
+            <table class="tabla-datos" id="tablaSolicitudes">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Solicitante</th>
+                        <th>Técnico</th>
+                        <th>Fecha</th>
+                        <th id="colAccionesSol" style="display:none;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="bodySolicitudes">
+                    <tr><td colspan="9">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

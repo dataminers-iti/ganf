@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const modoOscuro=localStorage.getItem("modo")==="dark";document.documentElement.style.colorScheme=modoOscuro?"dark":"light";if(modoOscuro)document.documentElement.classList.add("dark")}catch(_){}</script>
+    <title>Incidencias | SGRSI</title>
+    <link rel="icon" type="image/png" href="../src/shared/assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../src/shared/styles/base.css?v=3">
+    <link rel="stylesheet" href="../src/shared/styles/tema.css?v=9">
+    <link rel="stylesheet" href="../src/shared/styles/componentes.css?v=3">
+    <link rel="stylesheet" href="../src/shared/styles/layout.css?v=14">
+    <script type="module" src="../src/app/entries/incidents.page.js"></script>
+</head>
+<body class="page-incidencias">
+    <button class="dark-btn" onclick="toggleDark()"><i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i><i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true" hidden></i></button>
+
+    <!-- Formulario para crear incidencia -->
+    <div class="card incidence-form">
+        <div class="incidence-heading"><span class="incidence-kicker">Mesa de ayuda</span><h1>Registrar incidencia</h1><p>Contanos qué pasó y dónde ocurrió para que podamos ayudarte.</p></div>
+        <div class="incidence-fields">
+        <div class="incidence-field incidence-field-wide"><label for="titulo">Título de la incidencia</label><input type="text" id="titulo" required></div>
+        <div class="incidence-field incidence-field-wide"><label for="descripcionIncidencia">Descripción del problema</label><textarea id="descripcionIncidencia" required rows="3"></textarea></div>
+        <div class="incidence-field"><label for="area">Área o departamento</label><input type="text" id="area" required></div>
+        <div class="incidence-field"><label for="prioridadIncidencia">Prioridad</label><select id="prioridadIncidencia">
+            <option value="media">Prioridad: Media</option>
+            <option value="alta">Prioridad: Alta</option>
+            <option value="baja">Prioridad: Baja</option>
+        </select></div>
+        </div>
+        <p id="errorIncidencia" style="color:red;"></p>
+        <p id="estadoIncidencia" class="feedback" role="status" aria-live="polite"></p>
+        <button onclick="guardarIncidencia()">Guardar incidencia</button>
+    </div>
+
+    <!-- Tabla de incidencias -->
+    <div class="section-container incidence-list">
+        <div class="incidence-list-heading"><div><span class="incidence-kicker">Seguimiento</span><h2>Incidencias registradas</h2></div><span class="incidence-list-caption">Consultá el estado de los reportes</span></div>
+        <div style="overflow-x: auto;">
+            <table class="tabla-datos" id="tablaIncidencias">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Área</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Reportado por</th>
+                        <th>Asignado a</th>
+                        <th>Fecha</th>
+                        <th id="colAccionesInc" style="display:none;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyIncidencias">
+                    <tr><td colspan="10">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <dialog id="dialogoPrioridadIncidencia" class="inc-dialog" aria-labelledby="tituloDialogoPrioridadIncidencia">
+        <div class="inc-dialog-card">
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoPrioridadIncidencia').close()"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+            <span class="incidence-kicker">Gestión de incidencia</span>
+            <h2 id="tituloDialogoPrioridadIncidencia">Cambiar prioridad</h2>
+            <label for="nuevaPrioridadIncidencia">Seleccioná la nueva prioridad</label>
+            <select id="nuevaPrioridadIncidencia">
+                <option value="alta">Alta</option>
+                <option value="media">Media</option>
+                <option value="baja">Baja</option>
+            </select>
+            <p id="errorPrioridadIncidencia" class="inc-dialog-error" role="status" aria-live="polite"></p>
+            <div class="inc-dialog-actions">
+                <button type="button" class="btn-secundario" onclick="document.getElementById('dialogoPrioridadIncidencia').close()">Cancelar</button>
+                <button type="button" id="guardarPrioridadIncidencia" onclick="guardarPrioridadIncidencia()">Guardar prioridad</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="dialogoBorrarIncidencia" class="inc-dialog" aria-labelledby="tituloDialogoBorrarIncidencia">
+        <div class="inc-dialog-card">
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoBorrarIncidencia').close()"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+            <span class="incidence-kicker">Confirmación</span>
+            <h2 id="tituloDialogoBorrarIncidencia">Borrar incidencia</h2>
+            <p id="mensajeConfirmarBorradoIncidencia" class="inc-dialog-message"></p>
+            <p id="errorBorrarIncidencia" class="inc-dialog-error" role="status" aria-live="polite"></p>
+            <div class="inc-dialog-actions">
+                <button type="button" id="cancelarBorradoIncidencia" class="btn-secundario" onclick="document.getElementById('dialogoBorrarIncidencia').close()">Cancelar</button>
+                <button type="button" id="confirmarBorradoIncidencia" class="btn-danger-inc" onclick="confirmarBorradoIncidencia()">Sí, borrar</button>
+            </div>
+        </div>
+    </dialog>
+</body>
+</html>

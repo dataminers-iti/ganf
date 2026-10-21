@@ -1,0 +1,10 @@
+{
+  "name": "proyecto-dateminers",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SGRSI - Sistema de Gestión de Recursos y Servicios Informáticos (ITI)",
+  "scripts": {
+    "test": "node --test"
+  }
+}
