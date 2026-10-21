@@ -34,7 +34,7 @@ async function cargarUbicaciones() {
             `<option value="${u.id}">${escapeHtml([u.edificio,u.tipo,u.nombre,u.piso,u.referencia].filter(Boolean).join(' · '))}</option>`
         ).join('');
         const tabla = document.getElementById('bodyUbicaciones');
-        if (tabla) tabla.innerHTML = data.data.length ? data.data.map(u => `<tr><td>${escapeHtml(u.edificio)}</td><td>${escapeHtml(u.tipo)}</td><td>${escapeHtml(u.nombre)}</td><td>${escapeHtml(u.piso || '—')}</td><td>${escapeHtml(u.referencia || '—')}</td><td><button type="button" class="btn-delete-inc" aria-label="Borrar ubicación ${escapeHtml(u.nombre)}" onclick="eliminarUbicacion(${Number(u.id)}, this)" data-nombre="${escapeHtml(u.nombre)}"><span aria-hidden="true">⌫</span></button></td></tr>`).join('') : '<tr><td colspan="6">No hay ubicaciones registradas.</td></tr>';
+        if (tabla) tabla.innerHTML = data.data.length ? data.data.map(u => `<tr><td>${escapeHtml(u.edificio)}</td><td>${escapeHtml(u.tipo)}</td><td>${escapeHtml(u.nombre)}</td><td>${escapeHtml(u.piso || '—')}</td><td>${escapeHtml(u.referencia || '—')}</td><td><button type="button" class="btn-delete-inc" aria-label="Borrar ubicación ${escapeHtml(u.nombre)}" onclick="eliminarUbicacion(${Number(u.id)}, this)" data-nombre="${escapeHtml(u.nombre)}"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button></td></tr>`).join('') : '<tr><td colspan="6">No hay ubicaciones registradas.</td></tr>';
     } catch (_) { mostrarError('errorInventario', 'No se pudieron cargar las ubicaciones.'); }
 }
 
@@ -88,7 +88,7 @@ async function cargarInventario() {
                     <td>${item.cantidad}</td>
                     ${esAdmin ? `<td><div class="incidence-action-controls">
                         <button onclick="prepararEdicion(${item.id})" style="background:#0095f6;width:auto;padding:5px 10px;font-size:12px;">Editar</button>
-                        <button type="button" class="btn-delete-inc" aria-label="Eliminar equipo: ${escapeHtml(item.nombre)}" onclick="eliminarProducto(${item.id})"><span aria-hidden="true">⌫</span></button>
+                        <button type="button" class="btn-delete-inc" aria-label="Eliminar equipo: ${escapeHtml(item.nombre)}" onclick="eliminarProducto(${item.id})"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button>
                     </td>` : ''}
                 </tr>
             `).join('');

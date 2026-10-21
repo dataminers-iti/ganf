@@ -33,7 +33,7 @@ async function cargarPrestamos() {
 
 function accionesPrestamo(p) {
     const opts = p.estado === 'solicitado' && rolPrestamo === 'admin' ? [['aprobado','Aprobar'],['rechazado','Rechazar']] : p.estado === 'aprobado' ? [['entregado','Marcar entregado']] : p.estado === 'entregado' ? [['devuelto','Marcar devuelto']] : [];
-    return opts.map(([estado,label]) => `<button type="button" class="btn-secundario" onclick="actualizarPrestamo(${p.id},'${estado}')">${label}</button>`).join('') + `<button type="button" class="btn-delete-inc" aria-label="Borrar préstamo" onclick="borrarPrestamo(${p.id}, this)" data-equipo="${escapeHtml(p.nombre_equipo)}"><span aria-hidden="true">⌫</span></button>`;
+    return opts.map(([estado,label]) => `<button type="button" class="btn-secundario" onclick="actualizarPrestamo(${p.id},'${estado}')">${label}</button>`).join('') + `<button type="button" class="btn-delete-inc" aria-label="Borrar préstamo" onclick="borrarPrestamo(${p.id}, this)" data-equipo="${escapeHtml(p.nombre_equipo)}"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button>`;
 }
 
 async function solicitarPrestamo() {

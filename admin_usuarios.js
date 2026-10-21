@@ -20,29 +20,27 @@ async function cargarUsuarios() {
                     <td>${u.id}</td>
                     <td>${u.nombre || '-'}</td>
                     <td>${u.correo || '-'}</td>
-                    <td>
+                    <td>${u.activo ? '<span style="color:green;">Activo</span>' : '<span style="color:red;">Inactivo</span>'}</td>
+                    <td>${new Date(u.fecha_creacion).toLocaleDateString()}</td>
+                    <td><div class="incidence-action-controls">
                         <select onchange="cambiarRol(${u.id}, this.value)" style="width:auto;padding:5px;font-size:12px;">
                             <option value="usuario" ${u.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
                             <option value="solicitante" ${u.rol === 'solicitante' ? 'selected' : ''}>Solicitante</option>
                             <option value="tecnico" ${u.rol === 'tecnico' ? 'selected' : ''}>Técnico</option>
                             <option value="admin" ${u.rol === 'admin' ? 'selected' : ''}>Admin</option>
                         </select>
-                    </td>
-                    <td>${u.activo ? '<span style="color:green;">Activo</span>' : '<span style="color:red;">Inactivo</span>'}</td>
-                    <td>${new Date(u.fecha_creacion).toLocaleDateString()}</td>
-                    <td>
                         <button onclick="toggleActivo(${u.id}, ${u.activo ? 0 : 1})" 
                                 style="background:${u.activo ? '#e74c3c' : '#27ae60'};width:auto;padding:5px 10px;font-size:12px;">
                             ${u.activo ? 'Desactivar' : 'Activar'}
                         </button>
-                    </td>
+                    </div></td>
                 </tr>
             `).join('');
         } else {
-            tbody.innerHTML = '<tr><td colspan="7">No hay usuarios registrados</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6">No hay usuarios registrados</td></tr>';
         }
     } catch (err) {
-        document.getElementById('bodyUsuarios').innerHTML = '<tr><td colspan="7">Error al cargar usuarios</td></tr>';
+        document.getElementById('bodyUsuarios').innerHTML = '<tr><td colspan="6">Error al cargar usuarios</td></tr>';
     }
 }
 

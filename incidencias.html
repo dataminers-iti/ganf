@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="base.css?v=3">
     <link rel="stylesheet" href="tema.css?v=9">
     <link rel="stylesheet" href="componentes.css?v=3">
-    <link rel="stylesheet" href="layout.css?v=10">
-    <script src="navegacion.js?v=3" defer></script>
+    <link rel="stylesheet" href="layout.css?v=14">
+    <script src="navegacion.js?v=10" defer></script>
     <script src="autenticacion.js?v=3" defer></script>
-    <script src="incidencias.js?v=4" defer></script>
+    <script src="incidencias.js?v=5" defer></script>
     <script src="tema.js?v=5" defer></script>
 </head>
 <body class="page-incidencias">
-    <button class="dark-btn" onclick="toggleDark()"><span class="theme-icon-moon" aria-hidden="true">☾</span><span class="theme-icon-sun" aria-hidden="true" hidden>☀</span></button>
+    <button class="dark-btn" onclick="toggleDark()"><i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i><i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true" hidden></i></button>
 
     <!-- Formulario para crear incidencia -->
     <div class="card incidence-form">
@@ -65,7 +65,7 @@
 
     <dialog id="dialogoPrioridadIncidencia" class="inc-dialog" aria-labelledby="tituloDialogoPrioridadIncidencia">
         <div class="inc-dialog-card">
-            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoPrioridadIncidencia').close()">×</button>
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoPrioridadIncidencia').close()"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
             <span class="incidence-kicker">Gestión de incidencia</span>
             <h2 id="tituloDialogoPrioridadIncidencia">Cambiar prioridad</h2>
             <label for="nuevaPrioridadIncidencia">Seleccioná la nueva prioridad</label>
@@ -84,7 +84,7 @@
 
     <dialog id="dialogoBorrarIncidencia" class="inc-dialog" aria-labelledby="tituloDialogoBorrarIncidencia">
         <div class="inc-dialog-card">
-            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoBorrarIncidencia').close()">×</button>
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar" onclick="document.getElementById('dialogoBorrarIncidencia').close()"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
             <span class="incidence-kicker">Confirmación</span>
             <h2 id="tituloDialogoBorrarIncidencia">Borrar incidencia</h2>
             <p id="mensajeConfirmarBorradoIncidencia" class="inc-dialog-message"></p>

@@ -52,7 +52,7 @@ async function cargarSolicitudes() {
                             <option value="rechazada">Rechazada</option>
                         </select>
                             <button type="button" class="btn-priority-inc" data-solicitud-id="${sol.id}" data-prioridad="${sol.prioridad}" onclick="abrirPrioridadSolicitud(this)">Cambiar prioridad</button>
-                            <button type="button" class="btn-delete-inc" aria-label="Borrar solicitud: ${escapeHtml(sol.tipo_servicio)}" onclick="borrarSolicitud(${sol.id}, this)" data-titulo="${escapeHtml(sol.tipo_servicio)}"><span aria-hidden="true">⌫</span></button>
+                            <button type="button" class="btn-delete-inc" aria-label="Borrar solicitud: ${escapeHtml(sol.tipo_servicio)}" onclick="borrarSolicitud(${sol.id}, this)" data-titulo="${escapeHtml(sol.tipo_servicio)}"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button>
                         </div>
                     </td>` : ''}
                 </tr>

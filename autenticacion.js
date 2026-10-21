@@ -104,7 +104,7 @@ async function registro() {
         if (data.status === 'exito') {
             mostrarError('estadoRegistro', 'Cuenta creada correctamente. Ahora podés iniciar sesión.');
             document.querySelector('#errorRegistro')?.replaceChildren();
-            window.location.href = 'pagina.html';
+            window.location.href = 'index.html';
         } else {
             mostrarError("errorRegistro", data.message || "Error al crear cuenta");
         }
@@ -119,7 +119,7 @@ async function logout() {
         await fetch('api/auth.php?accion=logout', { method: 'POST' });
     } catch (e) {}
     sessionStorage.removeItem('usuario');
-    window.location.href = 'pagina.html';
+    window.location.href = 'index.html';
 }
 
 // Verificar sesión activa - call on protected pages
@@ -133,7 +133,7 @@ async function verificarSesion() {
         }
     } catch (e) {}
     // No session, redirect to login
-    window.location.href = 'pagina.html';
+    window.location.href = 'index.html';
     return null;
 }
 

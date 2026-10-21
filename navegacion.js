@@ -3,7 +3,7 @@ function irAPagina(ruta) {
     window.location.href = ruta;
 }
 
-function mostrarLogin() { irAPagina("pagina.html"); }
+function mostrarLogin() { irAPagina("index.html"); }
 function mostrarRegistro() { irAPagina("registro.html"); }
 function mostrarSistema() { irAPagina("sistema.html"); }
 function mostrarInventario() { irAPagina("inventario.html"); }
@@ -14,24 +14,36 @@ function mostrarAdminUsuarios() { irAPagina("admin_usuarios.html"); }
 function mostrarPrestamos() { irAPagina("prestamos.html"); }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const guestPages = ['pagina.html', 'registro.html'];
+    if (!document.querySelector('link[data-bootstrap-icons]')) {
+        const iconos = document.createElement('link');
+        iconos.rel = 'stylesheet';
+        iconos.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css';
+        iconos.dataset.bootstrapIcons = 'true';
+        document.head.appendChild(iconos);
+    }
+    const guestPages = ['index.html', 'registro.html'];
     if (guestPages.includes(location.pathname.split('/').pop())) return;
     const usuario = getUsuarioActual();
     const rutaActual = location.pathname.split('/').pop();
+
     const items = [
-        ['principal.html', '⌂', 'Panel principal'],
-        ['incidencias.html', '◉', 'Incidencias'],
-        ...(['admin','solicitante','tecnico'].includes(usuario?.rol) ? [['servicio.html', '▤', 'Solicitudes']] : []),
-        ['inventario.html', '▣', 'Inventario'],
-        ...(usuario?.rol === 'admin' ? [['inventario.html#ubicaciones', '⌖', 'Ubicaciones']] : []),
-        ['prestamos.html', '⇄', 'Préstamos'],
-        ...(usuario?.rol === 'admin' ? [['admin_usuarios.html', '♧', 'Usuarios y técnicos']] : [])
+        ['principal.html', 'bi-house-door-fill', 'Panel principal'],
+        ['incidencias.html', 'bi-clipboard2-pulse-fill', 'Incidencias'],
+        ...(['admin','solicitante','tecnico'].includes(usuario?.rol) ? [['servicio.html', 'bi-wrench-adjustable', 'Solicitudes']] : []),
+        ['inventario.html', 'bi-boxes', 'Inventario'],
+        ...(usuario?.rol === 'admin' ? [['inventario.html#ubicaciones', 'bi-geo-alt-fill', 'Ubicaciones']] : []),
+        ['prestamos.html', 'bi-arrow-left-right', 'Préstamos'],
+        ...(usuario?.rol === 'admin' ? [['admin_usuarios.html', 'bi-people-fill', 'Usuarios y técnicos']] : [])
     ];
+    const itemsGestion = items.filter(item => item[0] !== 'admin_usuarios.html');
+    const itemsAdministracion = items.filter(item => item[0] === 'admin_usuarios.html');
     const sidebar = document.createElement('aside');
     sidebar.className = 'app-sidebar';
     sidebar.innerHTML = `<a class="app-brand" href="principal.html" aria-label="SGRSI ITI"><span class="app-brand-mark"><img src="ico logo.png" alt=""></span><span>SGRSI <small>· ITI</small></span></a>
         <div class="sidebar-label">Gestión</div>
-        <nav aria-label="Navegación principal">${items.map(([href,icon,label]) => `<a class="sidebar-link ${(href.includes('#') ? location.hash === href.slice(href.indexOf('#')) : rutaActual === href && location.hash !== '#ubicaciones') ? 'active' : ''}" href="${href}" title="${label}" aria-label="${label}"><span class="nav-icon">${icon}</span><span>${label}</span></a>`).join('')}</nav>
+
+        <nav aria-label="Gestión">${itemsGestion.map(([href,icon,label]) => `<a class="sidebar-link ${(href.includes('#') ? location.hash === href.slice(href.indexOf('#')) : rutaActual === href && location.hash !== '#ubicaciones') ? 'active' : ''}" href="${href}" title="${label}" aria-label="${label}"><i class="bi ${icon} nav-icon" aria-hidden="true"></i><span>${label}</span></a>`).join('')}</nav>
+        ${itemsAdministracion.length ? `<div class="sidebar-label sidebar-label-admin">Administración</div><nav aria-label="Administración">${itemsAdministracion.map(([href,icon,label]) => `<a class="sidebar-link ${rutaActual === href ? 'active' : ''}" href="${href}" title="${label}" aria-label="${label}"><i class="bi ${icon} nav-icon" aria-hidden="true"></i><span>${label}</span></a>`).join('')}</nav>` : ''}
         <div class="sidebar-foot"><span class="online-dot"></span>Mesa de ayuda<br><small>Sistema SGRSI · ITI</small></div>`;
     const main = document.createElement('div');
     main.className = 'app-main';

@@ -48,7 +48,7 @@ async function cargarIncidencias() {
                             <option value="en_proceso">En proceso</option>
                             <option value="resuelta">Resuelta</option>
                             <option value="cerrada">Cerrada</option>
-                        </select><button type="button" class="btn-priority-inc" data-incidencia-id="${Number(inc.id)}" data-prioridad="${escapeHtml(inc.prioridad)}" onclick="abrirDialogoPrioridadDesdeBoton(this)">Cambiar prioridad</button><button type="button" class="btn-delete-inc" data-incidencia-id="${Number(inc.id)}" data-incidencia-titulo="${escapeHtml(inc.titulo)}" aria-label="Borrar incidencia: ${escapeHtml(inc.titulo)}" title="Borrar incidencia" onclick="abrirDialogoBorrarDesdeBoton(this)"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+                        </select><button type="button" class="btn-priority-inc" data-incidencia-id="${Number(inc.id)}" data-prioridad="${escapeHtml(inc.prioridad)}" onclick="abrirDialogoPrioridadDesdeBoton(this)">Cambiar prioridad</button><button type="button" class="btn-delete-inc" data-incidencia-id="${Number(inc.id)}" data-incidencia-titulo="${escapeHtml(inc.titulo)}" aria-label="Borrar incidencia: ${escapeHtml(inc.titulo)}" title="Borrar incidencia" onclick="abrirDialogoBorrarDesdeBoton(this)"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button></div>
                         </div>
                     </td>` : ''}
                 </tr>
