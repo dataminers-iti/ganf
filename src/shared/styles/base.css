@@ -1,18 +1,54 @@
 /* =====================
    ESTILOS GENERALES
    ===================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Valley+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    /* Tipografías del sistema (fuente única de verdad) */
+    --fuente-titulos: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --fuente-texto: 'Valley Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --fuente-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    /* Espaciado lateral del documento: lo usan body y las barras a sangre */
+    --page-padding: clamp(16px, 2.5vw, 32px);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4, h5, h6,
+.section-heading,
+.dashboard-stat .stat-number {
+    font-family: var(--fuente-titulos);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -.03em;
+    text-wrap: balance;
+}
+
+h1 { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem); }
+h2 { font-size: clamp(1.3rem, 1rem + 1.2vw, 1.85rem); }
+h3 { font-size: clamp(1.1rem, .95rem + .7vw, 1.4rem); }
+h4 { font-size: clamp(1rem, .92rem + .4vw, 1.15rem); }
+h5, h6 { font-size: 1rem; }
+
 body {
-    font-family: "DM Sans", "Segoe UI", Arial, sans-serif;
+    font-family: var(--fuente-texto);
+    font-size: 16px;
+    line-height: 1.6;
     background: #f4f7fb;
     color: #1f2937;
     text-align: center;
-    padding: 32px;
+    padding: var(--page-padding);
     transition: 0.3s;
     max-width: 1800px;
     margin: 0 auto;
@@ -22,13 +58,39 @@ p {
     margin: 10px 0;
 }
 
+small {
+    font-size: .8125em;
+}
+
+/* Código, datos y etiquetas técnicas */
+code, kbd, pre, samp, .mono {
+    font-family: var(--fuente-mono);
+    font-variant-ligatures: none;
+}
+
+.sidebar-label,
+.dashboard-eyebrow,
+.incidence-kicker,
+.location-caption,
+.breadcrumb-label {
+    font-family: var(--fuente-mono);
+}
+
+input,
+select,
+textarea,
+button {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
 input {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-family: Arial, sans-serif;
 }
 
 button {
@@ -40,7 +102,6 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: 0.2s;
-    font-family: Arial, sans-serif;
 }
 
 input:focus, select:focus, textarea:focus { outline: 3px solid rgba(23,105,170,.18); border-color:#1769aa; }
@@ -63,8 +124,51 @@ a:hover {
     color: #0077c8;
 }
 
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+img,
+video {
+    height: auto;
+}
+
+/* =====================
+   RESPONSIVE BASE
+   ===================== */
 @media (max-width: 600px) {
+    :root {
+        --page-padding: 15px;
+    }
+
     body {
-        padding: 15px;
+        padding: var(--page-padding);
+        font-size: 15.5px;
+    }
+
+    /* Evita el zoom automático de iOS al enfocar campos */
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+
+    /* Objetivos táctiles cómodos */
+    input,
+    select {
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 380px) {
+    :root {
+        --page-padding: 12px;
+    }
+
+    body {
+        font-size: 15px;
     }
 }

@@ -3,10 +3,11 @@
    ===================== */
 .card {
     background: white;
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
     margin: 20px auto;
-    padding: 25px;
-    border-radius: 14px;
+    padding: clamp(18px, 3.5vw, 25px);
+    border-radius: 22px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -18,7 +19,6 @@
     margin-top: 0;
 }
 
-h1,h2,h3,.section-heading,.dashboard-stat .stat-number { font-family:Manrope,"DM Sans","Segoe UI",sans-serif; letter-spacing:-.03em; }
 
 #errorLogin,
 #errorRegistro,
@@ -44,6 +44,7 @@ h1,h2,h3,.section-heading,.dashboard-stat .stat-number { font-family:Manrope,"DM
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-variant-numeric: tabular-nums;
 }
 
 .tabla-datos th {
@@ -52,6 +53,7 @@ h1,h2,h3,.section-heading,.dashboard-stat .stat-number { font-family:Manrope,"DM
     padding: 12px 10px;
     text-align: left;
     font-size: 14px;
+    white-space: nowrap;
 }
 
 .tabla-datos td {
@@ -92,8 +94,9 @@ html.dark body .tabla-datos tr:hover {
 .badge {
     padding: 3px 8px;
     border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    font-weight: 600;
     display: inline-block;
 }
 
@@ -119,7 +122,7 @@ select {
     margin: 5px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-family: Arial, sans-serif;
+    font-family: inherit;
     background: white;
 }
 
@@ -138,8 +141,30 @@ html.dark body select {
     border: 1px solid #555;
 }
 
+/* =====================
+   RESPONSIVE
+   ===================== */
+@media (max-width: 700px) {
+    .tabla-datos th {
+        padding: 10px 8px;
+        font-size: 12.5px;
+    }
+
+    .tabla-datos td {
+        padding: 9px 8px;
+        font-size: 12.5px;
+    }
+}
+
 @media (max-width: 600px) {
     .card {
-        width: 100%;
+        max-width: 100%;
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 380px) {
+    .card {
+        padding: 16px;
     }
 }

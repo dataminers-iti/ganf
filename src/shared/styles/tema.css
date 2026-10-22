@@ -169,3 +169,40 @@ html.dark body .home-btn:hover,
 html.dark body .back-btn:hover {
     background: #555;
 }
+
+/* =====================
+   RESPONSIVE
+   ===================== */
+@media (max-width: 600px) {
+    html.dark body:has(.login-container) .login-container,
+    html:not(.dark) body:has(.login-container) .login-container {
+        min-height: calc(100vh - 30px);
+        min-height: calc(100dvh - 30px);
+    }
+
+    .dark-btn {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+
+    .home-btn,
+    .back-btn {
+        top: 10px;
+        left: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    html:not(.dark) body:has(.login-container) .login-container .card,
+    html.dark body:has(.login-container) .login-container .card {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
