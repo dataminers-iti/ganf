@@ -1,0 +1,7 @@
+/* Punto de entrada CSS de las páginas públicas (login y registro).
+   Vite empaqueta estos @import en un solo archivo por página en el build. */
+@import '../tokens.css';
+@import '../base.css';
+@import '../tema.css';
+@import '../componentes.css';
+@import '../layout/login.css';

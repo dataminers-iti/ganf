@@ -1,9 +1,24 @@
 // Rutas de la aplicación y base de la API.
 //
-// Se calculan desde la ubicación de este módulo, así funcionan tanto si la
-// app se sirve en la raíz del dominio como en un subdirectorio (XAMPP).
+// La raíz se deduce del documento actual: todas las páginas viven en la raíz
+// (index.html) o en sites/ (el resto). Así funciona igual servida en la raíz
+// del dominio, en un subdirectorio (XAMPP) o empaquetada con Vite, donde este
+// módulo termina dentro de /assets/ y ya no sirve contar niveles de carpeta.
+//
+// En Node (tests) no hay `document`, así que se usa la ubicación del módulo.
 
-export const RAIZ_APP = new URL('../../../', import.meta.url);
+function calcularRaiz() {
+    if (typeof document !== 'undefined' && document.baseURI) {
+        const carpetaPagina = new URL('.', document.baseURI);
+        return carpetaPagina.pathname.endsWith('/sites/')
+            ? new URL('../', carpetaPagina)
+            : carpetaPagina;
+    }
+    const rutaModulo = import.meta.url;
+    return new URL('../../../', rutaModulo);
+}
+
+export const RAIZ_APP = calcularRaiz();
 
 export function rutaApp(ruta) {
     return new URL(ruta, RAIZ_APP).href;
