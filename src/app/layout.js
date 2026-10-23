@@ -4,8 +4,10 @@
 import { escapeHtml } from '../shared/dom/dom.js';
 import { RUTAS, bindNavigationGlobals } from './routes.js';
 import { getUsuarioActual, logout } from '../features/auth/index.js';
+import { icono } from '../shared/ui/icons.js';
+import { montarVolverArriba } from '../shared/ui/back-to-top.js';
 
-const RUTA_LOGO = new URL('../shared/assets/logo.png', import.meta.url).href;
+const RUTA_LOGO = new URL('../shared/assets/logo.webp', import.meta.url).href;
 
 function pathnameActual() {
     const pathname = window.location.pathname;
@@ -17,29 +19,20 @@ function esPaginaPublica() {
     return [RUTAS.login, RUTAS.registro].some(ruta => new URL(ruta).pathname === actual);
 }
 
-function inyectarIconos() {
-    if (document.querySelector('link[data-bootstrap-icons]')) return;
-    const iconos = document.createElement('link');
-    iconos.rel = 'stylesheet';
-    iconos.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css';
-    iconos.dataset.bootstrapIcons = 'true';
-    document.head.appendChild(iconos);
-}
-
 function construirItems(usuario) {
     return [
-        [RUTAS.panel, 'bi-house-door-fill', 'Panel principal'],
-        [RUTAS.incidencias, 'bi-clipboard2-pulse-fill', 'Incidencias'],
+        [RUTAS.panel, 'inicio', 'Panel principal'],
+        [RUTAS.incidencias, 'incidencia', 'Incidencias'],
         ...(['admin', 'solicitante', 'tecnico'].includes(usuario?.rol)
-            ? [[RUTAS.servicio, 'bi-wrench-adjustable', 'Solicitudes']]
+            ? [[RUTAS.servicio, 'llave', 'Solicitudes']]
             : []),
-        [RUTAS.inventario, 'bi-boxes', 'Inventario'],
+        [RUTAS.inventario, 'cajas', 'Inventario'],
         ...(usuario?.rol === 'admin'
-            ? [[`${RUTAS.inventario}#ubicaciones`, 'bi-geo-alt-fill', 'Ubicaciones']]
+            ? [[`${RUTAS.inventario}#ubicaciones`, 'ubicacion', 'Ubicaciones']]
             : []),
-        [RUTAS.prestamos, 'bi-arrow-left-right', 'Préstamos'],
+        [RUTAS.prestamos, 'intercambio', 'Préstamos'],
         ...(usuario?.rol === 'admin'
-            ? [[RUTAS.adminUsuarios, 'bi-people-fill', 'Usuarios y técnicos']]
+            ? [[RUTAS.adminUsuarios, 'usuarios', 'Usuarios y técnicos']]
             : []),
     ];
 }
@@ -48,19 +41,19 @@ function construirSidebar(itemsGestion, itemsAdministracion) {
     const sidebar = document.createElement('aside');
     sidebar.className = 'app-sidebar';
 
-    const enlace = ([href, icono, etiqueta]) => {
+    const enlace = ([href, nombreIcono, etiqueta]) => {
         const activo = href.includes('#')
             ? window.location.hash === href.slice(href.indexOf('#'))
             : new URL(href).pathname === pathnameActual() && window.location.hash !== '#ubicaciones';
-        return `<a class="sidebar-link ${activo ? 'active' : ''}" href="${href}" title="${etiqueta}" aria-label="${etiqueta}"><i class="bi ${icono} nav-icon" aria-hidden="true"></i><span>${etiqueta}</span></a>`;
+        return `<a class="sidebar-link ${activo ? 'active' : ''}" href="${href}" title="${etiqueta}" aria-label="${etiqueta}">${icono(nombreIcono, 'nav-icon')}<span>${etiqueta}</span></a>`;
     };
 
-    sidebar.innerHTML = `<a class="app-brand" href="${RUTAS.panel}" aria-label="SGRSI ITI"><span class="app-brand-mark"><img src="${RUTA_LOGO}" alt=""></span><span>SGRSI <small>· ITI</small></span></a>
+    sidebar.innerHTML = `<a class="app-brand" href="${RUTAS.panel}" aria-label="SGRSI ITI"><span class="app-brand-mark"><img src="${RUTA_LOGO}" alt=""></span><span>SGRSI <small>ITI</small></span></a>
         <div class="sidebar-label">Gestión</div>
 
         <nav aria-label="Gestión">${itemsGestion.map(enlace).join('')}</nav>
         ${itemsAdministracion.length ? `<div class="sidebar-label sidebar-label-admin">Administración</div><nav aria-label="Administración">${itemsAdministracion.map(enlace).join('')}</nav>` : ''}
-        <div class="sidebar-foot"><span class="online-dot"></span>Mesa de ayuda<br><small>Sistema SGRSI · ITI</small></div>`;
+        <div class="sidebar-foot">Mesa de ayuda<br><small>Sistema SGRSI · ITI</small></div>`;
 
     return sidebar;
 }
@@ -80,8 +73,8 @@ function construirTopbar(usuario, items) {
         .join('')
         .toUpperCase();
 
-    topbar.innerHTML = `<button type="button" class="mobile-menu" onclick="toggleMobileNav()" aria-label="Abrir menú">☰</button><span class="breadcrumb-label">SGRSI <span>›</span> ${nombreSeccion}</span>
-        <div class="topbar-user"><span>${escapeHtml(usuario?.nombre || '')} <small>${escapeHtml(usuario?.rol || '')}</small></span><span class="topbar-avatar">${escapeHtml(iniciales)}</span><button type="button" class="btn-logout" onclick="logout()">Salir</button></div>`;
+    topbar.innerHTML = `<button type="button" class="mobile-menu" onclick="toggleMobileNav()" aria-label="Abrir menú">${icono('menu')}</button><span class="breadcrumb-label">SGRSI <span>›</span> ${nombreSeccion}</span>
+        <div class="topbar-user"><span>${escapeHtml(usuario?.nombre || '')} <small>${escapeHtml(usuario?.rol || '')}</small></span><span class="topbar-avatar">${escapeHtml(iniciales)}</span><button type="button" class="btn-logout" onclick="logout()">${icono('salir')}Salir</button></div>`;
 
     return topbar;
 }
@@ -128,6 +121,6 @@ window.logout = logout;
 bindNavigationGlobals();
 
 document.addEventListener('DOMContentLoaded', () => {
-    inyectarIconos();
     montarShell();
+    if (!esPaginaPublica()) montarVolverArriba();
 });

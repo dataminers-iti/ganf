@@ -1,4 +1,5 @@
 import { escapeHtml } from '../../../shared/dom/dom.js';
+import { icono } from '../../../shared/ui/icons.js';
 import { formatearFecha } from '../../../shared/utils/format.js';
 import { verificarSesion } from '../../auth/index.js';
 import { cargarResumen } from '../services/dashboard.service.js';
@@ -37,7 +38,7 @@ function renderizarUbicaciones(ubicaciones) {
     contenedor.innerHTML = ubicaciones.length
         ? ubicaciones.slice(0, 4).map(ubicacion => {
             const detalle = [ubicacion.edificio, ubicacion.tipo, ubicacion.piso, ubicacion.referencia].filter(Boolean).join(' · ');
-            return `<div class="location-row"><span class="location-row-icon"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></span><span><strong>${escapeHtml(ubicacion.nombre)}</strong><small>${escapeHtml(detalle)}</small></span></div>`;
+            return `<div class="location-row"><span class="location-row-icon">${icono('ubicacion')}</span><span><strong>${escapeHtml(ubicacion.nombre)}</strong><small>${escapeHtml(detalle)}</small></span></div>`;
         }).join('')
         : '<p class="location-empty">Todavía no hay ubicaciones cargadas.</p>';
 }

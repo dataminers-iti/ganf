@@ -1,0 +1,110 @@
+/* =====================
+   TOKENS DATAMINERS
+   =====================
+   Fuente de verdad: el design system de Dataminers (https://claude.ai/artifact/C4aWDMadQWA1p9gsodtNra),
+   igual que dataminers-site/src/index.css. Los nombres no cambian entre temas, los valores sí.
+   Los componentes usan roles (var(--ink)), nunca colores sueltos. Las razones son contraste WCAG 2.
+   El tema vive en <html data-theme="light|dark">; lo fija el script del <head> antes de pintar.
+   ===================== */
+
+@font-face {
+    font-family: 'Dela Gothic One';
+    src: url('../fonts/dela-gothic-one-latin.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Valley Sans';
+    src: url('../fonts/valley-sans-latin.woff2') format('woff2');
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Merriweather';
+    src: url('../fonts/merriweather-latin.woff2') format('woff2');
+    font-weight: 300 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/jetbrains-mono-latin.woff2') format('woff2');
+    font-weight: 100 800;
+    font-display: swap;
+}
+
+:root,
+[data-theme='light'] {
+    color-scheme: light;
+    --surface: #fff4e1; /* lienzo */
+    --surface-raised: #fffaf0; /* tarjetas, tablas */
+    --surface-sunken: #f6e8cf; /* campos, cabeceras de tabla */
+    --line: #e3d6bf; /* filete decorativo */
+    --line-strong: #428475; /* bordes de controles, >=3:1 sobre todas las superficies */
+    --ink: #1a312c; /* 12.7:1 sobre surface */
+    --ink-muted: #4f5e58; /* 6.3:1 sobre surface, 5.6:1 sobre sunken */
+    --brand: #428475; /* identidad: rellenos; 4.0:1, solo texto grande */
+    --brand-strong: #2f6156; /* enlaces y eyebrows: 6.5:1 */
+    --highlight: #428475; /* una palabra de un titular display, >=24px */
+    --on-brand: #fff4e1;
+    --accent: #89d7b7; /* acción primaria; nunca texto sobre superficie clara */
+    --on-accent: #1a312c; /* 8.2:1 sobre accent */
+    --accent-soft: #ddf3e8; /* tinte detrás de brand-strong: 6.1:1 */
+    --deep: #1a312c; /* fijo en ambos temas */
+    --cream: #fff4e1; /* fijo, 12.7:1 sobre deep */
+    --danger: #a3361f; /* 6.2:1 sobre surface */
+    --focus-ring: #1a312c;
+    --shadow-ink: #1a312c;
+}
+
+[data-theme='dark'] {
+    color-scheme: dark;
+    --surface: #1a312c;
+    --surface-raised: #23413a;
+    --surface-sunken: #142723;
+    --line: #2e4d46;
+    --line-strong: #5a9c8c; /* 3.5:1 sobre raised, 4.3:1 sobre surface */
+    --ink: #fff4e1; /* 12.7:1 sobre surface */
+    --ink-muted: #b9c9bf; /* 8.0:1 sobre surface, 6.4:1 sobre raised */
+    --brand-strong: #89d7b7; /* 8.2:1 sobre surface */
+    --highlight: #89d7b7;
+    --accent-soft: #24463e; /* detrás de brand-strong: 6.2:1 */
+    --danger: #f2a38f; /* 6.8:1 sobre surface */
+    --focus-ring: #89d7b7;
+    --shadow-ink: #89d7b7;
+}
+
+:root {
+    --font-display: 'Dela Gothic One', 'Arial Black', system-ui, sans-serif;
+    --font-sans: 'Valley Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Merriweather', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+    /* Escala tipográfica del design system */
+    --text-display-m: 2.25rem;
+    --text-display-s: 1.5rem;
+    --text-title: 1.25rem;
+    --text-body: 1.0625rem;
+    --text-body-s: 0.9375rem;
+    --text-label: 0.875rem;
+    --text-lede: 1.3125rem;
+    --text-eyebrow: 0.75rem;
+    --text-data: 0.8125rem;
+
+    --radius-sm: 2px; /* botones, tags, campos */
+    --radius-md: 6px; /* tarjetas, tablas */
+    --radius-lg: 12px; /* paneles de formulario, diálogos */
+
+    --shadow-block: 4px 4px 0 0 var(--shadow-ink); /* duro, sin blur: tarjeta destacada y volver arriba */
+    --shadow-press: 4px 4px 0 0 var(--ink); /* hover del botón primario */
+
+    /* Movimiento (casa): 120 ms hover/press, 180 ms panel, 240 ms layout */
+    --dur-hover: 120ms;
+    --dur-panel: 180ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --page-padding: clamp(16px, 3vw, 42px);
+    --sidebar-width: 248px;
+}

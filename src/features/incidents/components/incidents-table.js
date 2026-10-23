@@ -1,4 +1,5 @@
 import { escapeHtml } from '../../../shared/dom/dom.js';
+import { icono } from '../../../shared/ui/icons.js';
 import { capitalizar, formatearFecha, recortar } from '../../../shared/utils/format.js';
 import { formatEstadoIncidencia } from '../utils/incidents.js';
 
@@ -18,13 +19,13 @@ function renderAcciones(incidencia, { rol, tecnicos }) {
     return `<td>
         <div class="incidence-action-stack">
         ${selectorTecnico}
-        <div class="incidence-action-controls"><select aria-label="Cambiar estado de ${escapeHtml(incidencia.titulo)}" onchange="actualizarIncidencia(${Number(incidencia.id)}, this.value)" style="width:auto;padding:5px;font-size:12px;">
+        <div class="incidence-action-controls"><select aria-label="Cambiar estado de ${escapeHtml(incidencia.titulo)}" onchange="actualizarIncidencia(${Number(incidencia.id)}, this.value)">
             <option value="" disabled selected>Cambiar estado</option>
             <option value="abierta">Abierta</option>
             <option value="en_proceso">En proceso</option>
             <option value="resuelta">Resuelta</option>
             <option value="cerrada">Cerrada</option>
-        </select><button type="button" class="btn-priority-inc" data-incidencia-id="${Number(incidencia.id)}" data-prioridad="${escapeHtml(incidencia.prioridad)}" onclick="abrirDialogoPrioridadDesdeBoton(this)">Cambiar prioridad</button><button type="button" class="btn-delete-inc" data-incidencia-id="${Number(incidencia.id)}" data-incidencia-titulo="${escapeHtml(incidencia.titulo)}" aria-label="Borrar incidencia: ${escapeHtml(incidencia.titulo)}" title="Borrar incidencia" onclick="abrirDialogoBorrarDesdeBoton(this)"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button></div>
+        </select><button type="button" class="btn-priority-inc" data-incidencia-id="${Number(incidencia.id)}" data-prioridad="${escapeHtml(incidencia.prioridad)}" onclick="abrirDialogoPrioridadDesdeBoton(this)">Cambiar prioridad</button><button type="button" class="btn-delete-inc" data-incidencia-id="${Number(incidencia.id)}" data-incidencia-titulo="${escapeHtml(incidencia.titulo)}" aria-label="Borrar incidencia: ${escapeHtml(incidencia.titulo)}" title="Borrar incidencia" onclick="abrirDialogoBorrarDesdeBoton(this)">${icono('papelera')}</button></div>
         </div>
     </td>`;
 }
