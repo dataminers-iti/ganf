@@ -7,6 +7,7 @@ import { cpSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import { devPlugin } from './scripts/dev/plugin.js';
 
 const raiz = fileURLToPath(new URL('.', import.meta.url));
 const pagina = ruta => resolve(raiz, ruta);
@@ -24,9 +25,12 @@ function copiarApiPhp() {
     };
 }
 
+// En desarrollo el backend PHP no lo sirve Vite. devPlugin() (scripts/dev/) lee `.dev` y
+// simula la API (API_MODE=mock) o reenvía /api al PHP real (API_MODE=proxy + API_TARGET).
+// VITE_API_PROXY sigue valiendo como alias de API_TARGET.
 export default defineConfig({
     base: './',
-    plugins: [copiarApiPhp()],
+    plugins: [copiarApiPhp(), devPlugin()],
     server: {
         port: 5173,
     },
