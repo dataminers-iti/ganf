@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const modoOscuro=localStorage.getItem("modo")==="dark";document.documentElement.style.colorScheme=modoOscuro?"dark":"light";if(modoOscuro)document.documentElement.classList.add("dark")}catch(_){}</script>
-    <meta name="theme-color" content="#173b63">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const g=localStorage.getItem("dm-theme");document.documentElement.dataset.theme=g==="dark"||g==="light"?g:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(_){document.documentElement.dataset.theme="light"}</script>
+    <meta name="theme-color" content="#1a312c">
     <title>Panel principal | SGRSI</title>
-    <link rel="icon" type="image/png" href="../src/shared/assets/logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../src/shared/styles/base.css?v=4"><link rel="stylesheet" href="../src/shared/styles/tema.css?v=10"><link rel="stylesheet" href="../src/shared/styles/componentes.css?v=4"><link rel="stylesheet" href="../src/shared/styles/layout.css?v=15">
+    <link rel="icon" type="image/webp" href="../src/shared/assets/logo.webp">
+    <link rel="stylesheet" href="../src/shared/styles/entradas/dashboard.css">
     <script type="module" src="../src/app/entries/dashboard.page.js"></script>
 </head>
 <body>
-    <button class="dark-btn" onclick="toggleDark()" aria-label="Cambiar tema"><i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i><i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true" hidden></i></button>
+    <button type="button" class="dark-btn" onclick="toggleDark()" aria-label="Cambiar a modo oscuro"><i data-icon="luna" class="theme-icon-moon"></i><i data-icon="sol" class="theme-icon-sun" hidden></i></button>
     <section class="dashboard-welcome">
-        <div><div class="dashboard-eyebrow">Instituto Tecnológico · Gestión de recursos informáticos</div><h1>Bienvenido al sistema SGRSI</h1><p id="mensajeBienvenida">Gestioná equipos, ubicaciones, solicitudes y atención técnica desde un solo lugar.</p></div>
-        <span class="dashboard-badge">SGRSI <span>· ITI</span></span>
+        <div><div class="dashboard-eyebrow">Instituto Tecnológico · Gestión de recursos informáticos</div><h1>Bienvenido al sistema <span class="resaltado">SGRSI</span></h1><p id="mensajeBienvenida">Gestioná equipos, ubicaciones, solicitudes y atención técnica desde un solo lugar.</p></div>
+        <span class="dashboard-badge">SGRSI ITI</span>
     </section>
     <section class="dashboard-stats" aria-label="Resumen del sistema">
-        <a class="dashboard-stat" href="incidencias.html"><span class="stat-icon"><i class="bi bi-clipboard2-pulse-fill" aria-hidden="true"></i></span><span class="stat-number" id="statIncidencias">—</span><span class="stat-label">Incidencias abiertas</span></a>
-        <a class="dashboard-stat" href="servicio.html"><span class="stat-icon"><i class="bi bi-wrench-adjustable" aria-hidden="true"></i></span><span class="stat-number" id="statSolicitudes">—</span><span class="stat-label">Solicitudes pendientes</span></a>
-        <a class="dashboard-stat" href="inventario.html"><span class="stat-icon"><i class="bi bi-boxes" aria-hidden="true"></i></span><span class="stat-number" id="statEquipos">—</span><span class="stat-label">Equipos registrados</span></a>
-        <a class="dashboard-stat" href="prestamos.html"><span class="stat-icon"><i class="bi bi-arrow-left-right" aria-hidden="true"></i></span><span class="stat-number" id="statPrestamos">—</span><span class="stat-label">Préstamos activos</span></a>
+        <a class="dashboard-stat" href="incidencias.html"><span class="stat-icon"><i data-icon="incidencia"></i></span><span class="stat-number" id="statIncidencias">-</span><span class="stat-label">Incidencias abiertas</span></a>
+        <a class="dashboard-stat" href="servicio.html"><span class="stat-icon"><i data-icon="llave"></i></span><span class="stat-number" id="statSolicitudes">-</span><span class="stat-label">Solicitudes pendientes</span></a>
+        <a class="dashboard-stat" href="inventario.html"><span class="stat-icon"><i data-icon="cajas"></i></span><span class="stat-number" id="statEquipos">-</span><span class="stat-label">Equipos registrados</span></a>
+        <a class="dashboard-stat" href="prestamos.html"><span class="stat-icon"><i data-icon="intercambio"></i></span><span class="stat-number" id="statPrestamos">-</span><span class="stat-label">Préstamos activos</span></a>
     </section>
     <section class="dashboard-grid">
         <div class="dashboard-panel activity-panel">
-            <div class="panel-heading"><div><h2>Actividad reciente</h2><p>Incidencias y solicitudes registradas</p></div><a href="incidencias.html">Ver incidencias <span aria-hidden="true"><i class="bi bi-arrow-right" aria-hidden="true"></i></span></a></div>
-            <div class="table-responsive"><table class="table dashboard-table mb-0"><thead><tr><th>Detalle</th><th>Tipo</th><th>Estado</th><th>Fecha</th></tr></thead><tbody id="actividadReciente"><tr><td colspan="4">Cargando actividad…</td></tr></tbody></table></div>
+            <div class="panel-heading"><div><h2>Actividad reciente</h2><p class="panel-sub">Incidencias y solicitudes registradas</p></div><a href="incidencias.html">Ver incidencias <span aria-hidden="true"><i data-icon="flecha"></i></span></a></div>
+            <div class="tabla-scroll"><table class="tabla-datos"><thead><tr><th>Detalle</th><th>Tipo</th><th>Estado</th><th>Fecha</th></tr></thead><tbody id="actividadReciente"><tr><td colspan="4">Cargando actividad…</td></tr></tbody></table></div>
             <p id="errorDashboard" class="feedback" role="status" aria-live="polite"></p>
         </div>
         <div class="dashboard-panel locations-panel">
-            <div class="panel-heading"><div><h2>Ubicaciones</h2><p>Espacios registrados en el instituto</p></div><a href="inventario.html">Ver inventario <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
-            <div class="location-illustration" aria-hidden="true"><span class="location-grid"></span><span class="location-pin"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></span><span class="location-caption">ITI · ESPACIOS</span></div>
-            <div id="dashboardUbicaciones" class="location-list"><p>Cargando ubicaciones…</p></div>
-            <div class="dashboard-note"><strong>¿Qué querés hacer?</strong><div class="quick-actions"><a href="incidencias.html"><i class="bi bi-clipboard2-pulse" aria-hidden="true"></i> Incidencia</a><a href="servicio.html"><i class="bi bi-wrench-adjustable" aria-hidden="true"></i> Servicio</a><a href="prestamos.html"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Préstamo</a></div></div>
+            <div class="panel-heading"><div><h2>Ubicaciones</h2><p class="panel-sub">Espacios registrados en el instituto</p></div><a href="inventario.html">Ver inventario <i data-icon="flecha"></i></a></div>
+                        <div id="dashboardUbicaciones" class="location-list"><p>Cargando ubicaciones…</p></div>
+            <div class="dashboard-note"><strong>¿Qué querés hacer?</strong><div class="quick-actions"><a href="incidencias.html"><i data-icon="incidencia"></i> Incidencia</a><a href="servicio.html"><i data-icon="llave"></i> Servicio</a><a href="prestamos.html"><i data-icon="intercambio"></i> Préstamo</a></div></div>
         </div>
     </section>
 </body>

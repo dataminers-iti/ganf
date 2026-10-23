@@ -1,4 +1,5 @@
 import { escapeHtml } from '../../../shared/dom/dom.js';
+import { icono } from '../../../shared/ui/icons.js';
 import { capitalizar, formatearFecha, recortar } from '../../../shared/utils/format.js';
 import { formatEstadoSolicitud } from '../utils/service-requests.js';
 
@@ -17,7 +18,7 @@ function renderAcciones(solicitud, { rol, tecnicos }) {
 
     return `<td>
         ${selectorTecnico}
-        <div class="incidence-action-controls"><select aria-label="Cambiar estado de solicitud ${escapeHtml(solicitud.id)}" onchange="actualizarSolicitud(${Number(solicitud.id)}, this.value)" style="width:auto;padding:5px;font-size:12px;">
+        <div class="incidence-action-controls"><select aria-label="Cambiar estado de solicitud ${escapeHtml(solicitud.id)}" onchange="actualizarSolicitud(${Number(solicitud.id)}, this.value)">
             <option value="" disabled selected>Cambiar estado</option>
             <option value="pendiente">Pendiente</option>
             <option value="en_proceso">En proceso</option>
@@ -25,7 +26,7 @@ function renderAcciones(solicitud, { rol, tecnicos }) {
             <option value="rechazada">Rechazada</option>
         </select>
             <button type="button" class="btn-priority-inc" data-solicitud-id="${Number(solicitud.id)}" data-prioridad="${escapeHtml(solicitud.prioridad)}" onclick="abrirPrioridadSolicitud(this)">Cambiar prioridad</button>
-            <button type="button" class="btn-delete-inc" aria-label="Borrar solicitud: ${escapeHtml(solicitud.tipo_servicio)}" onclick="borrarSolicitud(${Number(solicitud.id)}, this)" data-titulo="${escapeHtml(solicitud.tipo_servicio)}"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button>
+            <button type="button" class="btn-delete-inc" aria-label="Borrar solicitud: ${escapeHtml(solicitud.tipo_servicio)}" onclick="borrarSolicitud(${Number(solicitud.id)}, this)" data-titulo="${escapeHtml(solicitud.tipo_servicio)}">${icono('papelera')}</button>
         </div>
     </td>`;
 }

@@ -1,0 +1,3 @@
+/* Entrada CSS de incidencias: base interna + estilos de la página. */
+@import './internas.css';
+@import '../layout/incidencias.css';

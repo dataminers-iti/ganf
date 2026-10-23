@@ -1,7 +1,7 @@
 # SGRSI · ITI
 
 Sistema de Gestión de Recursos y Servicios Informáticos. Frontend en JavaScript
-vanilla (ES modules, sin bundler) + API PHP en `api/`.
+vanilla (ES modules) empaquetado con **Vite MPA** + API PHP en `api/`.
 
 ## Estructura
 
@@ -20,7 +20,9 @@ sites/                          # Resto de páginas HTML
 ├── registro.html
 └── sistema.html
 api/                            # Backend PHP (endpoint por dominio)
+vite.config.js                  # Build MPA: una entrada por página HTML
 scripts/perf/                   # Benchmark HTTP de la API
+dist/                           # Salida del build (no se versiona)
 PERFORMANCE.md                  # Último informe de rendimiento
 src/
 ├── app/                        # Composición de la aplicación
@@ -48,9 +50,12 @@ src/
     ├── config/paths.js         # Rutas de páginas + base de la API
     ├── dom/dom.js              # escapeHtml, mostrarError, limpiarCampo
     ├── ui/dialog.js            # Diálogos de confirmación / prioridad
+    ├── ui/icons.js             # Iconos Lucide (generado: bun run vendor)
+    ├── ui/back-to-top.js       # Botón de volver arriba
+    ├── fonts/                  # Fuentes self-hosted (Dataminers)
     ├── theme/theme.js          # Tema claro/oscuro
     ├── utils/format.js         # Fechas, recortes, capitalización
-    ├── styles/                 # CSS global
+    ├── styles/                 # CSS por capas: tokens, base, tema, componentes, layout/, entradas/
     └── assets/                 # Logo e imágenes
 ```
 
@@ -60,12 +65,38 @@ Las rutas se definen una sola vez en `src/shared/config/paths.js`:
 
 - `RUTAS` contiene URLs absolutas (`login`, `panel`, `incidencias`, ...).
 - `rutaApi()` resuelve los endpoints de `api/`.
-- Ambas se calculan desde `import.meta.url`, por lo que funcionan igual si la
-  app se sirve en la raíz del dominio o dentro de un subdirectorio.
+- La raíz se deduce del documento actual (raíz o `sites/`), así funciona igual
+  servida en la raíz del dominio, en un subdirectorio (XAMPP) o empaquetada
+  con Vite, donde el módulo termina dentro de `/assets/`.
 
 `src/app/routes.js` expone `irAPagina()` y los helpers `mostrarLogin()`,
 `mostrarPrincipal()`, etc. El layout y las redirecciones de auth usan esas
 rutas; no hay rutas de página hardcodeadas en las features.
+
+### CSS por capas
+
+Los estilos viven en `src/shared/styles/`. `entradas/` concentra los `@import`
+de cada tipo de página y es lo único que enlazan los HTML; Vite los empaqueta
+en **un solo CSS minificado por página**.
+
+| Archivo | Contenido |
+| --- | --- |
+| `tokens.css` | `@font-face` y tokens de color/tipografía (claro y oscuro) |
+| `base.css` | Reset, tipografía, campos y botón primario |
+| `tema.css` | Botón de tema y volver arriba |
+| `componentes.css` | Tarjetas, tablas, etiquetas, variantes de botón y diálogos |
+| `layout/login.css` | Login y registro |
+| `layout/app-shell.css` | Sidebar, topbar y contenido |
+| `layout/dashboard.css` | Panel principal |
+| `layout/incidencias.css` | Formulario y listado de incidencias |
+| `entradas/publicas.css` | tokens + base + tema + componentes + login |
+| `entradas/internas.css` | tokens + base + tema + componentes + shell |
+| `entradas/dashboard.css` | internas + dashboard |
+| `entradas/incidencias.css` | internas + incidencias |
+
+Regla: si un estilo lo usan 2+ páginas va en una capa global; si es de una
+sola pantalla va en `layout/<pantalla>.css`. El orden de los `@import` es el
+orden de la cascada.
 
 
 ### Anatomía de una feature
@@ -99,14 +130,48 @@ deliberado con el HTML existente.
 
 ## Cómo ejecutar
 
-El proyecto necesita un servidor HTTP (los ES modules no funcionan con
-`file://`). Con XAMPP/Apache, serví la carpeta del proyecto y abrí:
+Desarrollo (Vite):
 
-```
-http://localhost/proyecto-dateminers/index.html
+```bash
+bun install      # o npm install
+bun run dev      # http://localhost:5173
 ```
 
-La API PHP requiere la base de datos `sgrsi_db` (ver `setup.sql`).
+Build de producción (deja todo en `dist/`, incluida la API PHP en `dist/api/`):
+
+```bash
+bun run build
+bun run preview  # revisa el build en http://localhost:4173
+```
+
+Despliegue: copia el contenido de `dist/` a la carpeta que sirve Apache, en la
+raíz del dominio o en un subdirectorio. Las URLs del build son relativas
+(`base: './'`), así que no hace falta configurar nada más. La API PHP requiere
+la base `sgrsi_db` (ver `setup.sql`).
+
+### Modo desarrollo (`bun dev`)
+
+`bun dev` es alias de `bun run dev`. Vite no ejecuta PHP, así que el servidor
+trae su propia capa de API (`scripts/dev/`, solo con `serve`; nunca entra al
+build):
+
+- **Variables en `.dev`** (formato dotenv, fuera de git). Si no existe, se crea
+  copiando `.dev.example`, que documenta cada variable. Una variable de entorno
+  con el mismo nombre pisa al archivo.
+- **`API_MODE=mock`** (por defecto): `/api/*.php` responde desde memoria con el
+  mismo contrato `{status, message, data}`, los mismos roles y los mismos
+  mensajes de error. No hace falta PHP ni MySQL. Contraseña de todos los
+  usuarios de prueba: `dev1234` (`admin@iti.dev`, `tecnico@iti.dev`,
+  `solicitante@iti.dev`, `usuario@iti.dev`). Los datos se reinician con el
+  servidor.
+- **`API_MODE=proxy`** con `API_TARGET=http://localhost/proyecto-dateminers`:
+  reenvía `/api` al backend real (`VITE_API_PROXY` sigue valiendo como alias).
+- **Llamadas visibles**: cada request a `/api/` se loguea en la terminal
+  (`[api] GET auth.php?accion=sesion 200 4ms mock`) y en la consola del
+  navegador (grupo "API" con pedido y respuesta; las claves salen enmascaradas).
+  Un panel flotante abajo a la derecha lista las últimas 60 llamadas y, en mock,
+  permite entrar con un usuario de prueba. `DEV_PANEL=false` lo apaga.
+- `API_LATENCY_MS` simula red lenta; `API_LOG=false` silencia los logs.
 
 ## Tests
 
@@ -148,6 +213,6 @@ Ver [`scripts/perf/README.md`](scripts/perf/README.md).
 | `admin_usuarios.js`     | `features/user-admin/`                             |
 | `dialogos.js`           | `shared/ui/dialog.js`                              |
 | `tema.js`               | `shared/theme/theme.js`                            |
-| `base.css`, `tema.css`, `componentes.css`, `layout.css` | `shared/styles/`         |
-| `ico logo.png`          | `shared/assets/logo.png`                           |
+| `base.css`, `tema.css`, `componentes.css`, `layout.css` | `shared/styles/` (capas + `entradas/` para Vite) |
+| `ico logo.png`          | `shared/assets/logo.webp`                          |
 | `login-instituto.webp`  | `shared/assets/login-instituto.webp`               |

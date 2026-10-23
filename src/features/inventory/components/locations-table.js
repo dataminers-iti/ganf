@@ -1,4 +1,5 @@
 import { escapeHtml } from '../../../shared/dom/dom.js';
+import { icono } from '../../../shared/ui/icons.js';
 
 function etiquetaUbicacion(ubicacion) {
     return [ubicacion.edificio, ubicacion.tipo, ubicacion.nombre, ubicacion.piso, ubicacion.referencia]
@@ -18,9 +19,9 @@ export function renderTablaUbicaciones(ubicaciones) {
             <td>${escapeHtml(ubicacion.edificio)}</td>
             <td>${escapeHtml(ubicacion.tipo)}</td>
             <td>${escapeHtml(ubicacion.nombre)}</td>
-            <td>${escapeHtml(ubicacion.piso || '—')}</td>
-            <td>${escapeHtml(ubicacion.referencia || '—')}</td>
-            <td><button type="button" class="btn-delete-inc" aria-label="Borrar ubicación ${escapeHtml(ubicacion.nombre)}" onclick="eliminarUbicacion(${Number(ubicacion.id)}, this)" data-nombre="${escapeHtml(ubicacion.nombre)}"><i class="bi bi-trash3-fill" aria-hidden="true"></i></button></td>
+            <td>${escapeHtml(ubicacion.piso || '-')}</td>
+            <td>${escapeHtml(ubicacion.referencia || '-')}</td>
+            <td><button type="button" class="btn-delete-inc" aria-label="Borrar ubicación ${escapeHtml(ubicacion.nombre)}" onclick="eliminarUbicacion(${Number(ubicacion.id)}, this)" data-nombre="${escapeHtml(ubicacion.nombre)}">${icono('papelera')}</button></td>
         </tr>
     `).join('');
 }

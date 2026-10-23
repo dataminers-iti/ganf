@@ -1,9 +1,9 @@
 // Utilidades de formato puras (sin acceso al DOM).
 
 export function formatearFecha(valor, locale) {
-    if (!valor) return '—';
+    if (!valor) return '-';
     const fecha = new Date(valor);
-    if (Number.isNaN(fecha.getTime())) return '—';
+    if (Number.isNaN(fecha.getTime())) return '-';
     return locale ? fecha.toLocaleDateString(locale) : fecha.toLocaleDateString();
 }
 

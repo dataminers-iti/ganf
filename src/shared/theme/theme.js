@@ -1,31 +1,36 @@
-// Tema claro/oscuro. La preferencia se guarda en localStorage.
+// Tema claro/oscuro. Sigue al sistema hasta que la persona elige; la elección se guarda.
+// El atributo data-theme lo fija antes de pintar el script del <head> de cada página.
 
-const CLAVE_TEMA = 'modo';
+import { hidratarIconos } from '../ui/icons.js';
+
+const CLAVE_TEMA = 'dm-theme';
+
+function temaActual() {
+    return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+}
 
 export function actualizarControlTema() {
-    const oscuro = document.documentElement.classList.contains('dark');
+    const oscuro = temaActual() === 'dark';
     const boton = document.querySelector('.dark-btn');
     if (!boton) return;
 
-    boton.setAttribute('aria-label', oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-    boton.setAttribute('title', oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    const etiqueta = oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+    boton.setAttribute('aria-label', etiqueta);
+    boton.setAttribute('title', etiqueta);
     boton.setAttribute('aria-pressed', String(oscuro));
     boton.querySelector('.theme-icon-moon')?.toggleAttribute('hidden', oscuro);
     boton.querySelector('.theme-icon-sun')?.toggleAttribute('hidden', !oscuro);
 }
 
 export function toggleDark() {
-    const oscuro = document.documentElement.classList.toggle('dark');
-    document.body.classList.toggle('dark', oscuro);
-    document.documentElement.style.colorScheme = oscuro ? 'dark' : 'light';
-    try { localStorage.setItem(CLAVE_TEMA, oscuro ? 'dark' : 'light'); } catch { /* almacenamiento no disponible */ }
+    const siguiente = temaActual() === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = siguiente;
+    try { localStorage.setItem(CLAVE_TEMA, siguiente); } catch { /* almacenamiento no disponible: vale solo para esta página */ }
     actualizarControlTema();
 }
 
 export function initTheme() {
-    const oscuro = document.documentElement.classList.contains('dark');
-    document.body.classList.toggle('dark', oscuro);
-    document.documentElement.style.colorScheme = oscuro ? 'dark' : 'light';
+    hidratarIconos();
     actualizarControlTema();
 }
 

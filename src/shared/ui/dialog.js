@@ -1,5 +1,7 @@
 // Diálogos modales compartidos (confirmaciones y selección de prioridad).
 
+import { icono } from './icons.js';
+
 let dialogo;
 
 function obtenerDialogo() {
@@ -10,7 +12,7 @@ function obtenerDialogo() {
     dialogo.setAttribute('aria-labelledby', 'tituloDialogoAccion');
     dialogo.innerHTML = `
         <div class="inc-dialog-card">
-            <button type="button" class="inc-dialog-close" aria-label="Cerrar"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+            <button type="button" class="inc-dialog-close" aria-label="Cerrar">${icono('cerrar')}</button>
             <span class="incidence-kicker">Confirmación</span>
             <h2 id="tituloDialogoAccion"></h2>
             <p class="inc-dialog-message"></p>

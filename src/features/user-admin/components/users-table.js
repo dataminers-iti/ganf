@@ -12,8 +12,8 @@ export function renderTablaUsuarios(usuarios) {
     return usuarios.map(usuario => {
         const opcionesRol = ROLES.map(([valor, etiqueta]) => `<option value="${valor}" ${usuario.rol === valor ? 'selected' : ''}>${etiqueta}</option>`).join('');
         const estado = usuario.activo
-            ? '<span style="color:green;">Activo</span>'
-            : '<span style="color:red;">Inactivo</span>';
+            ? '<span class="badge badge-activo">Activo</span>'
+            : '<span class="badge badge-inactivo">Inactivo</span>';
 
         return `
             <tr>
@@ -23,11 +23,10 @@ export function renderTablaUsuarios(usuarios) {
                 <td>${estado}</td>
                 <td>${formatearFecha(usuario.fecha_creacion)}</td>
                 <td><div class="incidence-action-controls">
-                    <select onchange="cambiarRol(${Number(usuario.id)}, this.value)" style="width:auto;padding:5px;font-size:12px;">
+                    <select onchange="cambiarRol(${Number(usuario.id)}, this.value)">
                         ${opcionesRol}
                     </select>
-                    <button onclick="toggleActivo(${Number(usuario.id)}, ${usuario.activo ? 0 : 1})"
-                            style="background:${usuario.activo ? '#e74c3c' : '#27ae60'};width:auto;padding:5px 10px;font-size:12px;">
+                    <button type="button" class="btn-tabla${usuario.activo ? ' btn-tabla-peligro' : ''}" onclick="toggleActivo(${Number(usuario.id)}, ${usuario.activo ? 0 : 1})">
                         ${usuario.activo ? 'Desactivar' : 'Activar'}
                     </button>
                 </div></td>

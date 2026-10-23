@@ -15,13 +15,13 @@ test('recortar limita el texto y agrega puntos suspensivos', () => {
 });
 
 test('formatearFecha devuelve un guion para valores vacíos o inválidos', () => {
-    assert.equal(formatearFecha(''), '—');
-    assert.equal(formatearFecha(null), '—');
-    assert.equal(formatearFecha('no-es-una-fecha'), '—');
+    assert.equal(formatearFecha(''), '-');
+    assert.equal(formatearFecha(null), '-');
+    assert.equal(formatearFecha('no-es-una-fecha'), '-');
 });
 
 test('formatearFecha formatea una fecha válida', () => {
     const resultado = formatearFecha('2024-01-15');
-    assert.notEqual(resultado, '—');
+    assert.notEqual(resultado, '-');
     assert.match(resultado, /\d/);
 });

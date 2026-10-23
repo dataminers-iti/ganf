@@ -1,0 +1,3 @@
+/* Entrada CSS del panel principal: base interna + estilos del dashboard. */
+@import './internas.css';
+@import '../layout/dashboard.css';

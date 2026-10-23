@@ -1,0 +1,91 @@
+/* =====================
+   INCIDENCIAS (página)
+   =====================
+   Formulario y listado propios de sites/incidencias.html. Los diálogos y los
+   botones de acción de tabla son compartidos y viven en componentes.css.
+   ===================== */
+
+.page-incidencias .app-content .incidence-form {
+    max-width: 780px;
+    gap: 16px;
+    padding: clamp(20px, 3vw, 32px);
+}
+
+.incidence-heading {
+    display: grid;
+    gap: 6px;
+}
+
+.incidence-heading h1 {
+    margin: 0;
+}
+
+.incidence-heading p {
+    color: var(--ink-muted);
+    font-size: var(--text-body-s);
+}
+
+.incidence-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 20px;
+}
+
+.incidence-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.incidence-field-wide {
+    grid-column: 1 / -1;
+}
+
+.incidence-field label {
+    margin: 0;
+}
+
+.incidence-fields textarea {
+    min-height: 6rem;
+}
+
+.page-incidencias .incidence-list {
+    max-width: none;
+}
+
+.incidence-list-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.incidence-list-heading h2 {
+    margin: 0;
+}
+
+.incidence-list-caption {
+    color: var(--ink-muted);
+    font-size: var(--text-label);
+}
+
+/* =====================
+   RESPONSIVE
+   ===================== */
+@media (max-width: 650px) {
+    .incidence-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .incidence-field-wide {
+        grid-column: auto;
+    }
+
+    .incidence-list-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+}

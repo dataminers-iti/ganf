@@ -1,208 +1,70 @@
 /* =====================
-   ESTILOS DEL MODO OSCURO Y BOTONES
+   TEMA: controles de tema y botón de volver arriba
+   =====================
+   El modo oscuro ya no se pisa clase por clase: tokens.css redefine los
+   valores bajo [data-theme='dark'] y todo lo demás los consume.
    ===================== */
-html.dark body {
-    background: #121212;
-    color: white;
-}
-
-html.dark body:has(.login-container) {
-    min-height:100vh;
-    background:#101a27;
-    color:#e3ebf4;
-}
-html.dark body:has(.login-container) .login-container { min-height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; position:relative; isolation:isolate; z-index:0; }
-html.dark body:has(.login-container) .login-container::before,html.dark body:has(.login-container) .login-container::after { content:""; position:fixed; inset:-10px; pointer-events:none; }
-html.dark body:has(.login-container) .login-container::before { z-index:-2; background:url("../assets/login-instituto.webp") center/cover no-repeat; filter:blur(5px); transform:scale(1.03); }
-html.dark body:has(.login-container) .login-container::after { z-index:-1; background:rgba(12,26,44,.79); backdrop-filter:blur(1px); }
-html.dark body:has(.login-container) .login-container .card { width:min(100%,400px); margin:0 auto; background:#182638; color:#e3ebf4; border:1px solid #304760; box-shadow:0 18px 48px #07111f80; }
-html.dark body:has(.login-container) .login-container h1 { color:#e1efff; }
-html.dark body:has(.login-container) .login-container p { color:#b8c9dc; }
-html.dark body:has(.login-container) .login-container a { color:#80c2f5; }
-html.dark body:has(.login-container) .login-container input { background:#122033; color:#edf4fc; border-color:#3b5874; }
-
-html:not(.dark) body:has(.login-container) {
-    min-height:100vh;
-    background:#eaf2fa;
-    color:#203047;
-}
-html:not(.dark) body:has(.login-container) .login-container { min-height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; position:relative; isolation:isolate; z-index:0; }
-html:not(.dark) body:has(.login-container) .login-container::before,html:not(.dark) body:has(.login-container) .login-container::after { content:""; position:fixed; inset:-10px; pointer-events:none; }
-html:not(.dark) body:has(.login-container) .login-container::before { z-index:-2; background:url("../assets/login-instituto.webp") center/cover no-repeat; filter:blur(5px); transform:scale(1.03); }
-html:not(.dark) body:has(.login-container) .login-container::after { z-index:-1; background:rgba(245,249,254,.74); backdrop-filter:blur(1px); }
-html:not(.dark) body:has(.login-container) .login-container .card { width:min(100%,400px); margin:0 auto; background:#fff; color:#203047; border:1px solid #d8e5f1; box-shadow:0 18px 48px #173b631a; }
-html:not(.dark) body:has(.login-container) .login-container h1 { color:#173b63; }
-html:not(.dark) body:has(.login-container) .login-container p { color:#5e7288; }
-html:not(.dark) body:has(.login-container) .login-container a { color:#1769aa; }
-html:not(.dark) body:has(.login-container) .login-container input { background:#fbfdff; color:#203047; border-color:#cbd9e7; }
-
-html.dark body .card {
-    background: #1e1e1e;
-    color: white;
-}
-
-html.dark body input {
-    background: #17283b;
-    color: #edf4fc;
-    border: 1px solid #3b5066;
-}
-
-html.dark body textarea,
-html.dark body select { background:#17283b; color:#edf4fc; border:1px solid #3b5066; }
-html.dark body select option { background:#17283b; color:#edf4fc; }
-html.dark body input::placeholder,html.dark body textarea::placeholder { color:#9cafc2; }
-html.dark body label { color:#d8e4f0; }
-html.dark body a { color:#75b9f0; }
-html.dark body a:hover { color:#a6d3fb; }
-
-html.dark body button:not(.dark-btn):not(.btn-logout):not(.btn-secundario):not(.btn-priority-inc):not(.btn-delete-inc):not(.btn-danger-inc):not(.inc-dialog-close) {
-    background: #1769aa;
-    color: #fff;
-}
-
-html.dark body button:not(.dark-btn):not(.btn-logout):not(.btn-secundario):not(.btn-priority-inc):not(.btn-delete-inc):not(.btn-danger-inc):not(.inc-dialog-close):hover {
-    background: #2382c8;
-}
-
-html.dark body .dark-btn {
-    background: #20354b;
-    color: #f4c95d;
-    border: 1px solid #3b5066;
-}
-
-html.dark body header {
-    background: #1e1e1e;
-}
-
-html.dark body nav {
-    background: #2b2b2b;
-}
-
-html.dark body footer {
-    background: #1e1e1e;
-}
-
-html.dark body:not(:has(.app-shell)) main,
-html.dark body:not(:has(.app-shell)) section,
-html.dark body:not(:has(.app-shell)) article {
-    background: #2b2b2b;
-    color: white;
-    border-color: #444;
-}
 
 .dark-btn {
     position: fixed;
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
     display: grid;
     place-items: center;
+    width: 44px;
+    min-height: 44px;
+    height: 44px;
     padding: 0;
-    font-size: 23px;
-    line-height: 1;
-    background: white;
-    color: black;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
+    border: 2px solid var(--line-strong);
+    background: var(--surface-raised);
+    color: var(--ink);
 }
 
-.theme-icon-moon,.theme-icon-sun { display:block; }
-.theme-icon-moon[hidden],.theme-icon-sun[hidden] { display:none; }
-body:has(.app-shell) .dark-btn { position:static; flex:0 0 36px; width:36px; height:36px; margin:0; border:1px solid #e1eaf3; border-radius:9px; color:#315d83; box-shadow:none; background:#f4f8fc; font-size:21px; }
-html.dark body:has(.app-shell) .dark-btn { border-color:#3b5066; color:#f4c95d; background:#20354b; }
-html.dark body .feedback { color:#c6d6e7; }
-html.dark body .empty-note,html.dark body td,html.dark body th,html.dark body .form-text { color:#d4dfeb; }
-html.dark body .tabla-datos { border-color:#2c4055; background:#182638; }
-html.dark body .tabla-datos th { background:#20364d; color:#d9e8f6; }
-html.dark body .tabla-datos td { border-bottom-color:#2b3c50; }
-html.dark body .tabla-datos tr:hover { background:#203247; }
-html.dark body .app-content .card,html.dark body .login-container { background:#182638; color:#e3ebf4; border-color:#293c52; }
-html.dark body .app-content h1,html.dark body .app-content h2,html.dark body .app-content h3 { color:#d6eaff; }
-html.dark body .app-content .section-container { color:#e3ebf4; }
-html.dark body .app-content input,html.dark body .app-content select,html.dark body .app-content textarea { color:#edf4fc; background:#122033; border-color:#354a61; }
-html.dark body .app-content .btn-secundario { background:#203d59; color:#dceeff; }
-html.dark body .app-content .btn-logout { background:#20354b; color:#dceeff; }
-html.dark body .app-content .tabla-datos { background:#182638; }
-html.dark body .app-content .tabla-datos td { color:#d7e2ef; }
-html.dark body .app-content .tabla-datos th { background:#203247; color:#c3d5e7; }
-html.dark body .app-content .dashboard-table td { color:#d7e2ef; }
-html.dark body .app-content .dashboard-table thead th { background:#203247; color:#c3d5e7; }
-html.dark body .app-topbar { border-bottom-color:#293c52; }
+.dark-btn:hover:not(:disabled) {
+    translate: none;
+    box-shadow: none;
+    background: var(--accent-soft);
+}
 
-.home-btn,
-.back-btn {
+.dark-btn .icono {
+    width: 20px;
+    height: 20px;
+}
+
+.theme-icon-moon[hidden],
+.theme-icon-sun[hidden] {
+    display: none;
+}
+
+/* Volver arriba: aparece pasada la primera pantalla (shared/ui/back-to-top.js) */
+.volver-arriba {
     position: fixed;
-    top: 15px;
-    left: 15px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 20px;
-    background: white;
-    color: black;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    right: 20px;
+    bottom: 20px;
+    z-index: 900;
+    width: 44px;
     padding: 0;
+    border: 2px solid var(--ink);
+    background: var(--surface-raised);
+    color: var(--ink);
+    box-shadow: var(--shadow-block);
 }
 
-.home-btn:hover,
-.back-btn:hover {
-    background: #f0f0f0;
+.volver-arriba:hover:not(:disabled) {
+    translate: none;
+    box-shadow: var(--shadow-block);
+    background: var(--accent);
+    border-color: var(--ink);
 }
 
-html.dark body .home-btn,
-html.dark body .back-btn {
-    background: #333;
-    color: white;
+.volver-arriba[hidden] {
+    display: none;
 }
 
-html.dark body .home-btn:hover,
-html.dark body .back-btn:hover {
-    background: #555;
-}
-
-/* =====================
-   RESPONSIVE
-   ===================== */
-@media (max-width: 600px) {
-    html.dark body:has(.login-container) .login-container,
-    html:not(.dark) body:has(.login-container) .login-container {
-        min-height: calc(100vh - 30px);
-        min-height: calc(100dvh - 30px);
-    }
-
-    .dark-btn {
-        top: 10px;
-        right: 10px;
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
-    }
-
-    .home-btn,
-    .back-btn {
-        top: 10px;
-        left: 10px;
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
+@media (max-width: 650px) {
+    .volver-arriba {
+        right: 12px;
+        bottom: 12px;
     }
 }
-
-@media (max-width: 480px) {
-    html:not(.dark) body:has(.login-container) .login-container .card,
-    html.dark body:has(.login-container) .login-container .card {
-        width: 100%;
-        max-width: 100%;
-    }
-}
-

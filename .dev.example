@@ -1,0 +1,25 @@
+# Variables del modo desarrollo (bun dev). Se copia a `.dev` solo la primera vez; `.dev` no se versiona.
+# Una variable de entorno con el mismo nombre gana sobre este archivo: API_MODE=proxy bun dev
+
+# Puerto del servidor de desarrollo
+PORT=5173
+
+# mock  = API simulada en memoria (no necesita PHP ni MySQL)
+# proxy = reenvía /api al backend PHP real de API_TARGET
+API_MODE=mock
+
+# Solo con API_MODE=proxy: dónde corre el PHP (XAMPP o `php -S`), sin barra final
+# Ejemplo: http://localhost/proyecto-dateminers
+API_TARGET=
+
+# Mostrar cada llamada a /api en la terminal y en la consola del navegador
+API_LOG=true
+
+# Incluir pedido y respuesta (las contraseñas salen enmascaradas)
+API_LOG_BODIES=true
+
+# Latencia artificial del mock, en milisegundos (para ver estados de carga)
+API_LATENCY_MS=0
+
+# Panel flotante con el historial de llamadas y los usuarios de prueba
+DEV_PANEL=true

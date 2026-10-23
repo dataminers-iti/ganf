@@ -2,24 +2,19 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const modoOscuro=localStorage.getItem("modo")==="dark";document.documentElement.style.colorScheme=modoOscuro?"dark":"light";if(modoOscuro)document.documentElement.classList.add("dark")}catch(_){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><script>try{const g=localStorage.getItem("dm-theme");document.documentElement.dataset.theme=g==="dark"||g==="light"?g:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(_){document.documentElement.dataset.theme="light"}</script>
     <title>Usuarios | SGRSI</title>
-    <link rel="icon" type="image/png" href="../src/shared/assets/logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../src/shared/styles/base.css?v=4">
-    <link rel="stylesheet" href="../src/shared/styles/tema.css?v=10">
-    <link rel="stylesheet" href="../src/shared/styles/componentes.css?v=4">
-    <link rel="stylesheet" href="../src/shared/styles/layout.css?v=15">
+    <link rel="icon" type="image/webp" href="../src/shared/assets/logo.webp">
+    <link rel="stylesheet" href="../src/shared/styles/entradas/internas.css">
     <script type="module" src="../src/app/entries/user-admin.page.js"></script>
 </head>
 <body>
-    <button class="dark-btn" onclick="toggleDark()"><i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i><i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true" hidden></i></button>
+    <button type="button" class="dark-btn" onclick="toggleDark()" aria-label="Cambiar a modo oscuro"><i data-icon="luna" class="theme-icon-moon"></i><i data-icon="sol" class="theme-icon-sun" hidden></i></button>
 
-    <div class="section-container" style="margin: 20px auto; max-width: 1000px;">
-        <h1 style="margin-bottom: 15px;">Gestión de Usuarios</h1>
+    <div class="section-container">
+        <h1>Gestión de Usuarios</h1>
         <p id="estadoUsuarios" class="feedback" role="status" aria-live="polite"></p>
-        <div style="overflow-x: auto;">
+        <div class="tabla-scroll">
             <table class="tabla-datos" id="tablaUsuarios">
                 <thead>
                     <tr>
