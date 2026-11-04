@@ -14,7 +14,11 @@ test('un técnico no puede aprobar solicitudes pendientes', () => {
 });
 
 test('los estados posteriores siguen su flujo', () => {
-    assert.deepEqual(accionesDisponibles({ estado: 'aprobado' }, 'tecnico'), [['entregado', 'Marcar entregado']]);
-    assert.deepEqual(accionesDisponibles({ estado: 'entregado' }, 'admin'), [['devuelto', 'Marcar devuelto']]);
+    assert.deepEqual(accionesDisponibles({ estado: 'aprobado' }, 'tecnico'), [
+        ['entregado', 'Marcar entregado'],
+    ]);
+    assert.deepEqual(accionesDisponibles({ estado: 'entregado' }, 'admin'), [
+        ['devuelto', 'Marcar devuelto'],
+    ]);
     assert.deepEqual(accionesDisponibles({ estado: 'devuelto' }, 'admin'), []);
 });

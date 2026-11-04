@@ -5,16 +5,20 @@ import { formatEstadoSolicitud } from '../utils/service-requests.js';
 
 function renderOpcionesTecnicos(solicitud, tecnicos) {
     return tecnicos
-        .map(tecnico => `<option value="${tecnico.id}" ${String(tecnico.id) === String(solicitud.tecnico_id) ? 'selected' : ''}>${escapeHtml(tecnico.nombre)}</option>`)
+        .map(
+            (tecnico) =>
+                `<option value="${tecnico.id}" ${String(tecnico.id) === String(solicitud.tecnico_id) ? 'selected' : ''}>${escapeHtml(tecnico.nombre)}</option>`,
+        )
         .join('');
 }
 
 function renderAcciones(solicitud, { rol, tecnicos }) {
     if (!['admin', 'tecnico'].includes(rol)) return '';
 
-    const selectorTecnico = rol === 'admin'
-        ? `<label class="visually-hidden" for="tecnico-sol-${solicitud.id}">Asignar técnico</label><select id="tecnico-sol-${solicitud.id}" onchange="asignarTecnicoSolicitud(${Number(solicitud.id)}, this.value)"><option value="">Sin asignar</option>${renderOpcionesTecnicos(solicitud, tecnicos)}</select>`
-        : '';
+    const selectorTecnico =
+        rol === 'admin'
+            ? `<label class="visually-hidden" for="tecnico-sol-${solicitud.id}">Asignar técnico</label><select id="tecnico-sol-${solicitud.id}" onchange="asignarTecnicoSolicitud(${Number(solicitud.id)}, this.value)"><option value="">Sin asignar</option>${renderOpcionesTecnicos(solicitud, tecnicos)}</select>`
+            : '';
 
     return `<td>
         ${selectorTecnico}
@@ -32,7 +36,9 @@ function renderAcciones(solicitud, { rol, tecnicos }) {
 }
 
 export function renderTablaSolicitudes(solicitudes, opciones = {}) {
-    return solicitudes.map(solicitud => `
+    return solicitudes
+        .map(
+            (solicitud) => `
         <tr>
             <td>${escapeHtml(solicitud.id)}</td>
             <td>${escapeHtml(solicitud.tipo_servicio)}</td>
@@ -44,5 +50,7 @@ export function renderTablaSolicitudes(solicitudes, opciones = {}) {
             <td>${formatearFecha(solicitud.fecha_creacion)}</td>
             ${renderAcciones(solicitud, opciones)}
         </tr>
-    `).join('');
+    `,
+        )
+        .join('');
 }

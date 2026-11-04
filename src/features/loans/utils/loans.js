@@ -4,7 +4,10 @@
  */
 export function accionesDisponibles(prestamo, rol) {
     if (prestamo.estado === 'solicitado' && rol === 'admin') {
-        return [['aprobado', 'Aprobar'], ['rechazado', 'Rechazar']];
+        return [
+            ['aprobado', 'Aprobar'],
+            ['rechazado', 'Rechazar'],
+        ];
     }
     if (prestamo.estado === 'aprobado') {
         return [['entregado', 'Marcar entregado']];

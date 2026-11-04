@@ -9,13 +9,17 @@ const ROLES = [
 ];
 
 export function renderTablaUsuarios(usuarios) {
-    return usuarios.map(usuario => {
-        const opcionesRol = ROLES.map(([valor, etiqueta]) => `<option value="${valor}" ${usuario.rol === valor ? 'selected' : ''}>${etiqueta}</option>`).join('');
-        const estado = usuario.activo
-            ? '<span class="badge badge-activo">Activo</span>'
-            : '<span class="badge badge-inactivo">Inactivo</span>';
+    return usuarios
+        .map((usuario) => {
+            const opcionesRol = ROLES.map(
+                ([valor, etiqueta]) =>
+                    `<option value="${valor}" ${usuario.rol === valor ? 'selected' : ''}>${etiqueta}</option>`,
+            ).join('');
+            const estado = usuario.activo
+                ? '<span class="badge badge-activo">Activo</span>'
+                : '<span class="badge badge-inactivo">Inactivo</span>';
 
-        return `
+            return `
             <tr>
                 <td>${escapeHtml(usuario.id)}</td>
                 <td>${escapeHtml(usuario.nombre || '-')}</td>
@@ -32,5 +36,6 @@ export function renderTablaUsuarios(usuarios) {
                 </div></td>
             </tr>
         `;
-    }).join('');
+        })
+        .join('');
 }

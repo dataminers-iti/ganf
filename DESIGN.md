@@ -30,28 +30,28 @@ esta adaptación.
 
 ## Roles de color
 
-| Rol | Token | Uso en SGRSI |
-|---|---|---|
-| lienzo | `surface` | fondo de página y topbar |
-| tarjeta | `surface-raised` | tarjetas, tablas, diálogos |
-| hundido | `surface-sunken` | campos, cabecera de tabla |
-| texto | `ink`, `ink-muted` | contenido, ayudas |
-| filete | `line`, `line-strong` | separadores, bordes de controles (>=3:1) |
-| enlace | `brand-strong` | enlaces, etiquetas superiores |
-| primaria | `accent` / `on-accent` | botón primario, ítem activo |
-| peligro | `danger` | errores, borrar, estados negativos |
-| fijos | `deep`, `cream` | sidebar, panel de bienvenida |
+| Rol      | Token                  | Uso en SGRSI                             |
+| -------- | ---------------------- | ---------------------------------------- |
+| lienzo   | `surface`              | fondo de página y topbar                 |
+| tarjeta  | `surface-raised`       | tarjetas, tablas, diálogos               |
+| hundido  | `surface-sunken`       | campos, cabecera de tabla                |
+| texto    | `ink`, `ink-muted`     | contenido, ayudas                        |
+| filete   | `line`, `line-strong`  | separadores, bordes de controles (>=3:1) |
+| enlace   | `brand-strong`         | enlaces, etiquetas superiores            |
+| primaria | `accent` / `on-accent` | botón primario, ítem activo              |
+| peligro  | `danger`               | errores, borrar, estados negativos       |
+| fijos    | `deep`, `cream`        | sidebar, panel de bienvenida             |
 
 ## Estados (etiquetas `.badge`)
 
 El color nunca va solo: la etiqueta siempre dice el estado. Cuatro tonos, por significado.
 
-| Tono | Estados |
-|---|---|
-| danger (borde) | prioridad alta, de baja, cerrada, rechazada, inactivo |
-| brand (tinte) | media, en reparación, en proceso, solicitado, pendiente, aprobado |
-| accent (relleno menta) | baja, activo, resuelta, completada, devuelto |
-| ink (relleno oscuro) | abierta, entregado |
+| Tono                   | Estados                                                           |
+| ---------------------- | ----------------------------------------------------------------- |
+| danger (borde)         | prioridad alta, de baja, cerrada, rechazada, inactivo             |
+| brand (tinte)          | media, en reparación, en proceso, solicitado, pendiente, aprobado |
+| accent (relleno menta) | baja, activo, resuelta, completada, devuelto                      |
+| ink (relleno oscuro)   | abierta, entregado                                                |
 
 ## Layout
 

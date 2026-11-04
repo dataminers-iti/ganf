@@ -48,9 +48,11 @@ function unaRequest(ruta) {
         const headers = { Accept: 'application/json' };
         if (COOKIE) headers.Cookie = COOKIE;
 
-        const req = modulo.get(url, { agent: agente, headers }, res => {
+        const req = modulo.get(url, { agent: agente, headers }, (res) => {
             let bytes = 0;
-            res.on('data', chunk => { bytes += chunk.length; });
+            res.on('data', (chunk) => {
+                bytes += chunk.length;
+            });
             res.on('end', () => {
                 const ms = Number(process.hrtime.bigint() - inicio) / 1e6;
                 resolve({ ms, bytes, status: res.statusCode });
@@ -66,9 +68,9 @@ function percentil(ordenados, p) {
 }
 
 function resumen(muestras, duracionMs) {
-    const tiempos = muestras.map(m => m.ms).sort((a, b) => a - b);
+    const tiempos = muestras.map((m) => m.ms).sort((a, b) => a - b);
     const suma = tiempos.reduce((total, t) => total + t, 0);
-    const errores = muestras.filter(m => m.status >= 400).length;
+    const errores = muestras.filter((m) => m.status >= 400).length;
     const bytes = muestras.reduce((total, m) => total + m.bytes, 0) / muestras.length;
 
     return {
@@ -123,9 +125,20 @@ for (const [nombre, ruta] of ENDPOINTS) {
 }
 
 agente.destroy();
-console.log(JSON.stringify({
-    fecha: new Date().toISOString(),
-    base: BASE,
-    configuracion: { warmup: WARMUP, secuencial: N_SEQ, concurrente: N_CONC, workers: CONCURRENCIA },
-    resultados,
-}, null, 2));
+console.log(
+    JSON.stringify(
+        {
+            fecha: new Date().toISOString(),
+            base: BASE,
+            configuracion: {
+                warmup: WARMUP,
+                secuencial: N_SEQ,
+                concurrente: N_CONC,
+                workers: CONCURRENCIA,
+            },
+            resultados,
+        },
+        null,
+        2,
+    ),
+);

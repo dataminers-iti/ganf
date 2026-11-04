@@ -11,9 +11,9 @@
     const MAX_LLAMADAS = 60;
     const llamadas = [];
     const oyentes = new Set();
-    const avisar = () => oyentes.forEach(fn => fn());
+    const avisar = () => oyentes.forEach((fn) => fn());
 
-    const enmascarar = valor => {
+    const enmascarar = (valor) => {
         if (!valor || typeof valor !== 'object') return valor;
         const copia = Array.isArray(valor) ? [...valor] : { ...valor };
         for (const clave of Object.keys(copia)) {
@@ -25,17 +25,25 @@
     function describirCuerpo(cuerpo) {
         if (cuerpo == null) return null;
         if (cuerpo instanceof FormData) {
-            return enmascarar(Object.fromEntries([...cuerpo].map(([k, v]) => [k, typeof v === 'string' ? v : '[archivo]'])));
+            return enmascarar(
+                Object.fromEntries(
+                    [...cuerpo].map(([k, v]) => [k, typeof v === 'string' ? v : '[archivo]']),
+                ),
+            );
         }
         if (cuerpo instanceof URLSearchParams) return enmascarar(Object.fromEntries(cuerpo));
         if (typeof cuerpo === 'string') {
-            try { return enmascarar(JSON.parse(cuerpo)); } catch { return cuerpo; }
+            try {
+                return enmascarar(JSON.parse(cuerpo));
+            } catch {
+                return cuerpo;
+            }
         }
         return '[cuerpo no mostrable]';
     }
 
     const hora = () => new Date().toLocaleTimeString('es-UY', { hour12: false });
-    const esExito = estado => estado >= 200 && estado < 400;
+    const esExito = (estado) => estado >= 200 && estado < 400;
 
     function registrar(llamada) {
         llamadas.unshift(llamada);
@@ -43,11 +51,16 @@
         avisar();
         if (!cfg.log) return;
 
-        const etiqueta = 'background:#1a312c;color:#89d7b7;padding:1px 6px;border-radius:2px;font-weight:700';
-        const color = llamada.estado === 0 ? '#dc2626' : esExito(llamada.estado) ? '#16a34a' : '#d97706';
+        const etiqueta =
+            'background:#1a312c;color:#89d7b7;padding:1px 6px;border-radius:2px;font-weight:700';
+        const color =
+            llamada.estado === 0 ? '#dc2626' : esExito(llamada.estado) ? '#16a34a' : '#d97706';
         console.groupCollapsed(
             `%cAPI%c ${llamada.metodo} %c${llamada.ruta}%c ${llamada.estado || 'sin respuesta'} · ${llamada.ms} ms`,
-            etiqueta, 'font-weight:700', 'font-weight:400', `color:${color};font-weight:700`,
+            etiqueta,
+            'font-weight:700',
+            'font-weight:400',
+            `color:${color};font-weight:700`,
         );
         if (cfg.bodies) {
             console.log('Pedido', llamada.pedido);
@@ -61,13 +74,18 @@
     window.fetch = async (entrada, opciones) => {
         let url;
         try {
-            url = new URL(typeof entrada === 'string' || entrada instanceof URL ? entrada : entrada.url, location.href);
+            url = new URL(
+                typeof entrada === 'string' || entrada instanceof URL ? entrada : entrada.url,
+                location.href,
+            );
         } catch {
             return fetchOriginal(entrada, opciones);
         }
         if (!url.pathname.includes('/api/')) return fetchOriginal(entrada, opciones);
 
-        const metodo = String(opciones?.method || (typeof entrada === 'object' && entrada.method) || 'GET').toUpperCase();
+        const metodo = String(
+            opciones?.method || (typeof entrada === 'object' && entrada.method) || 'GET',
+        ).toUpperCase();
         const ruta = url.pathname.replace(/^.*\/api\//, '') + url.search;
         const pedido = describirCuerpo(opciones?.body);
         const inicio = performance.now();
@@ -76,11 +94,32 @@
             const copia = respuesta.clone();
             const textoRespuesta = await copia.text();
             let datos = textoRespuesta;
-            try { datos = JSON.parse(textoRespuesta); } catch { /* respuesta que no es JSON: se muestra tal cual */ }
-            registrar({ hora: hora(), metodo, ruta, estado: respuesta.status, ms: Math.round(performance.now() - inicio), pedido, respuesta: enmascarar(datos) });
+            try {
+                datos = JSON.parse(textoRespuesta);
+            } catch {
+                /* respuesta que no es JSON: se muestra tal cual */
+            }
+            registrar({
+                hora: hora(),
+                metodo,
+                ruta,
+                estado: respuesta.status,
+                ms: Math.round(performance.now() - inicio),
+                pedido,
+                respuesta: enmascarar(datos),
+            });
             return respuesta;
         } catch (error) {
-            registrar({ hora: hora(), metodo, ruta, estado: 0, ms: Math.round(performance.now() - inicio), pedido, respuesta: null, error });
+            registrar({
+                hora: hora(),
+                metodo,
+                ruta,
+                estado: 0,
+                ms: Math.round(performance.now() - inicio),
+                pedido,
+                respuesta: null,
+                error,
+            });
             throw error;
         }
     };
@@ -114,10 +153,27 @@
         .nota { padding: 8px 10px; color: #b9c9bf; border-top: 1px solid #2e4d46; }
     `;
 
-    const esc = valor => String(valor).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    const clase = estado => (estado === 0 || estado >= 500 ? 'mal' : esExito(estado) ? 'ok' : 'avisoe');
-    const guardar = (clave, valor) => { try { sessionStorage.setItem(clave, valor); } catch { /* sin almacenamiento */ } };
-    const leer = clave => { try { return sessionStorage.getItem(clave); } catch { return null; } };
+    const esc = (valor) =>
+        String(valor).replace(
+            /[&<>"]/g,
+            (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+    const clase = (estado) =>
+        estado === 0 || estado >= 500 ? 'mal' : esExito(estado) ? 'ok' : 'avisoe';
+    const guardar = (clave, valor) => {
+        try {
+            sessionStorage.setItem(clave, valor);
+        } catch {
+            /* sin almacenamiento */
+        }
+    };
+    const leer = (clave) => {
+        try {
+            return sessionStorage.getItem(clave);
+        } catch {
+            return null;
+        }
+    };
 
     function montar() {
         const anfitrion = document.createElement('div');
@@ -125,8 +181,13 @@
         const sombra = anfitrion.attachShadow({ mode: 'open' });
         document.documentElement.append(anfitrion);
 
-        const hayUsuarios = cfg.modo === 'mock' && Array.isArray(cfg.usuarios) && cfg.usuarios.length > 0;
-        const estado = { abierto: leer('sgrsi-dev-abierto') === '1', pestana: leer('sgrsi-dev-pestana') || 'llamadas', expandida: null };
+        const hayUsuarios =
+            cfg.modo === 'mock' && Array.isArray(cfg.usuarios) && cfg.usuarios.length > 0;
+        const estado = {
+            abierto: leer('sgrsi-dev-abierto') === '1',
+            pestana: leer('sgrsi-dev-pestana') || 'llamadas',
+            expandida: null,
+        };
         if (estado.pestana === 'usuarios' && !hayUsuarios) estado.pestana = 'llamadas';
 
         function pintar() {
@@ -154,27 +215,34 @@
         }
 
         function vistaLlamadas() {
-            if (!llamadas.length) return '<div class="vacio">Todavía no hubo llamadas a la API.</div>';
-            return llamadas.map((l, i) => {
-                const abierta = estado.expandida === i;
-                const detalle = abierta
-                    ? `<pre>${esc(JSON.stringify({ pedido: l.pedido, respuesta: l.respuesta }, null, 2))}</pre>`
-                    : '';
-                return `<button class="fila" data-llamada="${i}" aria-expanded="${abierta}">
+            if (!llamadas.length)
+                return '<div class="vacio">Todavía no hubo llamadas a la API.</div>';
+            return llamadas
+                .map((l, i) => {
+                    const abierta = estado.expandida === i;
+                    const detalle = abierta
+                        ? `<pre>${esc(JSON.stringify({ pedido: l.pedido, respuesta: l.respuesta }, null, 2))}</pre>`
+                        : '';
+                    return `<button class="fila" data-llamada="${i}" aria-expanded="${abierta}">
                     <span class="tenue">${esc(l.hora)}</span><b>${esc(l.metodo)}</b>
                     <span class="ruta" title="${esc(l.ruta)}">${esc(l.ruta)}</span>
                     <span class="${clase(l.estado)}">${l.estado || 'x'} · ${l.ms} ms</span>
                 </button>${detalle}`;
-            }).join('');
+                })
+                .join('');
         }
 
         function vistaUsuarios() {
-            const filas = cfg.usuarios.map((u, i) => `<div class="usuario">
+            const filas = cfg.usuarios
+                .map(
+                    (u, i) => `<div class="usuario">
                 <span class="rol">${esc(u.rol)}</span>
                 <span class="datos" title="${esc(u.correo)}">${esc(u.nombre)}${u.activo ? '' : ' (inactivo)'}</span>
                 <button data-usuario="${i}" data-modo="completar" aria-label="Completar el formulario con ${esc(u.nombre)}">Completar</button>
                 <button data-usuario="${i}" data-modo="entrar" aria-label="Entrar como ${esc(u.nombre)}" ${u.activo ? '' : 'disabled'}>Entrar</button>
-            </div>`).join('');
+            </div>`,
+                )
+                .join('');
             return `${filas}<div class="nota">Contraseña de todos: ${esc(cfg.clavePrueba)}</div>`;
         }
 
@@ -182,9 +250,16 @@
             const campos = new FormData();
             campos.append('correo', usuario.correo);
             campos.append('clave', usuario.clave);
-            const respuesta = await window.fetch('/api/auth.php?accion=login', { method: 'POST', body: campos });
+            const respuesta = await window.fetch('/api/auth.php?accion=login', {
+                method: 'POST',
+                body: campos,
+            });
             if (!respuesta.ok) return;
-            try { sessionStorage.removeItem('usuario'); } catch { /* sin almacenamiento */ }
+            try {
+                sessionStorage.removeItem('usuario');
+            } catch {
+                /* sin almacenamiento */
+            }
             location.reload();
         }
 
@@ -200,20 +275,36 @@
             if (modo === 'entrar') entrarComo(usuario);
         }
 
-        sombra.addEventListener('click', evento => {
+        sombra.addEventListener('click', (evento) => {
             const objetivo = evento.target.closest('button');
             if (!objetivo) return;
             const { accion, pestana, llamada, usuario, modo } = objetivo.dataset;
-            if (accion === 'alternar') { estado.abierto = !estado.abierto; guardar('sgrsi-dev-abierto', estado.abierto ? '1' : '0'); }
-            else if (accion === 'cerrar') { estado.abierto = false; guardar('sgrsi-dev-abierto', '0'); }
-            else if (accion === 'limpiar') { llamadas.length = 0; estado.expandida = null; }
-            else if (pestana) { estado.pestana = pestana; guardar('sgrsi-dev-pestana', pestana); }
-            else if (llamada !== undefined) { estado.expandida = estado.expandida === Number(llamada) ? null : Number(llamada); }
-            else if (usuario !== undefined) { completarOEntrar(cfg.usuarios[Number(usuario)], modo); return; }
+            if (accion === 'alternar') {
+                estado.abierto = !estado.abierto;
+                guardar('sgrsi-dev-abierto', estado.abierto ? '1' : '0');
+            } else if (accion === 'cerrar') {
+                estado.abierto = false;
+                guardar('sgrsi-dev-abierto', '0');
+            } else if (accion === 'limpiar') {
+                llamadas.length = 0;
+                estado.expandida = null;
+            } else if (pestana) {
+                estado.pestana = pestana;
+                guardar('sgrsi-dev-pestana', pestana);
+            } else if (llamada !== undefined) {
+                estado.expandida = estado.expandida === Number(llamada) ? null : Number(llamada);
+            } else if (usuario !== undefined) {
+                completarOEntrar(cfg.usuarios[Number(usuario)], modo);
+                return;
+            }
             pintar();
         });
-        sombra.addEventListener('keydown', evento => {
-            if (evento.key === 'Escape' && estado.abierto) { estado.abierto = false; guardar('sgrsi-dev-abierto', '0'); pintar(); }
+        sombra.addEventListener('keydown', (evento) => {
+            if (evento.key === 'Escape' && estado.abierto) {
+                estado.abierto = false;
+                guardar('sgrsi-dev-abierto', '0');
+                pintar();
+            }
         });
 
         oyentes.add(pintar);

@@ -1,0 +1,59 @@
+name: Deploy
+
+# Deploy blue/green en el VPS en cada push a main.
+#
+# Runner self-hosted: este workflow NO escucha pull_request. Solo un push a main
+# (requiere permiso de escritura) o un disparo manual; ningún PR de un fork ejecuta
+# código en el VPS.
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            accion:
+                description: 'deploy = publicar este commit · rollback = volver al slot anterior'
+                type: choice
+                options: [deploy, rollback]
+                default: deploy
+
+permissions:
+    contents: read
+
+concurrency:
+    group: deploy-ganf
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        name: Deploy blue/green
+        runs-on: [self-hosted, vps-nexus]
+        timeout-minutes: 15
+        env:
+            # URL real del dominio (ej. https://ganf.example.com/). Variable del repo.
+            HEALTH_URL: ${{ vars.GANF_HEALTH_URL }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: 1.4.4
+
+            - name: Install
+              if: ${{ inputs.accion != 'rollback' }}
+              run: bun install --frozen-lockfile
+
+            - name: Check (lint + format + test)
+              if: ${{ inputs.accion != 'rollback' }}
+              run: bun run check
+
+            - name: Build
+              if: ${{ inputs.accion != 'rollback' }}
+              run: bun run build
+
+            - name: Deploy (slot inactivo, health, switch de Nginx)
+              if: ${{ inputs.accion != 'rollback' }}
+              run: bash deploy/deploy.sh deploy "${GITHUB_SHA}"
+
+            - name: Rollback (volver al slot anterior)
+              if: ${{ inputs.accion == 'rollback' }}
+              run: bash deploy/deploy.sh rollback

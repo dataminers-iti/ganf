@@ -1,0 +1,29 @@
+# Unidad plantilla: una instancia por slot (ganf@blue, ganf@green).
+# Instalar: sudo cp deploy/ganf@.service /etc/systemd/system/ && sudo systemctl daemon-reload
+#
+# Sirve dist/ (estático + API PHP) con el servidor embebido de PHP, solo en loopback.
+# Nginx es lo único que ve la red. Puertos: blue 4161 · green 4162 (mantener en sync
+# con deploy/deploy.sh y deploy/nginx/ganf.conf).
+# Secretos (DB_HOST, DB_NAME, DB_USER, DB_PASS) en /home/hermes/deploy/env/ganf.env.
+[Unit]
+Description=ganf SGRSI (%i)
+After=network.target
+
+[Service]
+Type=simple
+User=hermes
+WorkingDirectory=/home/hermes/apps/ganf/%i
+EnvironmentFile=/home/hermes/deploy/env/ganf.env
+Environment=PHP_CLI_SERVER_WORKERS=4
+# Las sesiones PHP se comparten entre slots: el login sobrevive al switch.
+ExecStartPre=/bin/mkdir -p /home/hermes/data/ganf/sessions
+ExecStart=/bin/sh -c 'case "%i" in blue) p=4161;; green) p=4162;; *) exit 64;; esac; exec /usr/bin/php -d session.save_path=/home/hermes/data/ganf/sessions -S 127.0.0.1:$${p} -t /home/hermes/apps/ganf/%i'
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/hermes/data/ganf
+
+[Install]
+WantedBy=multi-user.target

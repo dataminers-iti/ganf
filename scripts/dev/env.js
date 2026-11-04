@@ -35,7 +35,7 @@ export function parsearDev(texto) {
     return variables;
 }
 
-const verdadero = valor => ['1', 'true', 'si', 'yes', 'on'].includes(String(valor).toLowerCase());
+const verdadero = (valor) => ['1', 'true', 'si', 'yes', 'on'].includes(String(valor).toLowerCase());
 
 export function resolverConfig(archivo = {}, entorno = process.env) {
     const crudo = { ...DEFAULTS };

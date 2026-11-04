@@ -16,7 +16,7 @@ function actualizarUsuarioEnTopbar(usuario) {
         avatar.textContent = (usuario.nombre || 'U')
             .split(/\s+/)
             .slice(0, 2)
-            .map(nombre => nombre[0])
+            .map((nombre) => nombre[0])
             .join('')
             .toUpperCase();
     }
@@ -27,7 +27,12 @@ function renderizarActividad(actividad) {
     if (!tbody) return;
 
     tbody.innerHTML = actividad.length
-        ? actividad.map(fila => `<tr><td>${escapeHtml(fila.detalle)}</td><td>${escapeHtml(fila.tipo)}</td><td><span class="badge badge-${escapeHtml(fila.estado)}">${escapeHtml(String(fila.estado || '').replace('_', ' '))}</span></td><td>${formatearFecha(fila.fecha, 'es-UY')}</td></tr>`).join('')
+        ? actividad
+              .map(
+                  (fila) =>
+                      `<tr><td>${escapeHtml(fila.detalle)}</td><td>${escapeHtml(fila.tipo)}</td><td><span class="badge badge-${escapeHtml(fila.estado)}">${escapeHtml(String(fila.estado || '').replace('_', ' '))}</span></td><td>${formatearFecha(fila.fecha, 'es-UY')}</td></tr>`,
+              )
+              .join('')
         : '<tr><td colspan="4" class="empty-note">No hay actividad registrada todavía.</td></tr>';
 }
 
@@ -36,10 +41,20 @@ function renderizarUbicaciones(ubicaciones) {
     if (!contenedor) return;
 
     contenedor.innerHTML = ubicaciones.length
-        ? ubicaciones.slice(0, 4).map(ubicacion => {
-            const detalle = [ubicacion.edificio, ubicacion.tipo, ubicacion.piso, ubicacion.referencia].filter(Boolean).join(' · ');
-            return `<div class="location-row"><span class="location-row-icon">${icono('ubicacion')}</span><span><strong>${escapeHtml(ubicacion.nombre)}</strong><small>${escapeHtml(detalle)}</small></span></div>`;
-        }).join('')
+        ? ubicaciones
+              .slice(0, 4)
+              .map((ubicacion) => {
+                  const detalle = [
+                      ubicacion.edificio,
+                      ubicacion.tipo,
+                      ubicacion.piso,
+                      ubicacion.referencia,
+                  ]
+                      .filter(Boolean)
+                      .join(' · ');
+                  return `<div class="location-row"><span class="location-row-icon">${icono('ubicacion')}</span><span><strong>${escapeHtml(ubicacion.nombre)}</strong><small>${escapeHtml(detalle)}</small></span></div>`;
+              })
+              .join('')
         : '<p class="location-empty">Todavía no hay ubicaciones cargadas.</p>';
 }
 

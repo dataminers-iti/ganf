@@ -26,7 +26,10 @@ test('resolverConfig usa los valores por defecto', () => {
 });
 
 test('resolverConfig: el entorno gana sobre el archivo', () => {
-    const config = resolverConfig({ API_MODE: 'mock', PORT: '4000' }, { API_MODE: 'proxy', API_TARGET: 'http://localhost/x/' });
+    const config = resolverConfig(
+        { API_MODE: 'mock', PORT: '4000' },
+        { API_MODE: 'proxy', API_TARGET: 'http://localhost/x/' },
+    );
     assert.equal(config.modo, 'proxy');
     assert.equal(config.port, 4000);
     assert.equal(config.target, 'http://localhost/x');
@@ -39,7 +42,10 @@ test('resolverConfig: modo inválido cae en mock y VITE_API_PROXY alimenta el ta
 });
 
 test('resolverConfig interpreta booleanos y latencia', () => {
-    const config = resolverConfig({ API_LOG: 'false', API_LOG_BODIES: '0', DEV_PANEL: 'no', API_LATENCY_MS: '250' }, {});
+    const config = resolverConfig(
+        { API_LOG: 'false', API_LOG_BODIES: '0', DEV_PANEL: 'no', API_LATENCY_MS: '250' },
+        {},
+    );
     assert.equal(config.log, false);
     assert.equal(config.bodies, false);
     assert.equal(config.panel, false);

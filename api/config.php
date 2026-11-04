@@ -18,10 +18,12 @@ class Database
     public static function obtenerConexion(): PDO
     {
         if (self::$conexion === null) {
-            $host    = 'localhost';
-            $db      = 'sgrsi_db';
-            $user    = 'root';
-            $pass    = '';
+            // En el VPS vienen de /home/hermes/deploy/env/ganf.env (systemd);
+            // sin variables rigen los valores de XAMPP.
+            $host    = getenv('DB_HOST') ?: 'localhost';
+            $db      = getenv('DB_NAME') ?: 'sgrsi_db';
+            $user    = getenv('DB_USER') ?: 'root';
+            $pass    = getenv('DB_PASS') ?: '';
             $charset = 'utf8mb4';
 
             $dsn = "mysql:host={$host};dbname={$db};charset={$charset}";

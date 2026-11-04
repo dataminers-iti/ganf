@@ -56,7 +56,7 @@ src/
     ├── theme/theme.js          # Tema claro/oscuro
     ├── utils/format.js         # Fechas, recortes, capitalización
     ├── styles/                 # CSS por capas: tokens, base, tema, componentes, layout/, entradas/
-    └── assets/                 # Logo e imágenes
+    └── assets/                 # Logos WebP (marca + favicon) e imágenes
 ```
 
 ### Routing
@@ -79,25 +79,24 @@ Los estilos viven en `src/shared/styles/`. `entradas/` concentra los `@import`
 de cada tipo de página y es lo único que enlazan los HTML; Vite los empaqueta
 en **un solo CSS minificado por página**.
 
-| Archivo | Contenido |
-| --- | --- |
-| `tokens.css` | `@font-face` y tokens de color/tipografía (claro y oscuro) |
-| `base.css` | Reset, tipografía, campos y botón primario |
-| `tema.css` | Botón de tema y volver arriba |
-| `componentes.css` | Tarjetas, tablas, etiquetas, variantes de botón y diálogos |
-| `layout/login.css` | Login y registro |
-| `layout/app-shell.css` | Sidebar, topbar y contenido |
-| `layout/dashboard.css` | Panel principal |
-| `layout/incidencias.css` | Formulario y listado de incidencias |
-| `entradas/publicas.css` | tokens + base + tema + componentes + login |
-| `entradas/internas.css` | tokens + base + tema + componentes + shell |
-| `entradas/dashboard.css` | internas + dashboard |
-| `entradas/incidencias.css` | internas + incidencias |
+| Archivo                    | Contenido                                                  |
+| -------------------------- | ---------------------------------------------------------- |
+| `tokens.css`               | `@font-face` y tokens de color/tipografía (claro y oscuro) |
+| `base.css`                 | Reset, tipografía, campos y botón primario                 |
+| `tema.css`                 | Botón de tema y volver arriba                              |
+| `componentes.css`          | Tarjetas, tablas, etiquetas, variantes de botón y diálogos |
+| `layout/login.css`         | Login y registro                                           |
+| `layout/app-shell.css`     | Sidebar, topbar y contenido                                |
+| `layout/dashboard.css`     | Panel principal                                            |
+| `layout/incidencias.css`   | Formulario y listado de incidencias                        |
+| `entradas/publicas.css`    | tokens + base + tema + componentes + login                 |
+| `entradas/internas.css`    | tokens + base + tema + componentes + shell                 |
+| `entradas/dashboard.css`   | internas + dashboard                                       |
+| `entradas/incidencias.css` | internas + incidencias                                     |
 
 Regla: si un estilo lo usan 2+ páginas va en una capa global; si es de una
 sola pantalla va en `layout/<pantalla>.css`. El orden de los `@import` es el
 orden de la cascada.
-
 
 ### Anatomía de una feature
 
@@ -201,18 +200,19 @@ Ver [`scripts/perf/README.md`](scripts/perf/README.md).
 
 ## Mapa de la migración
 
-| Antes                   | Ahora                                              |
-| ----------------------- | -------------------------------------------------- |
-| `autenticacion.js`      | `features/auth/`                                   |
-| `navegacion.js`         | `app/layout.js` + `app/routes.js`                  |
-| `inicio.js`             | `features/dashboard/`                              |
-| `incidencias.js`        | `features/incidents/`                              |
-| `servicio.js`           | `features/service-requests/`                       |
-| `inventario.js`         | `features/inventory/`                              |
-| `prestamos.js`          | `features/loans/`                                  |
-| `admin_usuarios.js`     | `features/user-admin/`                             |
-| `dialogos.js`           | `shared/ui/dialog.js`                              |
-| `tema.js`               | `shared/theme/theme.js`                            |
-| `base.css`, `tema.css`, `componentes.css`, `layout.css` | `shared/styles/` (capas + `entradas/` para Vite) |
-| `ico logo.png`          | `shared/assets/logo.webp`                          |
-| `login-instituto.webp`  | `shared/assets/login-instituto.webp`               |
+| Antes                                                   | Ahora                                                        |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| `autenticacion.js`                                      | `features/auth/`                                             |
+| `navegacion.js`                                         | `app/layout.js` + `app/routes.js`                            |
+| `inicio.js`                                             | `features/dashboard/`                                        |
+| `incidencias.js`                                        | `features/incidents/`                                        |
+| `servicio.js`                                           | `features/service-requests/`                                 |
+| `inventario.js`                                         | `features/inventory/`                                        |
+| `prestamos.js`                                          | `features/loans/`                                            |
+| `admin_usuarios.js`                                     | `features/user-admin/`                                       |
+| `dialogos.js`                                           | `shared/ui/dialog.js`                                        |
+| `tema.js`                                               | `shared/theme/theme.js`                                      |
+| `base.css`, `tema.css`, `componentes.css`, `layout.css` | `shared/styles/` (capas + `entradas/` para Vite)             |
+| `ico logo.png`                                          | `shared/assets/logo-dataminers.webp` + `favicon.webp`        |
+| `logo.png` (original)                                   | Fuente en `docs/brand/`; WebP optimizado en `shared/assets/` |
+| `login-instituto.webp`                                  | `shared/assets/login-instituto.webp`                         |

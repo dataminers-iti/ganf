@@ -58,7 +58,8 @@ async function guardarIncidencia() {
 
     try {
         await crearIncidencia({ titulo, descripcion, area, prioridad });
-        document.getElementById('estadoIncidencia').textContent = 'Incidencia guardada correctamente.';
+        document.getElementById('estadoIncidencia').textContent =
+            'Incidencia guardada correctamente.';
         limpiarCampo('titulo');
         limpiarCampo('descripcionIncidencia');
         limpiarCampo('area');
@@ -99,12 +100,18 @@ async function guardarPrioridadIncidencia() {
     boton.disabled = true;
 
     try {
-        const respuesta = await cambiarPrioridadIncidencia({ id: incidenciaPrioridadActiva, prioridad });
+        const respuesta = await cambiarPrioridadIncidencia({
+            id: incidenciaPrioridadActiva,
+            prioridad,
+        });
         document.getElementById('dialogoPrioridadIncidencia').close();
         document.getElementById('estadoIncidencia').textContent = respuesta.message;
         await cargarIncidencias();
     } catch (error) {
-        document.getElementById('errorPrioridadIncidencia').textContent = mensajeDeError(error, 'No se pudo cambiar la prioridad.');
+        document.getElementById('errorPrioridadIncidencia').textContent = mensajeDeError(
+            error,
+            'No se pudo cambiar la prioridad.',
+        );
     } finally {
         boton.disabled = false;
     }
@@ -113,7 +120,8 @@ async function guardarPrioridadIncidencia() {
 function abrirDialogoBorrarDesdeBoton(boton) {
     incidenciaBorrarActiva = Number(boton.dataset.incidenciaId);
     const titulo = boton.dataset.incidenciaTitulo || 'esta incidencia';
-    document.getElementById('mensajeConfirmarBorradoIncidencia').textContent = `¿Seguro que querés borrar la incidencia «${titulo}»? Esta acción no se puede deshacer.`;
+    document.getElementById('mensajeConfirmarBorradoIncidencia').textContent =
+        `¿Seguro que querés borrar la incidencia «${titulo}»? Esta acción no se puede deshacer.`;
     document.getElementById('errorBorrarIncidencia').textContent = '';
     document.getElementById('dialogoBorrarIncidencia').showModal();
     document.getElementById('cancelarBorradoIncidencia').focus();
@@ -129,7 +137,10 @@ async function confirmarBorradoIncidencia() {
         document.getElementById('estadoIncidencia').textContent = respuesta.message;
         await cargarIncidencias();
     } catch (error) {
-        document.getElementById('errorBorrarIncidencia').textContent = mensajeDeError(error, 'No se pudo borrar la incidencia.');
+        document.getElementById('errorBorrarIncidencia').textContent = mensajeDeError(
+            error,
+            'No se pudo borrar la incidencia.',
+        );
     } finally {
         boton.disabled = false;
     }

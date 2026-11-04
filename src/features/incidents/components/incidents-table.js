@@ -5,16 +5,20 @@ import { formatEstadoIncidencia } from '../utils/incidents.js';
 
 function renderOpcionesTecnicos(incidencia, tecnicos) {
     return tecnicos
-        .map(tecnico => `<option value="${tecnico.id}" ${String(tecnico.id) === String(incidencia.asignado_a) ? 'selected' : ''}>${escapeHtml(tecnico.nombre)}</option>`)
+        .map(
+            (tecnico) =>
+                `<option value="${tecnico.id}" ${String(tecnico.id) === String(incidencia.asignado_a) ? 'selected' : ''}>${escapeHtml(tecnico.nombre)}</option>`,
+        )
         .join('');
 }
 
 function renderAcciones(incidencia, { rol, tecnicos }) {
     if (!['admin', 'tecnico'].includes(rol)) return '';
 
-    const selectorTecnico = rol === 'admin'
-        ? `<label class="visually-hidden" for="tecnico-inc-${incidencia.id}">Asignar técnico</label><select id="tecnico-inc-${incidencia.id}" onchange="asignarTecnicoIncidencia(${Number(incidencia.id)}, this.value)"><option value="">Sin asignar</option>${renderOpcionesTecnicos(incidencia, tecnicos)}</select>`
-        : '';
+    const selectorTecnico =
+        rol === 'admin'
+            ? `<label class="visually-hidden" for="tecnico-inc-${incidencia.id}">Asignar técnico</label><select id="tecnico-inc-${incidencia.id}" onchange="asignarTecnicoIncidencia(${Number(incidencia.id)}, this.value)"><option value="">Sin asignar</option>${renderOpcionesTecnicos(incidencia, tecnicos)}</select>`
+            : '';
 
     return `<td>
         <div class="incidence-action-stack">
@@ -31,7 +35,9 @@ function renderAcciones(incidencia, { rol, tecnicos }) {
 }
 
 export function renderTablaIncidencias(incidencias, opciones = {}) {
-    return incidencias.map(incidencia => `
+    return incidencias
+        .map(
+            (incidencia) => `
         <tr>
             <td>${escapeHtml(incidencia.id)}</td>
             <td>${escapeHtml(incidencia.titulo)}</td>
@@ -44,5 +50,7 @@ export function renderTablaIncidencias(incidencias, opciones = {}) {
             <td>${formatearFecha(incidencia.fecha_creacion)}</td>
             ${renderAcciones(incidencia, opciones)}
         </tr>
-    `).join('');
+    `,
+        )
+        .join('');
 }

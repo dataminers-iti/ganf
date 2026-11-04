@@ -25,7 +25,12 @@ function obtenerDialogo() {
     return dialogo;
 }
 
-export function confirmarAccionCentrada({ titulo = 'Confirmar acción', mensaje, confirmar = 'Confirmar', peligro = false }) {
+export function confirmarAccionCentrada({
+    titulo = 'Confirmar acción',
+    mensaje,
+    confirmar = 'Confirmar',
+    peligro = false,
+}) {
     const modal = obtenerDialogo();
     modal.querySelector('h2').textContent = titulo;
     modal.querySelector('.inc-dialog-message').textContent = mensaje;
@@ -38,8 +43,12 @@ export function confirmarAccionCentrada({ titulo = 'Confirmar acción', mensaje,
     botonConfirmar.classList.toggle('btn-danger-inc', peligro);
     botonConfirmar.classList.toggle('btn-primary-inc', !peligro);
 
-    return new Promise(resolve => {
-        const cerrar = valor => { modal.close(); limpiar(); resolve(valor); };
+    return new Promise((resolve) => {
+        const cerrar = (valor) => {
+            modal.close();
+            limpiar();
+            resolve(valor);
+        };
         const botonCancelar = modal.querySelector('.inc-dialog-actions button:first-child');
         const limpiar = () => {
             botonConfirmar.removeEventListener('click', aceptar);
@@ -49,7 +58,10 @@ export function confirmarAccionCentrada({ titulo = 'Confirmar acción', mensaje,
         };
         const aceptar = () => cerrar(true);
         const cancelar = () => cerrar(false);
-        const alCancelar = event => { event.preventDefault(); cancelar(); };
+        const alCancelar = (event) => {
+            event.preventDefault();
+            cancelar();
+        };
 
         botonConfirmar.addEventListener('click', aceptar);
         botonCancelar.addEventListener('click', cancelar);
@@ -72,7 +84,8 @@ export function elegirPrioridadCentrada({ titulo, prioridad }) {
         select = document.createElement('select');
         select.className = 'dialogo-prioridad-select';
         select.setAttribute('aria-label', 'Seleccioná la nueva prioridad');
-        select.innerHTML = '<option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option>';
+        select.innerHTML =
+            '<option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option>';
         mensaje.after(select);
     }
     select.value = prioridad;
@@ -86,8 +99,12 @@ export function elegirPrioridadCentrada({ titulo, prioridad }) {
     const botonCancelar = modal.querySelector('.inc-dialog-actions button:first-child');
     botonCancelar.textContent = 'Cancelar';
 
-    return new Promise(resolve => {
-        const cerrar = valor => { modal.close(); limpiar(); resolve(valor); };
+    return new Promise((resolve) => {
+        const cerrar = (valor) => {
+            modal.close();
+            limpiar();
+            resolve(valor);
+        };
         const cancelar = () => cerrar(null);
         const aceptar = () => cerrar(select.value);
         const botonCerrar = modal.querySelector('.inc-dialog-close');
@@ -97,7 +114,10 @@ export function elegirPrioridadCentrada({ titulo, prioridad }) {
             botonCerrar.removeEventListener('click', cancelar);
             modal.removeEventListener('cancel', alCancelar);
         };
-        const alCancelar = event => { event.preventDefault(); cancelar(); };
+        const alCancelar = (event) => {
+            event.preventDefault();
+            cancelar();
+        };
 
         botonConfirmar.addEventListener('click', aceptar);
         botonCancelar.addEventListener('click', cancelar);

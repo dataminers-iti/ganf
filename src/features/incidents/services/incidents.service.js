@@ -1,7 +1,7 @@
 import { api } from '../../../shared/api/http.js';
 
 export function listarIncidencias() {
-    return api.get('incidencias.php?accion=listar').then(respuesta => respuesta.data || []);
+    return api.get('incidencias.php?accion=listar').then((respuesta) => respuesta.data || []);
 }
 
 export function crearIncidencia({ titulo, descripcion, area, prioridad }) {

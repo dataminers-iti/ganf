@@ -7,7 +7,7 @@ import { getUsuarioActual, logout } from '../features/auth/index.js';
 import { icono } from '../shared/ui/icons.js';
 import { montarVolverArriba } from '../shared/ui/back-to-top.js';
 
-const RUTA_LOGO = new URL('../shared/assets/logo.webp', import.meta.url).href;
+const RUTA_LOGO = new URL('../shared/assets/logo-dataminers.webp', import.meta.url).href;
 
 function pathnameActual() {
     const pathname = window.location.pathname;
@@ -16,7 +16,7 @@ function pathnameActual() {
 
 function esPaginaPublica() {
     const actual = pathnameActual();
-    return [RUTAS.login, RUTAS.registro].some(ruta => new URL(ruta).pathname === actual);
+    return [RUTAS.login, RUTAS.registro].some((ruta) => new URL(ruta).pathname === actual);
 }
 
 function construirItems(usuario) {
@@ -44,7 +44,8 @@ function construirSidebar(itemsGestion, itemsAdministracion) {
     const enlace = ([href, nombreIcono, etiqueta]) => {
         const activo = href.includes('#')
             ? window.location.hash === href.slice(href.indexOf('#'))
-            : new URL(href).pathname === pathnameActual() && window.location.hash !== '#ubicaciones';
+            : new URL(href).pathname === pathnameActual() &&
+              window.location.hash !== '#ubicaciones';
         return `<a class="sidebar-link ${activo ? 'active' : ''}" href="${href}" title="${etiqueta}" aria-label="${etiqueta}">${icono(nombreIcono, 'nav-icon')}<span>${etiqueta}</span></a>`;
     };
 
@@ -62,14 +63,16 @@ function construirTopbar(usuario, items) {
     const topbar = document.createElement('header');
     topbar.className = 'app-topbar';
 
-    const nombreSeccion = window.location.hash === '#ubicaciones'
-        ? 'Ubicaciones'
-        : (items.find(item => new URL(item[0]).pathname === pathnameActual())?.[2] || 'Sistema');
+    const nombreSeccion =
+        window.location.hash === '#ubicaciones'
+            ? 'Ubicaciones'
+            : items.find((item) => new URL(item[0]).pathname === pathnameActual())?.[2] ||
+              'Sistema';
 
     const iniciales = (usuario?.nombre || 'U')
         .split(/\s+/)
         .slice(0, 2)
-        .map(nombre => nombre[0])
+        .map((nombre) => nombre[0])
         .join('')
         .toUpperCase();
 
@@ -88,8 +91,8 @@ function montarShell() {
 
     const usuario = getUsuarioActual();
     const items = construirItems(usuario);
-    const itemsGestion = items.filter(item => item[0] !== RUTAS.adminUsuarios);
-    const itemsAdministracion = items.filter(item => item[0] === RUTAS.adminUsuarios);
+    const itemsGestion = items.filter((item) => item[0] !== RUTAS.adminUsuarios);
+    const itemsAdministracion = items.filter((item) => item[0] === RUTAS.adminUsuarios);
 
     const sidebar = construirSidebar(itemsGestion, itemsAdministracion);
     const topbar = construirTopbar(usuario, items);
@@ -97,10 +100,11 @@ function montarShell() {
     const content = document.createElement('div');
     content.className = 'app-content';
     const movable = [...document.body.children].filter(
-        elemento => !elemento.classList.contains('dark-btn')
-            && !(elemento.tagName === 'SCRIPT' && !elemento.src),
+        (elemento) =>
+            !elemento.classList.contains('dark-btn') &&
+            !(elemento.tagName === 'SCRIPT' && !elemento.src),
     );
-    movable.forEach(elemento => content.appendChild(elemento));
+    movable.forEach((elemento) => content.appendChild(elemento));
 
     const main = document.createElement('div');
     main.className = 'app-main';
@@ -112,7 +116,10 @@ function montarShell() {
     document.body.appendChild(shell);
 
     const darkButton = document.querySelector('.dark-btn');
-    if (darkButton) topbar.querySelector('.topbar-user')?.insertBefore(darkButton, topbar.querySelector('.btn-logout'));
+    if (darkButton)
+        topbar
+            .querySelector('.topbar-user')
+            ?.insertBefore(darkButton, topbar.querySelector('.btn-logout'));
 }
 
 // Puentes para los onclick inline del HTML generado.

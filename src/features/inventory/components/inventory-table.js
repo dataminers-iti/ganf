@@ -3,7 +3,9 @@ import { icono } from '../../../shared/ui/icons.js';
 import { formatEstadoEquipo } from '../utils/inventory.js';
 
 export function renderTablaEquipos(equipos, { esAdmin = false } = {}) {
-    return equipos.map(equipo => `
+    return equipos
+        .map(
+            (equipo) => `
         <tr>
             <td>${escapeHtml(equipo.id)}</td>
             <td>${escapeHtml(equipo.nombre)}</td>
@@ -14,10 +16,16 @@ export function renderTablaEquipos(equipos, { esAdmin = false } = {}) {
             <td><span class="badge badge-${escapeHtml(equipo.estado)}">${formatEstadoEquipo(equipo.estado)}</span></td>
             <td>${escapeHtml(equipo.ubicacion_nombre) || 'Sin ubicación'}</td>
             <td>${escapeHtml(equipo.cantidad)}</td>
-            ${esAdmin ? `<td><div class="incidence-action-controls">
+            ${
+                esAdmin
+                    ? `<td><div class="incidence-action-controls">
                 <button type="button" class="btn-tabla" onclick="prepararEdicion(${Number(equipo.id)})">Editar</button>
                 <button type="button" class="btn-delete-inc" aria-label="Eliminar equipo: ${escapeHtml(equipo.nombre)}" onclick="eliminarProducto(${Number(equipo.id)})">${icono('papelera')}</button>
-            </div></td>` : ''}
+            </div></td>`
+                    : ''
+            }
         </tr>
-    `).join('');
+    `,
+        )
+        .join('');
 }

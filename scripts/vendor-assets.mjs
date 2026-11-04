@@ -10,10 +10,22 @@ const fuentes = join(raiz, 'src/shared/fonts');
 mkdirSync(fuentes, { recursive: true });
 
 const archivos = [
-    ['@fontsource-variable/valley-sans/files/valley-sans-latin-wght-normal.woff2', 'valley-sans-latin.woff2'],
-    ['@fontsource-variable/merriweather/files/merriweather-latin-opsz-normal.woff2', 'merriweather-latin.woff2'],
-    ['@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2', 'jetbrains-mono-latin.woff2'],
-    ['@fontsource/dela-gothic-one/files/dela-gothic-one-latin-400-normal.woff2', 'dela-gothic-one-latin.woff2'],
+    [
+        '@fontsource-variable/valley-sans/files/valley-sans-latin-wght-normal.woff2',
+        'valley-sans-latin.woff2',
+    ],
+    [
+        '@fontsource-variable/merriweather/files/merriweather-latin-opsz-normal.woff2',
+        'merriweather-latin.woff2',
+    ],
+    [
+        '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2',
+        'jetbrains-mono-latin.woff2',
+    ],
+    [
+        '@fontsource/dela-gothic-one/files/dela-gothic-one-latin-400-normal.woff2',
+        'dela-gothic-one-latin.woff2',
+    ],
 ];
 for (const [origen, destino] of archivos) copyFileSync(join(nm, origen), join(fuentes, destino));
 
@@ -38,7 +50,11 @@ const ICONOS = {
 
 const cuerpos = Object.entries(ICONOS).map(([nombre, lucide]) => {
     const svg = readFileSync(join(nm, 'lucide-static/icons', `${lucide}.svg`), 'utf8');
-    const interior = svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '').replace(/\s+/g, ' ').trim();
+    const interior = svg
+        .replace(/^[\s\S]*?<svg[^>]*>/, '')
+        .replace(/<\/svg>\s*$/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
     return `    ${nombre}: '${interior}',`;
 });
 
