@@ -16,7 +16,9 @@ WorkingDirectory=/home/hermes/apps/ganf/%i
 EnvironmentFile=/home/hermes/deploy/env/ganf.env
 Environment=PHP_CLI_SERVER_WORKERS=4
 # Las sesiones PHP se comparten entre slots: el login sobrevive al switch.
-ExecStartPre=/bin/mkdir -p /home/hermes/data/ganf/sessions
+# ReadWritePaths exige que el directorio exista antes de montar el namespace de cualquier
+# ExecStartPre (si no, falla con 226/NAMESPACE). El prefijo '+' lo corre sin sandbox y como root.
+ExecStartPre=+/usr/bin/install -d -o hermes -g hermes /home/hermes/data/ganf/sessions
 ExecStart=/bin/sh -c 'case "%i" in blue) p=4161;; green) p=4162;; *) exit 64;; esac; exec /usr/bin/php -d session.save_path=/home/hermes/data/ganf/sessions -S 127.0.0.1:$${p} -t /home/hermes/apps/ganf/%i'
 Restart=on-failure
 RestartSec=2

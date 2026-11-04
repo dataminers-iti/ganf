@@ -24,13 +24,14 @@ CI (`checks.yml`, `format.yml`) corre en runner de GitHub (`ubuntu-latest`) en P
 
 ## Setup único en el VPS
 
-1. `sudo cp deploy/ganf@.service /etc/systemd/system/ && sudo systemctl daemon-reload`
-2. `sudo systemctl enable ganf@blue ganf@green`
-3. Crear `/home/hermes/deploy/env/ganf.env` (fuera del repo, `chmod 600`) con `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`.
-4. Cargar `setup.sql` en MySQL (`sgrsi_db`).
-5. Instalar `deploy/nginx/ganf.conf`, crear `/etc/nginx/snippets/ganf-upstream.conf` con `server 127.0.0.1:4161;` y recargar Nginx.
-6. Sudoers para el usuario del runner (sin password), solo estos comandos: `/usr/bin/systemctl`, `/usr/sbin/nginx`, `/usr/bin/tee /etc/nginx/snippets/ganf-upstream.conf`, `/usr/bin/journalctl`.
-7. En GitHub: variable de repo `GANF_HEALTH_URL` con la URL real (ej. `https://ganf.example.com/`) y un runner con el label `vps-nexus` (o cambiar `runs-on` en `deploy.yml`).
+1. `mkdir -p /home/hermes/data/ganf/sessions` (la unidad lo exige: sin este directorio falla con `226/NAMESPACE`).
+2. `sudo cp deploy/ganf@.service /etc/systemd/system/ && sudo systemctl daemon-reload`
+3. `sudo systemctl enable ganf@blue ganf@green`
+4. Crear `/home/hermes/deploy/env/ganf.env` (fuera del repo, `chmod 600`) con `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`.
+5. Cargar `setup.sql` en MySQL (`sgrsi_db`).
+6. Instalar `deploy/nginx/ganf.conf`, crear `/etc/nginx/snippets/ganf-upstream.conf` con `server 127.0.0.1:4161;` y recargar Nginx.
+7. Sudoers para el usuario del runner (sin password), solo estos comandos: `/usr/bin/systemctl`, `/usr/sbin/nginx`, `/usr/bin/tee /etc/nginx/snippets/ganf-upstream.conf`, `/usr/bin/journalctl`.
+8. En GitHub: variable de repo `GANF_HEALTH_URL` con la URL real (ej. `https://ganf.example.com/`) y un runner con el label `vps-nexus` (o cambiar `runs-on` en `deploy.yml`).
 
 ## Health checks
 
