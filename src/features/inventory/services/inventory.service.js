@@ -1,7 +1,7 @@
 import { api } from '../../../shared/api/http.js';
 
 export function listarEquipos() {
-    return api.get('inventario.php?accion=listar').then(respuesta => respuesta.data || []);
+    return api.get('inventario.php?accion=listar').then((respuesta) => respuesta.data || []);
 }
 
 /**

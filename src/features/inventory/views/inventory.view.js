@@ -3,9 +3,16 @@ import { limpiarCampo, mostrarError } from '../../../shared/dom/dom.js';
 import { confirmarAccionCentrada } from '../../../shared/ui/dialog.js';
 import { verificarSesion } from '../../auth/index.js';
 import { eliminarEquipo, guardarEquipo, listarEquipos } from '../services/inventory.service.js';
-import { crearUbicacion, eliminarUbicacion as borrarUbicacion, listarUbicaciones } from '../services/locations.service.js';
+import {
+    crearUbicacion,
+    eliminarUbicacion as borrarUbicacion,
+    listarUbicaciones,
+} from '../services/locations.service.js';
 import { renderTablaEquipos } from '../components/inventory-table.js';
-import { renderOpcionesUbicaciones, renderTablaUbicaciones } from '../components/locations-table.js';
+import {
+    renderOpcionesUbicaciones,
+    renderTablaUbicaciones,
+} from '../components/locations-table.js';
 
 let esAdmin = false;
 let inventarioActual = []; // Cache local del último listado, para poblar el form al editar.
@@ -20,7 +27,9 @@ async function cargarUbicaciones() {
 
     try {
         const ubicaciones = await listarUbicaciones();
-        select.innerHTML = '<option value="">Seleccione una ubicación</option>' + renderOpcionesUbicaciones(ubicaciones);
+        select.innerHTML =
+            '<option value="">Seleccione una ubicación</option>' +
+            renderOpcionesUbicaciones(ubicaciones);
 
         const tabla = document.getElementById('bodyUbicaciones');
         if (tabla) {
@@ -92,7 +101,7 @@ async function cargarInventario() {
 }
 
 function prepararEdicion(id) {
-    const equipo = inventarioActual.find(item => Number(item.id) === Number(id));
+    const equipo = inventarioActual.find((item) => Number(item.id) === Number(id));
     if (!equipo) return;
 
     document.getElementById('idEditando').value = equipo.id;
@@ -115,7 +124,7 @@ function prepararEdicion(id) {
 
 function cancelarEdicion() {
     document.getElementById('idEditando').value = '';
-    ['nombre', 'marca', 'modelo', 'numero_serie', 'descripcion'].forEach(id => limpiarCampo(id));
+    ['nombre', 'marca', 'modelo', 'numero_serie', 'descripcion'].forEach((id) => limpiarCampo(id));
     document.getElementById('ubicacion_id').selectedIndex = 0;
     document.getElementById('cantidad').value = '1';
     document.getElementById('tipo').selectedIndex = 0;
@@ -163,7 +172,7 @@ async function guardarProducto() {
 }
 
 async function eliminarProducto(id) {
-    const equipo = inventarioActual.find(item => Number(item.id) === Number(id));
+    const equipo = inventarioActual.find((item) => Number(item.id) === Number(id));
     const confirmado = await confirmarAccionCentrada({
         titulo: 'Eliminar equipo',
         mensaje: `¿Seguro que querés eliminar «${equipo?.nombre || 'este equipo'}»? Esta acción no se puede deshacer.`,

@@ -1,11 +1,11 @@
 import { api } from '../../../shared/api/http.js';
 
 export function listarEquiposDisponibles() {
-    return api.get('prestamos.php?accion=equipos').then(respuesta => respuesta.data || []);
+    return api.get('prestamos.php?accion=equipos').then((respuesta) => respuesta.data || []);
 }
 
 export function listarPrestamos() {
-    return api.get('prestamos.php?accion=listar').then(respuesta => respuesta.data || []);
+    return api.get('prestamos.php?accion=listar').then((respuesta) => respuesta.data || []);
 }
 
 export function crearPrestamo({ equipoId, motivo, cantidad, fechaDevolucionPrevista }) {

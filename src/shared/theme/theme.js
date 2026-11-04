@@ -25,7 +25,11 @@ export function actualizarControlTema() {
 export function toggleDark() {
     const siguiente = temaActual() === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = siguiente;
-    try { localStorage.setItem(CLAVE_TEMA, siguiente); } catch { /* almacenamiento no disponible: vale solo para esta página */ }
+    try {
+        localStorage.setItem(CLAVE_TEMA, siguiente);
+    } catch {
+        /* almacenamiento no disponible: vale solo para esta página */
+    }
     actualizarControlTema();
 }
 

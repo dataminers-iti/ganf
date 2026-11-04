@@ -15,12 +15,12 @@ desde DevTools → Application → Cookies, o desde `document.cookie` en la cons
 
 Variables opcionales:
 
-| Variable | Default | Descripción |
-|---|---:|---|
-| `PERF_SEQ` | 300 | Requests secuenciales por endpoint |
-| `PERF_CONC` | 1500 | Requests totales en concurrencia |
-| `PERF_CONCURRENCY` | 20 | Workers simultáneos |
-| `PERF_WARMUP` | 50 | Requests de calentamiento |
+| Variable           | Default | Descripción                        |
+| ------------------ | ------: | ---------------------------------- |
+| `PERF_SEQ`         |     300 | Requests secuenciales por endpoint |
+| `PERF_CONC`        |    1500 | Requests totales en concurrencia   |
+| `PERF_CONCURRENCY` |      20 | Workers simultáneos                |
+| `PERF_WARMUP`      |      50 | Requests de calentamiento          |
 
 El resultado es JSON con `avg`, `p50`, `p95`, `p99`, `min`, `max`, `rps`,
 `bytes` y cantidad de errores por endpoint.
@@ -33,16 +33,16 @@ renderizados:
 ```js
 const nav = performance.getEntriesByType('navigation')[0];
 const res = performance.getEntriesByType('resource');
-const api = res.filter(r => new URL(r.name).pathname.startsWith('/api/'));
+const api = res.filter((r) => new URL(r.name).pathname.startsWith('/api/'));
 
 console.table({
-  ttfb: +(nav.responseStart - nav.startTime).toFixed(1),
-  domContentLoaded: +nav.domContentLoadedEventEnd.toFixed(1),
-  load: +nav.loadEventEnd.toFixed(1),
-  apiUltimaRespuesta: Math.max(...api.map(r => r.responseEnd)),
-  apiPromedio: api.reduce((t, r) => t + (r.responseEnd - r.startTime), 0) / api.length,
-  requests: res.length,
-  transferKB: res.reduce((t, r) => t + (r.transferSize || 0), 0) / 1024,
+    ttfb: +(nav.responseStart - nav.startTime).toFixed(1),
+    domContentLoaded: +nav.domContentLoadedEventEnd.toFixed(1),
+    load: +nav.loadEventEnd.toFixed(1),
+    apiUltimaRespuesta: Math.max(...api.map((r) => r.responseEnd)),
+    apiPromedio: api.reduce((t, r) => t + (r.responseEnd - r.startTime), 0) / api.length,
+    requests: res.length,
+    transferKB: res.reduce((t, r) => t + (r.transferSize || 0), 0) / 1024,
 });
 ```
 

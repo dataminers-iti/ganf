@@ -1,7 +1,11 @@
 import { ApiError } from '../../../shared/api/http.js';
 import { RUTAS } from '../../../shared/config/paths.js';
 import { verificarSesion } from '../../auth/index.js';
-import { listarUsuarios, cambiarRolUsuario, cambiarActivoUsuario } from '../services/users.service.js';
+import {
+    listarUsuarios,
+    cambiarRolUsuario,
+    cambiarActivoUsuario,
+} from '../services/users.service.js';
 import { renderTablaUsuarios } from '../components/users-table.js';
 
 async function cargarUsuarios() {
@@ -24,7 +28,8 @@ async function cambiarRol(id, nuevoRol) {
         await cambiarRolUsuario({ id, nuevoRol });
         if (estado) estado.textContent = 'Rol actualizado correctamente.';
     } catch (error) {
-        if (estado) estado.textContent = error instanceof ApiError ? error.message : 'Error de conexión';
+        if (estado)
+            estado.textContent = error instanceof ApiError ? error.message : 'Error de conexión';
         await cargarUsuarios(); // Revierte el select al valor real.
     }
 }
@@ -35,7 +40,8 @@ async function toggleActivo(id, nuevoEstado) {
         await cambiarActivoUsuario({ id, activo: nuevoEstado });
         await cargarUsuarios();
     } catch (error) {
-        if (estado) estado.textContent = error instanceof ApiError ? error.message : 'Error de conexión';
+        if (estado)
+            estado.textContent = error instanceof ApiError ? error.message : 'Error de conexión';
     }
 }
 

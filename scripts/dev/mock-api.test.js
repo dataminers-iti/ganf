@@ -4,8 +4,9 @@ import { CLAVE_DEV, crearMockApi } from './mock-api.js';
 
 function cliente() {
     const api = crearMockApi();
-    const llamar = (metodo, endpoint, accion, campos = {}) => api.manejar({ metodo, endpoint, accion, campos });
-    const entrar = correo => llamar('POST', 'auth.php', 'login', { correo, clave: CLAVE_DEV });
+    const llamar = (metodo, endpoint, accion, campos = {}) =>
+        api.manejar({ metodo, endpoint, accion, campos });
+    const entrar = (correo) => llamar('POST', 'auth.php', 'login', { correo, clave: CLAVE_DEV });
     return { llamar, entrar };
 }
 
@@ -26,13 +27,20 @@ test('login con credenciales válidas abre la sesión y logout la cierra', () =>
 
 test('login rechaza clave incorrecta y usuarios inactivos', () => {
     const { llamar } = cliente();
-    assert.equal(llamar('POST', 'auth.php', 'login', { correo: 'admin@iti.dev', clave: 'mala' }).estado, 401);
-    assert.equal(llamar('POST', 'auth.php', 'login', { correo: 'cferreira@iti.dev', clave: CLAVE_DEV }).estado, 401);
+    assert.equal(
+        llamar('POST', 'auth.php', 'login', { correo: 'admin@iti.dev', clave: 'mala' }).estado,
+        401,
+    );
+    assert.equal(
+        llamar('POST', 'auth.php', 'login', { correo: 'cferreira@iti.dev', clave: CLAVE_DEV })
+            .estado,
+        401,
+    );
 });
 
 test('registro valida correo, largo de clave y duplicados', () => {
     const { llamar } = cliente();
-    const alta = campos => llamar('POST', 'auth.php', 'registro', campos).estado;
+    const alta = (campos) => llamar('POST', 'auth.php', 'registro', campos).estado;
     assert.equal(alta({ nombre: 'Ana', correo: 'mal', clave: 'abcdefgh' }), 400);
     assert.equal(alta({ nombre: 'Ana', correo: 'ana@iti.dev', clave: 'corta' }), 400);
     assert.equal(alta({ nombre: 'Ana', correo: 'ana@iti.dev', clave: 'abcdefgh' }), 201);
@@ -46,14 +54,22 @@ test('el rol usuario solo ve las incidencias que reportó', () => {
     entrar('usuario@iti.dev');
     const propias = llamar('GET', 'incidencias.php', 'listar').cuerpo.data;
     assert.ok(propias.length < todas);
-    assert.ok(propias.every(i => i.nombre_reportador === 'Lucía Techera'));
+    assert.ok(propias.every((i) => i.nombre_reportador === 'Lucía Techera'));
 });
 
 test('crear incidencia valida los campos y la agrega al listado', () => {
     const { llamar, entrar } = cliente();
     entrar('usuario@iti.dev');
-    assert.equal(llamar('POST', 'incidencias.php', 'crear', { titulo: 'x', descripcion: 'y', area: 'z' }).estado, 400);
-    const creada = llamar('POST', 'incidencias.php', 'crear', { titulo: 'Pantalla rota', descripcion: 'La pantalla quedó con una grieta', area: 'Salón 1' });
+    assert.equal(
+        llamar('POST', 'incidencias.php', 'crear', { titulo: 'x', descripcion: 'y', area: 'z' })
+            .estado,
+        400,
+    );
+    const creada = llamar('POST', 'incidencias.php', 'crear', {
+        titulo: 'Pantalla rota',
+        descripcion: 'La pantalla quedó con una grieta',
+        area: 'Salón 1',
+    });
     assert.equal(creada.estado, 201);
     const lista = llamar('GET', 'incidencias.php', 'listar').cuerpo.data;
     assert.equal(lista[0].titulo, 'Pantalla rota');
@@ -80,7 +96,12 @@ test('no se borra una ubicación con equipos asignados', () => {
 test('préstamos: no se piden más unidades de las disponibles', () => {
     const { llamar, entrar } = cliente();
     entrar('usuario@iti.dev');
-    const pedido = cantidad => llamar('POST', 'prestamos.php', 'crear', { equipo_id: '4', motivo: 'Clase de prueba', cantidad: String(cantidad) });
+    const pedido = (cantidad) =>
+        llamar('POST', 'prestamos.php', 'crear', {
+            equipo_id: '4',
+            motivo: 'Clase de prueba',
+            cantidad: String(cantidad),
+        });
     assert.equal(pedido(3).estado, 409);
     assert.equal(pedido(2).estado, 201);
     assert.equal(pedido(1).estado, 409);

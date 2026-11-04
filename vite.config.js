@@ -10,7 +10,7 @@ import { defineConfig } from 'vite';
 import { devPlugin } from './scripts/dev/plugin.js';
 
 const raiz = fileURLToPath(new URL('.', import.meta.url));
-const pagina = ruta => resolve(raiz, ruta);
+const pagina = (ruta) => resolve(raiz, ruta);
 
 function copiarApiPhp() {
     return {

@@ -1,7 +1,7 @@
 import { api } from '../../../shared/api/http.js';
 
 export function listarUbicaciones() {
-    return api.get('inventario.php?accion=ubicaciones').then(respuesta => respuesta.data || []);
+    return api.get('inventario.php?accion=ubicaciones').then((respuesta) => respuesta.data || []);
 }
 
 export function crearUbicacion({ edificio, tipo, nombre, piso, referencia }) {

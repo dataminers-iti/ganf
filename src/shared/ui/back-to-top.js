@@ -8,7 +8,8 @@ export function montarVolverArriba() {
 
     const centinela = document.createElement('div');
     centinela.setAttribute('aria-hidden', 'true');
-    centinela.style.cssText = 'position:absolute;top:100dvh;left:0;width:1px;height:1px;pointer-events:none;';
+    centinela.style.cssText =
+        'position:absolute;top:100dvh;left:0;width:1px;height:1px;pointer-events:none;';
     document.body.append(centinela);
 
     const boton = document.createElement('button');

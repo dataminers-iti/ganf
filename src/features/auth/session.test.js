@@ -4,9 +4,9 @@ import assert from 'node:assert/strict';
 const almacen = new Map();
 
 globalThis.sessionStorage = {
-    getItem: clave => (almacen.has(clave) ? almacen.get(clave) : null),
+    getItem: (clave) => (almacen.has(clave) ? almacen.get(clave) : null),
     setItem: (clave, valor) => almacen.set(clave, String(valor)),
-    removeItem: clave => almacen.delete(clave),
+    removeItem: (clave) => almacen.delete(clave),
 };
 
 const { getUsuarioActual, guardarUsuario, limpiarSesion, tieneRol } = await import('./session.js');

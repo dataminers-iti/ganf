@@ -13,11 +13,12 @@ const CLIENTE = fileURLToPath(new URL('./client.js', import.meta.url));
 
 const color = process.stdout.isTTY || process.env.FORCE_COLOR;
 const pintar = (codigo, texto) => (color ? `\x1b[${codigo}m${texto}\x1b[0m` : texto);
-const tenue = texto => pintar('2', texto);
-const colorEstado = estado => (estado >= 500 || estado === 0 ? '31' : estado >= 400 ? '33' : '32');
+const tenue = (texto) => pintar('2', texto);
+const colorEstado = (estado) =>
+    estado >= 500 || estado === 0 ? '31' : estado >= 400 ? '33' : '32';
 
 const hora = () => new Date().toLocaleTimeString('es-UY', { hour12: false });
-const esperar = ms => new Promise(resolver => setTimeout(resolver, ms));
+const esperar = (ms) => new Promise((resolver) => setTimeout(resolver, ms));
 
 async function leerCampos(req) {
     if (req.method === 'GET' || req.method === 'HEAD') return {};
@@ -26,16 +27,22 @@ async function leerCampos(req) {
     const cuerpo = Buffer.concat(partes);
     if (!cuerpo.length) return {};
     try {
-        const formulario = await new Response(cuerpo, { headers: { 'content-type': req.headers['content-type'] ?? '' } }).formData();
+        const formulario = await new Response(cuerpo, {
+            headers: { 'content-type': req.headers['content-type'] ?? '' },
+        }).formData();
         return Object.fromEntries([...formulario].map(([clave, valor]) => [clave, String(valor)]));
     } catch {
         return {};
     }
 }
 
-const enmascarar = campos => Object.fromEntries(
-    Object.entries(campos).map(([clave, valor]) => [clave, /clave|password|token/i.test(clave) ? '********' : valor]),
-);
+const enmascarar = (campos) =>
+    Object.fromEntries(
+        Object.entries(campos).map(([clave, valor]) => [
+            clave,
+            /clave|password|token/i.test(clave) ? '********' : valor,
+        ]),
+    );
 
 function lineaLog({ metodo, ruta, estado, ms, origen }) {
     return `${tenue(hora())} ${pintar('36;1', '[api]')} ${metodo.padEnd(4)} ${ruta} ${pintar(colorEstado(estado), String(estado))} ${tenue(`${ms}ms ${origen}`)}`;
@@ -52,9 +59,16 @@ export function devPlugin() {
         apply: 'serve',
 
         config() {
-            const proxy = modo === 'proxy'
-                ? { '/api': { target: dev.target, changeOrigin: true, cookieDomainRewrite: '' } }
-                : undefined;
+            const proxy =
+                modo === 'proxy'
+                    ? {
+                          '/api': {
+                              target: dev.target,
+                              changeOrigin: true,
+                              cookieDomainRewrite: '',
+                          },
+                      }
+                    : undefined;
             return { server: { port: dev.port, proxy } };
         },
 
@@ -62,11 +76,17 @@ export function devPlugin() {
             const { logger } = servidor.config;
 
             servidor.httpServer?.once('listening', () => {
-                if (dev.creado) logger.info(`${pintar('36;1', '[dev]')} Se creó .dev desde .dev.example`);
-                if (sinTarget) logger.warn(`${pintar('33;1', '[dev]')} API_MODE=proxy sin API_TARGET en .dev: se usa el mock`);
-                logger.info(modo === 'mock'
-                    ? `${pintar('36;1', '[dev]')} API simulada en memoria (API_MODE=mock). Contraseña de los usuarios de prueba: ${CLAVE_DEV}`
-                    : `${pintar('36;1', '[dev]')} API real: /api -> ${dev.target}`);
+                if (dev.creado)
+                    logger.info(`${pintar('36;1', '[dev]')} Se creó .dev desde .dev.example`);
+                if (sinTarget)
+                    logger.warn(
+                        `${pintar('33;1', '[dev]')} API_MODE=proxy sin API_TARGET en .dev: se usa el mock`,
+                    );
+                logger.info(
+                    modo === 'mock'
+                        ? `${pintar('36;1', '[dev]')} API simulada en memoria (API_MODE=mock). Contraseña de los usuarios de prueba: ${CLAVE_DEV}`
+                        : `${pintar('36;1', '[dev]')} API real: /api -> ${dev.target}`,
+                );
             });
 
             servidor.middlewares.use(async (req, res, next) => {
@@ -80,7 +100,16 @@ export function devPlugin() {
 
                 if (!mock) {
                     res.on('finish', () => {
-                        if (dev.log) logger.info(lineaLog({ metodo, ruta, estado: res.statusCode, ms: Math.round(performance.now() - inicio), origen: 'proxy' }));
+                        if (dev.log)
+                            logger.info(
+                                lineaLog({
+                                    metodo,
+                                    ruta,
+                                    estado: res.statusCode,
+                                    ms: Math.round(performance.now() - inicio),
+                                    origen: 'proxy',
+                                }),
+                            );
                     });
                     return next();
                 }
@@ -99,9 +128,20 @@ export function devPlugin() {
                 res.end(JSON.stringify(cuerpo));
 
                 if (!dev.log) return;
-                logger.info(lineaLog({ metodo, ruta, estado, ms: Math.round(performance.now() - inicio), origen: 'mock' }));
+                logger.info(
+                    lineaLog({
+                        metodo,
+                        ruta,
+                        estado,
+                        ms: Math.round(performance.now() - inicio),
+                        origen: 'mock',
+                    }),
+                );
                 if (dev.bodies) {
-                    if (Object.keys(campos).length) logger.info(`${tenue('       pedido    ')} ${JSON.stringify(enmascarar(campos))}`);
+                    if (Object.keys(campos).length)
+                        logger.info(
+                            `${tenue('       pedido    ')} ${JSON.stringify(enmascarar(campos))}`,
+                        );
                     logger.info(`${tenue('       respuesta')} ${cuerpo.message}`);
                 }
             });
@@ -117,11 +157,13 @@ export function devPlugin() {
                 usuarios: modo === 'mock' ? usuariosDePrueba() : [],
                 clavePrueba: CLAVE_DEV,
             };
-            return [{
-                tag: 'script',
-                children: `window.__SGRSI_DEV__=${JSON.stringify(config)};\n${readFileSync(CLIENTE, 'utf8')}`,
-                injectTo: 'head-prepend',
-            }];
+            return [
+                {
+                    tag: 'script',
+                    children: `window.__SGRSI_DEV__=${JSON.stringify(config)};\n${readFileSync(CLIENTE, 'utf8')}`,
+                    injectTo: 'head-prepend',
+                },
+            ];
         },
     };
 }

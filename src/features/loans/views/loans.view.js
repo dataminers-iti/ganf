@@ -24,14 +24,20 @@ async function cargarEquiposPrestamo() {
     try {
         const equipos = await listarEquiposDisponibles();
         select.innerHTML = equipos.length
-            ? '<option value="">Seleccione un equipo</option>' + equipos.map(equipo => {
-                const serie = equipo.numero_serie ? ` · ${escapeHtml(equipo.numero_serie)}` : '';
-                return `<option value="${Number(equipo.id)}" data-disponible="${Number(equipo.disponible)}">${escapeHtml(equipo.nombre)}${serie} · ${Number(equipo.disponible)} disponibles</option>`;
-            }).join('')
+            ? '<option value="">Seleccione un equipo</option>' +
+              equipos
+                  .map((equipo) => {
+                      const serie = equipo.numero_serie
+                          ? ` · ${escapeHtml(equipo.numero_serie)}`
+                          : '';
+                      return `<option value="${Number(equipo.id)}" data-disponible="${Number(equipo.disponible)}">${escapeHtml(equipo.nombre)}${serie} · ${Number(equipo.disponible)} disponibles</option>`;
+                  })
+                  .join('')
             : '<option value="">No hay equipos disponibles</option>';
 
         select.onchange = () => {
-            document.getElementById('cantidadPrestamo').max = select.selectedOptions[0]?.dataset.disponible || 1;
+            document.getElementById('cantidadPrestamo').max =
+                select.selectedOptions[0]?.dataset.disponible || 1;
         };
     } catch (error) {
         select.innerHTML = `<option value="">${escapeHtml(error.message || 'No se pudo cargar el inventario')}</option>`;
@@ -117,7 +123,12 @@ export function initLoansPage() {
         if (!usuario) return;
 
         rolActual = usuario.rol;
-        document.getElementById('colAccionesPrestamo').style.display = ['admin', 'tecnico'].includes(rolActual) ? '' : 'none';
+        document.getElementById('colAccionesPrestamo').style.display = [
+            'admin',
+            'tecnico',
+        ].includes(rolActual)
+            ? ''
+            : 'none';
 
         await cargarEquiposPrestamo();
         await cargarPrestamos();

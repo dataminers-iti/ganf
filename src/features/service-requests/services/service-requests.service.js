@@ -1,7 +1,7 @@
 import { api } from '../../../shared/api/http.js';
 
 export function listarSolicitudes() {
-    return api.get('solicitudes.php?accion=listar').then(respuesta => respuesta.data || []);
+    return api.get('solicitudes.php?accion=listar').then((respuesta) => respuesta.data || []);
 }
 
 export function crearSolicitud({ tipoServicio, descripcion, prioridad }) {
